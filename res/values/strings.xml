@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SecurityLocker</string>
+    <string name="UP">New Button</string>
+    <string name="empty">Empty Hint</string>
+</resources>
