@@ -1,11 +1,13 @@
 package com.bosswiin.SecurityLocker;
 
+import com.bosswiin.UserInterface.Components.RollingAdpater;
 import com.bosswiin.com.bosswiin.repository.*;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import com.bosswiin.device.bluetooth.*;
+import com.bosswiin.sharelibs.*;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.format.*;
@@ -14,6 +16,8 @@ import android.view.View;
 import android.view.View.*;
 import android.app.AlertDialog.*;
 import android.widget.AdapterView.OnItemClickListener;
+import org.json.JSONArray;
+
 import java.util.*;
 
 /**
@@ -27,6 +31,8 @@ public class MainActivity extends Activity implements OnClickListener {
     private Button scanButton=null, upButton=null, stopButton=null, downButton=null;
 
     private IRepository repository=null;
+
+    private RollingAdpater rollingAdpater=null;
 
     private String tableName="DeviceList";
     private Context mainContext=this;
@@ -51,15 +57,18 @@ public class MainActivity extends Activity implements OnClickListener {
             this.listView.setSelector(R.drawable.listrowhighlighter);
             this.listView.setOnItemClickListener(new OnItemClickListener() {
 
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-                    String selectedFromList = listView.getItemAtPosition(position).toString();
-                    Builder MyAlertDialog = new Builder(mainContext);
-                    MyAlertDialog.setTitle("標題");
-                    MyAlertDialog.setMessage(selectedFromList);
-                    MyAlertDialog.show();
+            public void onItemClick(AdapterView<?> parent, View view,
+                                     int position, long id) {
 
-                }});
+                TextView info= (TextView)view.findViewById(R.id.info);
+
+                 Builder MyAlertDialog = new Builder(mainContext);
+                 MyAlertDialog.setTitle("標題");
+                 MyAlertDialog.setMessage(info.getTag().toString());
+                 MyAlertDialog.show();
+             }});
+
+            this.InitDoorList();
         }
     }
 
@@ -69,14 +78,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
         if(view.getId()==R.id.buttonScan){
 
-            this.databaseTuple.put("UUID", "UUID");
-            this.databaseTuple.put("Name", "Name");
-            this.databaseTuple.put("Location", "Location");
-            this.databaseTuple.put("Frequency", "Frequency");
-            this.databaseTuple.put("UpdateTime","UpdateTime");
 
-            this.listView.setAdapter(new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1, this.repository.Query(this.tableName, this.databaseTuple)));
         }
         else if(view.getId() == R.id.buttonUP){
 
@@ -102,6 +104,24 @@ public class MainActivity extends Activity implements OnClickListener {
             this.listView.setAdapter(new ArrayAdapter<String>(this,
                     android.R.layout.simple_list_item_1, this.repository.GetTableList()));
         }
+    }
+
+    private void InitDoorList()
+    {
+        this.databaseTuple.put("UUID", "UUID");
+        this.databaseTuple.put("Name", "Name");
+        this.databaseTuple.put("Location", "Location");
+        this.databaseTuple.put("Frequency", "Frequency");
+        this.databaseTuple.put("UpdateTime","UpdateTime");
+
+        JSONArray array=JSONHelper.GetJSON(this.repository.Query(this.tableName, this.databaseTuple));
+
+        if(this.rollingAdpater == null)
+        {
+            this.rollingAdpater=new RollingAdpater(this, array);
+        }
+
+        this.listView.setAdapter(this.rollingAdpater);
     }
 
     private boolean GetRepository(){
