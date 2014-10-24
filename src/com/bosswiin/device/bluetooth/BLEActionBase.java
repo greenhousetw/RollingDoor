@@ -1,5 +1,7 @@
 package com.bosswiin.device.bluetooth;
 
+import android.bluetooth.*;
+
 /**
  * Created by 9708023 on 2014/10/22.
  */
@@ -9,6 +11,7 @@ public class BLEActionBase implements IHandler {
 
     public BLEActionBase(){
     }
+
 
     public void SetSuccessor(IHandler handler){
         this.successor=handler;

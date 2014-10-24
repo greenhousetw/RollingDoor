@@ -25,8 +25,9 @@ import java.util.*;
  */
 public class MainActivity extends Activity implements OnClickListener {
 
-    private BLERequest bluetoothRequest=new BLERequest();
-    private BlueToothManager btManager=new BlueToothManager();
+    //private BLERequest bluetoothRequest=new BLERequest();
+    //private BossWiinBlueToothManager btManager=new BossWiinBlueToothManager();
+
     private ListView listView;
     private Button scanButton=null, upButton=null, stopButton=null, downButton=null;
 
@@ -69,6 +70,7 @@ public class MainActivity extends Activity implements OnClickListener {
              }});
 
             this.InitDoorList();
+            //ContextHelper.SetGlobalContext(this);
         }
     }
 

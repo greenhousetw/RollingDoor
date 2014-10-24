@@ -5,6 +5,7 @@ package com.bosswiin.device.bluetooth;
  */
 public enum BLEAcionEnum {
 
+    CheckLE,
     Open,
     Close,
     Scan,

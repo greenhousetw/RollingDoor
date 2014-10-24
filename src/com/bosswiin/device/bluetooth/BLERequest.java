@@ -1,7 +1,6 @@
 package com.bosswiin.device.bluetooth;
 
-import android.app.FragmentManager;
-
+import android.bluetooth.*;
 import java.util.*;
 
 /**
@@ -13,11 +12,19 @@ public class BLERequest {
 
     private HashMap<BLEAcionEnum, Object> dataSet=new HashMap<BLEAcionEnum, Object>();
 
+    private BluetoothAdapter bluetoothAdapter;
+
     public BLERequest() {
+
     }
 
     public synchronized  void SetRequestType(BLEAcionEnum  action){
         this.actionEnum=action;
+    }
+
+    protected synchronized void SetAdapter(BluetoothAdapter adapter)
+    {
+        this.bluetoothAdapter=adapter;
     }
 
     public synchronized boolean PushData(BLEAcionEnum keyName, Object value){
