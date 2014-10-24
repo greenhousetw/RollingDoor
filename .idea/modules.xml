@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Repository/Repository.iml" filepath="$PROJECT_DIR$/Repository/Repository.iml" />
       <module fileurl="file://$PROJECT_DIR$/SecurityLocker.iml" filepath="$PROJECT_DIR$/SecurityLocker.iml" />
     </modules>
   </component>
