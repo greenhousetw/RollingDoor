@@ -3,11 +3,11 @@ package com.bosswiin.device.bluetooth;
 import android.util.Log;
 
 /**
- * Created by 9708023 on 2014/10/22.
+ * Created by 9708023 on 2014/10/27.
  */
-public class BLEScan extends BLEActionBase {
+public class BLEStopScan extends BLEActionBase {
 
-    public BLEScan(){
+    public BLEStopScan(){
     }
 
     @Override
@@ -15,16 +15,18 @@ public class BLEScan extends BLEActionBase {
 
         boolean result=false;
 
-        if(request.actionEnum != BLEAcionEnum.Scan)
+        if(request.actionEnum != BLEAcionEnum.StopScan)
         {
-           result=this.successor.Execute(request);
+            result=this.successor.Execute(request);
         }
         else
         {
-            Log.v(this.getClass().getPackage().getName(), "Start to scan BLE device");
+            Log.v(this.getClass().getPackage().getName(), this.getClass().getName());
+
             request.GetWrapper().startScanning();
         }
 
         return result;
     }
 }
+

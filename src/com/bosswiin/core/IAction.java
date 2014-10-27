@@ -1,4 +1,4 @@
-package com.bosswiin.com.bosswiin.core;
+package com.bosswiin.core;
 
 import java.util.*;
 

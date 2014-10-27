@@ -3,11 +3,10 @@
  * @see SQLiteOpenHelper
  * @see IRepository
  * @author Yu-Hua Tseng
- * @since      0.0
+ * @since 0.0
  */
-package com.bosswiin.com.bosswiin.repository;
+package com.bosswiin.repository;
 
-import java.util.*;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -17,85 +16,67 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * Sqliter follows IRepository to implement defined operations
  */
 public class Sqliter extends SQLiteOpenHelper implements IRepository {
 
-    // the instance of SQLiteDatabase
-    private SQLiteDatabase database=null;
-
-    // table name
-    private String upgradTableName="";
-
     // prefix string for log method
-    private final static String LOGTAGNAME="Sqliter";
-
+    private final static String         LOGTAGNAME      = "Sqliter";
+    // the instance of SQLiteDatabase
+    private              SQLiteDatabase database        = null;
+    // table name
+    private              String         upgradTableName = "";
     // key for update and delete
-    private String whereIndex="Where";
+    private              String         whereIndex      = "Where";
 
     // runtime enviroment instance
-    private Context context=null;
+    private Context context = null;
 
     // version of table
-    private int version=1;
+    private int version = 1;
 
     // variable for database modification
-    private ContentValues valueList=new ContentValues();
+    private ContentValues valueList = new ContentValues();
 
     // string for table creation
-    private String createTableString="";
-
-    // the sql operation enumeration
-    private enum SqlOperatin{
-        // insert
-        Insert,
-
-        // update
-        Update,
-
-        // delete
-        Delete,
-
-        // query
-        Query,
-
-        // none
-        None
-    }
+    private String createTableString = "";
 
     /**
      * Create a helper object to create, open, and/or manage a database. This method always
      * returns very quickly. The database is not actually created or opened until one of
      * getWritableDatabase() or getReadableDatabase() is called.
      * date: 2014/10/23
+     *
+     * @param context to use to open or create the database
+     * @param name    of the database file, or null for an in-memory database
+     * @param factory to use for creating cursor objects, or null for the default
+     * @param version number of the database (starting at 1); if the database is older,
+     *                onUpgrade(SQLiteDatabase, int, int) will be used to upgrade the database;
+     *                if the database is newer, onDowngrade(SQLiteDatabase, int, int)
+     *                will be used to downgrade the database
      * @author Yu-Hua Tseng
-     * @param  context  to use to open or create the database
-     * @param  name  of the database file, or null for an in-memory database
-     * @param  factory  to use for creating cursor objects, or null for the default
-     * @param  version number of the database (starting at 1); if the database is older,
-     *                 onUpgrade(SQLiteDatabase, int, int) will be used to upgrade the database;
-     *                 if the database is newer, onDowngrade(SQLiteDatabase, int, int)
-     *                 will be used to downgrade the database
      */
     public Sqliter(Context context, String name, CursorFactory factory,
-                   int version)
-    {
+                   int version) {
         super(context, name, factory, version);
-        this.context=context;
-        this.version=version;
+        this.context = context;
+        this.version = version;
     }
 
     /**
      * Called when the database is created for the first time. This is where the creation
      * of tables and the initial population of the tables should happen.
      * date: 2014/10/23
+     *
+     * @param db The database instance
      * @author Yu-Hua Tseng
-     * @param  db  The database instance
      */
     @Override
-    public void onCreate(SQLiteDatabase db)
-    {
+    public void onCreate(SQLiteDatabase db) {
         db.execSQL(createTableString);
     }
 
@@ -110,14 +91,14 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
      * This method executes within a transaction. If an exception is thrown, all changes will automatically be
      * rolled back.
      * date: 2014/10/23
+     *
+     * @param db         The database.
+     * @param oldVersion The old database version.
+     * @param newVersion The new database version.
      * @author Yu-Hua Tseng
-     * @param  db  The database.
-     * @param  oldVersion The old database version.
-     * @param  newVersion The new database version.
      */
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
-    {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         final String DROPTABLE = "delete from sqlite_master where type = 'table'";
         db.execSQL(DROPTABLE);
         onCreate(db);
@@ -126,26 +107,25 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     /**
      * According to given initialization string to open database
      * date: 2014/10/23
-     * @author Yu-Hua Tseng
-     * @param  databaseName  name of database, like: info.db
-     * @param  initString any initializaiton string for database opening
+     *
+     * @param databaseName name of database, like: info.db
+     * @param initString   any initializaiton string for database opening
      * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
      */
     @Override
-    public boolean OpenDataBase(String databaseName, String initString)
-    {
-        boolean result=false;
+    public boolean OpenDataBase(String databaseName, String initString) {
+        boolean result = false;
 
         Log.v(LOGTAGNAME, "Open database:" + databaseName);
 
-        if(this.database==null || !this.database.isOpen())
-        {
-            this.database=new Sqliter(this.context,databaseName,null,this.version).getWritableDatabase();
-            this.createTableString=initString;
+        if (this.database == null || !this.database.isOpen()) {
+            this.database = new Sqliter(this.context, databaseName, null, this.version).getWritableDatabase();
+            this.createTableString = initString;
             this.onCreate(this.database);
         }
 
-        result=true;
+        result = true;
 
         return result;
     }
@@ -153,21 +133,20 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     /**
      * Close database
      * date: 2014/10/23
-     * @author Yu-Hua Tseng
-     * @param  databaseName  name of database, like: info.db
+     *
+     * @param databaseName name of database, like: info.db
      * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
      */
     @Override
-    public synchronized boolean CloseDataBase(String databaseName)
-    {
-        boolean result=false;
+    public synchronized boolean CloseDataBase(String databaseName) {
+        boolean result = false;
 
-        if(this.database.isOpen())
-        {
+        if (this.database.isOpen()) {
             super.close();
         }
 
-        result=true;
+        result = true;
 
         return result;
     }
@@ -175,19 +154,19 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     /**
      * Insert one tuple into the given table
      * date: 2014/10/23
-     * @author Yu-Hua Tseng
-     * @param  tableName the name of table
-     * @param  data is a HashMap, key means column's name, value means the content of column
+     *
+     * @param tableName the name of table
+     * @param data      is a HashMap, key means column's name, value means the content of column
      * @return return value will be encapsulate into ArrayList
+     * @author Yu-Hua Tseng
      */
     @Override
-    public ArrayList<String> Insert(String tableName, HashMap<String, Object> data)
-    {
-        ArrayList<String> executionResult=new ArrayList<String>();
+    public ArrayList<String> Insert(String tableName, HashMap<String, Object> data) {
+        ArrayList<String> executionResult = new ArrayList<String>();
 
         this.GetContentValues(data);
 
-        executionResult.add(Long.toString(this.database.insert(tableName,null,this.valueList)));
+        executionResult.add(Long.toString(this.database.insert(tableName, null, this.valueList)));
 
         return executionResult;
     }
@@ -195,15 +174,15 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     /**
      * Update one tuple into the given table
      * date: 2014/10/23
-     * @author Yu-Hua Tseng
-     * @param  tableName the name of table
-     * @param  data is a HashMap, key means column's name, value means the content of column
+     *
+     * @param tableName the name of table
+     * @param data      is a HashMap, key means column's name, value means the content of column
      * @return return value will be encapsulate into ArrayList
+     * @author Yu-Hua Tseng
      */
     @Override
-    public ArrayList<String> Update(String tableName, HashMap<String, Object> data)
-    {
-        ArrayList<String> executionResult=new ArrayList<String>();
+    public ArrayList<String> Update(String tableName, HashMap<String, Object> data) {
+        ArrayList<String> executionResult = new ArrayList<String>();
         executionResult.add(Long.toString(this.ModifyRecord(SqlOperatin.Update, tableName, data)));
         return executionResult;
     }
@@ -211,15 +190,15 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     /**
      * Delete one tuple from the given table
      * date: 2014/10/23
-     * @author Yu-Hua Tseng
-     * @param  tableName the name of table
-     * @param  data is a HashMap, you can give any data that will be used during deletion
+     *
+     * @param tableName the name of table
+     * @param data      is a HashMap, you can give any data that will be used during deletion
      * @return return value will be encapsulate into ArrayList
+     * @author Yu-Hua Tseng
      */
     @Override
-    public ArrayList<String> Delete(String tableName, HashMap<String, Object> data)
-    {
-        ArrayList<String> executionResult=new ArrayList<String>();
+    public ArrayList<String> Delete(String tableName, HashMap<String, Object> data) {
+        ArrayList<String> executionResult = new ArrayList<String>();
         executionResult.add(Long.toString(this.ModifyRecord(SqlOperatin.Delete, tableName, data)));
         return executionResult;
     }
@@ -227,23 +206,22 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     /**
      * Query data from the given table
      * date: 2014/10/23
-     * @author Yu-Hua Tseng
-     * @param  tableName  name of table, like: info.db
-     * @param  data you can give any data that will be used during query
+     *
+     * @param tableName name of table, like: info.db
+     * @param data      you can give any data that will be used during query
      * @return return value will be encapsulate into ArrayList
+     * @author Yu-Hua Tseng
      */
     @Override
-    public ArrayList<String> Query(String tableName, HashMap<String, Object> data)
-    {
-        ArrayList<String> executionResult=new ArrayList<String>();
+    public ArrayList<String> Query(String tableName, HashMap<String, Object> data) {
+        ArrayList<String> executionResult = new ArrayList<String>();
 
-        if(this.IsDataBaseOpen())
-        {
-            for(String key: data.keySet()){
+        if (this.IsDataBaseOpen()) {
+            for (String key : data.keySet()) {
                 executionResult.add(data.get(key).toString());
             }
 
-            String[] column=new String[data.size()];
+            String[] column = new String[data.size()];
             executionResult.toArray(column);
 
             try {
@@ -271,9 +249,7 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
                     Log.v(LOGTAGNAME, tuple);
                     executionResult.add(tuple);
                 }
-            }
-            catch (SQLException sqlEx)
-            {
+            } catch (SQLException sqlEx) {
                 Log.e(LOGTAGNAME, sqlEx.getMessage());
             }
         }
@@ -284,16 +260,15 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     /**
      * Get all tables, which the opened database has.
      * date: 2014/10/23
-     * @author Yu-Hua Tseng
+     *
      * @return return value will be encapsulate into ArrayList
+     * @author Yu-Hua Tseng
      */
     @Override
-    public ArrayList<String> GetTableList()
-    {
-        ArrayList<String> tableList=new ArrayList<String>();
+    public ArrayList<String> GetTableList() {
+        ArrayList<String> tableList = new ArrayList<String>();
 
-        if(this.IsDataBaseOpen())
-        {
+        if (this.IsDataBaseOpen()) {
             try {
                 String query = "SELECT name FROM sqlite_master WHERE type='table'";
                 Cursor dbPointer = this.database.rawQuery(query, null);
@@ -305,8 +280,7 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
 
                     tableList.add(dbPointer.getString(columnIndex));
                 }
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 Log.e(LOGTAGNAME, ex.getMessage());
             }
         }
@@ -317,27 +291,26 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     /**
      * Accoding to input data to modify tuple of one talbe
      * date: 2014/10/23
-     * @author Yu-Hua Tseng
-     * @param  operation enumeration value of SqlOperation
-     * @param  tableName the table that you want to alter
-     * @param  data you can give any data that will be used during modification
+     *
+     * @param operation enumeration value of SqlOperation
+     * @param tableName the table that you want to alter
+     * @param data      you can give any data that will be used during modification
      * @return return the number of rows affected
+     * @author Yu-Hua Tseng
      */
-    private synchronized long ModifyRecord(SqlOperatin operation, String tableName, HashMap<String, Object> data)
-    {
-        long result=Long.MIN_VALUE;
+    private synchronized long ModifyRecord(SqlOperatin operation, String tableName, HashMap<String, Object> data) {
+        long result = Long.MIN_VALUE;
 
-        if(this.IsDataBaseOpen() && data.containsKey(whereIndex))
-        {
+        if (this.IsDataBaseOpen() && data.containsKey(whereIndex)) {
             String whereString = data.get(whereIndex).toString();
             data.remove(whereIndex);
 
-            if(operation.equals(SqlOperatin.Update)) {
+            if (operation.equals(SqlOperatin.Update)) {
                 this.GetContentValues(data);
-                result=this.database.update(tableName, this.valueList, whereString, null);
+                result = this.database.update(tableName, this.valueList, whereString, null);
             }
-            else if(operation.equals(SqlOperatin.Delete)) {
-                result=this.database.delete(tableName, whereString, null);
+            else if (operation.equals(SqlOperatin.Delete)) {
+                result = this.database.delete(tableName, whereString, null);
             }
         }
         else {
@@ -350,26 +323,23 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     /**
      * Get content values which will be used by update and insert
      * date: 2014/10/23
-     * @author Yu-Hua Tseng
-     * @param  data you can give any data that will be used during modification
+     *
+     * @param data you can give any data that will be used during modification
      * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
      */
-    private synchronized boolean GetContentValues(HashMap<String, Object> data)
-    {
+    private synchronized boolean GetContentValues(HashMap<String, Object> data) {
         this.valueList.clear();
 
-        boolean result=false;
+        boolean result = false;
 
-        try
-        {
+        try {
             for (String fieldName : data.keySet()) {
                 valueList.put(fieldName, data.get(fieldName).toString());
             }
 
-            result=true;
-        }
-        catch (Exception ex)
-        {
+            result = true;
+        } catch (Exception ex) {
             Log.e(LOGTAGNAME, ex.getMessage());
         }
 
@@ -379,25 +349,41 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     /**
      * Query data from the given table
      * date: 2014/10/23
-     * @author Yu-Hua Tseng
-     * @param  tableName  name of table, like: info.db
-     * @param  data you can give any data that will be used during query
+     *
+     * @param tableName name of table, like: info.db
+     * @param data      you can give any data that will be used during query
      * @return return value will be encapsulate into ArrayList
+     * @author Yu-Hua Tseng
      */
-    private boolean IsDataBaseOpen()
-    {
-        boolean result=false;
+    private boolean IsDataBaseOpen() {
+        boolean result = false;
 
-        if(this.database!=null && this.database.isOpen())
-        {
+        if (this.database != null && this.database.isOpen()) {
             Log.v(LOGTAGNAME, "Database is opened.");
-            result=true;
+            result = true;
         }
-        else
-        {
+        else {
             Log.e(LOGTAGNAME, "Database is not opened.");
         }
 
-        return  result;
+        return result;
+    }
+
+    // the sql operation enumeration
+    private enum SqlOperatin {
+        // insert
+        Insert,
+
+        // update
+        Update,
+
+        // delete
+        Delete,
+
+        // query
+        Query,
+
+        // none
+        None
     }
 }

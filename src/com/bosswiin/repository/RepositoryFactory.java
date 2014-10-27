@@ -1,4 +1,4 @@
-package com.bosswiin.com.bosswiin.repository;
+package com.bosswiin.repository;
 
 import android.content.Context;
 import android.util.Log;

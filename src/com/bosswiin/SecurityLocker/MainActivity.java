@@ -1,24 +1,27 @@
 package com.bosswiin.SecurityLocker;
 
-import com.bosswiin.UserInterface.Components.RollingAdpater;
-import com.bosswiin.com.bosswiin.repository.*;
-import android.content.Context;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import com.bosswiin.device.bluetooth.*;
-import com.bosswiin.sharelibs.*;
 import android.app.Activity;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.os.Bundle;
-import android.text.format.*;
-import android.widget.*;
+import android.text.format.Time;
 import android.view.View;
-import android.view.View.*;
-import android.app.AlertDialog.*;
+import android.view.View.OnClickListener;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
+import com.bosswiin.UserInterface.Components.RollingAdpater;
+import com.bosswiin.repository.IRepository;
+import com.bosswiin.repository.RepositoryEnum;
+import com.bosswiin.repository.RepositoryFactory;
+import com.bosswiin.device.bluetooth.BLEAcionEnum;
+import com.bosswiin.device.bluetooth.BLERequest;
+import com.bosswiin.device.bluetooth.BossWiinBlueToothManager;
+import com.bosswiin.sharelibs.ContextHelper;
+import com.bosswiin.sharelibs.JSONHelper;
 import org.json.JSONArray;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Created by 9708023 on 2014/10/22.
@@ -29,27 +32,37 @@ public class MainActivity extends Activity implements OnClickListener {
     //private BossWiinBlueToothManager btManager=new BossWiinBlueToothManager();
 
     private ListView listView;
-    private Button scanButton=null, upButton=null, stopButton=null, downButton=null;
+    private Button scanButton = null, upButton = null, stopButton = null, downButton = null;
 
-    private IRepository repository=null;
+    private IRepository repository = null;
 
-    private RollingAdpater rollingAdpater=null;
+    private RollingAdpater rollingAdpater = null;
 
-    private String tableName="DeviceList";
-    private Context mainContext=this;
-    private HashMap<String, Object> databaseTuple=new HashMap<String, Object>();
+    private BossWiinBlueToothManager blueToothManager = null;
+    private BLERequest               bleRequest       = null;
+
+    private String                  tableName     = "DeviceList";
+    private Context                 mainContext   = this;
+    private HashMap<String, Object> databaseTuple = new HashMap<String, Object>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(this.GetRepository()) {
+        if (this.GetRepository()) {
+
+            ContextHelper.SetGlobalContext(this);
+            this.blueToothManager = new BossWiinBlueToothManager();
+            this.bleRequest = new BLERequest();
+
             super.setContentView(R.layout.main);
+
             this.listView = (ListView) this.findViewById(R.id.listView);
             this.scanButton = (Button) this.findViewById(R.id.buttonScan);
             this.upButton = (Button) this.findViewById(R.id.buttonUP);
-            this.downButton= (Button) this.findViewById(R.id.buttonDown);
-            this.stopButton= (Button) this.findViewById(R.id.buttonStop);
+            this.downButton = (Button) this.findViewById(R.id.buttonDown);
+            this.stopButton = (Button) this.findViewById(R.id.buttonStop);
+
             this.scanButton.setOnClickListener(this);
             this.upButton.setOnClickListener(this);
             this.stopButton.setOnClickListener(this);
@@ -58,31 +71,48 @@ public class MainActivity extends Activity implements OnClickListener {
             this.listView.setSelector(R.drawable.listrowhighlighter);
             this.listView.setOnItemClickListener(new OnItemClickListener() {
 
-            public void onItemClick(AdapterView<?> parent, View view,
-                                     int position, long id) {
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
 
-                TextView info= (TextView)view.findViewById(R.id.info);
+                    TextView info = (TextView) view.findViewById(R.id.info);
 
-                 Builder MyAlertDialog = new Builder(mainContext);
-                 MyAlertDialog.setTitle("標題");
-                 MyAlertDialog.setMessage(info.getTag().toString());
-                 MyAlertDialog.show();
-             }});
+                    Builder MyAlertDialog = new Builder(mainContext);
+                    MyAlertDialog.setTitle("標題");
+                    MyAlertDialog.setMessage(info.getTag().toString());
+                    MyAlertDialog.show();
+                }
+            });
 
             this.InitDoorList();
             //ContextHelper.SetGlobalContext(this);
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.bleRequest.SetRequestType(BLEAcionEnum.CheckEquipment);
+        this.blueToothManager.Execute(this.bleRequest);
+    }
 
     @Override
-    public void onClick(android.view.View view){
+    protected void onPause() {
+        super.onPause();
 
-        if(view.getId()==R.id.buttonScan){
+        bleRequest.SetRequestType(BLEAcionEnum.Diconnect);
+        this.blueToothManager.Execute(bleRequest);
+        bleRequest.SetRequestType(BLEAcionEnum.Close);
+        this.blueToothManager.Execute(bleRequest);
+    }
+
+    @Override
+    public void onClick(android.view.View view) {
+
+        if (view.getId() == R.id.buttonScan) {
 
 
         }
-        else if(view.getId() == R.id.buttonUP){
+        else if (view.getId() == R.id.buttonUP) {
 
             this.databaseTuple.put("UUID", UUID.randomUUID().toString());
             this.databaseTuple.put("Name", "Joey");
@@ -91,50 +121,50 @@ public class MainActivity extends Activity implements OnClickListener {
 
             Time now = new Time();
             now.setToNow();
-            this.databaseTuple.put("UpdateTime",now.format("%Y.%m.%d %H:%M:%S"));
-            this.repository.Insert(this.tableName,this.databaseTuple);
+            this.databaseTuple.put("UpdateTime", now.format("%Y.%m.%d %H:%M:%S"));
+            this.repository.Insert(this.tableName, this.databaseTuple);
 
             this.databaseTuple.clear();
         }
-        else if(view.getId() == R.id.buttonDown){
+        else if (view.getId() == R.id.buttonDown) {
 
             this.listView.setAdapter(new ArrayAdapter<String>(this,
                     android.R.layout.simple_list_item_1, this.repository.GetTableList()));
         }
-        else if(view.getId() == R.id.buttonStop){
+        else if (view.getId() == R.id.buttonStop) {
 
             this.listView.setAdapter(new ArrayAdapter<String>(this,
                     android.R.layout.simple_list_item_1, this.repository.GetTableList()));
         }
     }
 
-    private void InitDoorList()
-    {
+    private void InitDoorList() {
+
+        // set column name
         this.databaseTuple.put("UUID", "UUID");
         this.databaseTuple.put("Name", "Name");
         this.databaseTuple.put("Location", "Location");
         this.databaseTuple.put("Frequency", "Frequency");
-        this.databaseTuple.put("UpdateTime","UpdateTime");
+        this.databaseTuple.put("UpdateTime", "UpdateTime");
 
-        JSONArray array=JSONHelper.GetJSON(this.repository.Query(this.tableName, this.databaseTuple));
+        JSONArray array = JSONHelper.GetJSON(this.repository.Query(this.tableName, this.databaseTuple));
 
-        if(this.rollingAdpater == null)
-        {
-            this.rollingAdpater=new RollingAdpater(this, array);
+        if (this.rollingAdpater == null) {
+            this.rollingAdpater = new RollingAdpater(this, array);
         }
 
         this.listView.setAdapter(this.rollingAdpater);
     }
 
-    private boolean GetRepository(){
+    private boolean GetRepository() {
 
-        boolean result=false;
+        boolean result = false;
 
-        if(this.repository == null) {
+        if (this.repository == null) {
 
-            String dbName="info.db";
-            int dbVersion=1;
-            final String dbInitString="CREATE TABLE IF NOT EXISTS DeviceList(" +
+            String dbName = "info.db";
+            int dbVersion = 1;
+            final String dbInitString = "CREATE TABLE IF NOT EXISTS DeviceList(" +
                     "UUID       VARCHAR( 60 )   PRIMARY KEY," +
                     "Name       VARCHAR( 100 )," +
                     "Location   VARCHAR( 50 )," +

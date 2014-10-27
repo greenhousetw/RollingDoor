@@ -1,7 +1,6 @@
 package com.bosswiin.device.bluetooth;
 
-import android.bluetooth.*;
-import java.util.*;
+import com.bosswiin.device.bluetooth.blehandelr.*;
 
 /**
  * Created by 9708023 on 2014/10/22.
@@ -10,44 +9,24 @@ public class BLERequest {
 
     protected BLEAcionEnum actionEnum=BLEAcionEnum.None;
 
-    private HashMap<BLEAcionEnum, Object> dataSet=new HashMap<BLEAcionEnum, Object>();
-
-    private BluetoothAdapter bluetoothAdapter;
+    private BleWrapper bleWrapper;
 
     public BLERequest() {
 
     }
 
-    public synchronized  void SetRequestType(BLEAcionEnum  action){
+    public synchronized void SetRequestType(BLEAcionEnum  action)
+    {
         this.actionEnum=action;
     }
 
-    protected synchronized void SetAdapter(BluetoothAdapter adapter)
+    protected synchronized void SetWrapper(BleWrapper wrapper)
     {
-        this.bluetoothAdapter=adapter;
+        this.bleWrapper=wrapper;
     }
 
-    public synchronized boolean PushData(BLEAcionEnum keyName, Object value){
-
-        boolean result=false;
-
-        if(keyName != BLEAcionEnum.None) {
-            this.dataSet.remove(keyName);
-            this.dataSet.put(keyName, value);
-            result=true;
-        }
-
-        return  result;
-    }
-
-    public Object GetData(BLEAcionEnum keyName)
+    protected BleWrapper GetWrapper()
     {
-        Object returnValue=null;
-
-        if(this.dataSet.containsKey(keyName))
-        {
-            returnValue=this.dataSet.get(keyName);
-        }
-        return returnValue;
+        return this.bleWrapper;
     }
 }

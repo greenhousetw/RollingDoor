@@ -9,6 +9,10 @@ public enum BLEAcionEnum {
     Open,
     Close,
     Scan,
+    StopScan,
+    Send,
+    CheckEquipment,
+    Diconnect,
     None
 
 }

@@ -3,7 +3,7 @@
  * @author Yu-Hua Tseng
  * @version     0.1
  */
-package com.bosswiin.com.bosswiin.repository;
+package com.bosswiin.repository;
 
 import java.util.*;
 

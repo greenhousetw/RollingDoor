@@ -1,8 +1,10 @@
 package com.bosswiin.device.bluetooth;
 
+import android.app.*;
 import android.content.*;
 import android.util.Log;
-import android.content.pm.PackageManager;
+import android.bluetooth.*;
+import com.bosswiin.device.bluetooth.blehandelr.BleWrapper;
 import com.bosswiin.sharelibs.*;
 
 /**
@@ -18,7 +20,7 @@ public class BLECheckEquipment extends BLEActionBase {
 
         boolean result=false;
 
-        if(request.actionEnum != BLEAcionEnum.CheckLE)
+        if(request.actionEnum != BLEAcionEnum.CheckEquipment)
         {
             result=this.successor.Execute(request);
         }
@@ -28,10 +30,19 @@ public class BLECheckEquipment extends BLEActionBase {
 
             Context context = ContextHelper.GetGlobalContext();
 
-            if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE))
+            BleWrapper bleWrapper=request.GetWrapper();
+
+            // check for Bluetooth enabled on each resume
+            if (bleWrapper.isBtEnabled() == false)
             {
-                result=true;
+                // Bluetooth is not enabled. Request to user to turn it on
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                // startActivity((Activity) context);
+                // finish();
             }
+
+            // init ble wrapper
+            bleWrapper.initialize();
         }
 
         return result;
