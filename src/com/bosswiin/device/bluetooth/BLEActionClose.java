@@ -3,11 +3,11 @@ package com.bosswiin.device.bluetooth;
 import android.util.Log;
 
 /**
- * Created by 9708023 on 2014/10/27.
+ * Created by 9708023 on 2014/10/22.
  */
-public class BLEDisconnect extends BLEActionBase {
+public class BLEActionClose extends BLEActionBase {
 
-    public BLEDisconnect(){
+    public BLEActionClose(){
     }
 
     @Override
@@ -15,13 +15,14 @@ public class BLEDisconnect extends BLEActionBase {
 
         boolean result=false;
 
-        if(request.actionEnum != BLEAcionEnum.Diconnect)
+        if(request.actionEnum != BLEAcionEnum.Close)
         {
             result=this.successor.Execute(request);
         }
         else
         {
-           request.GetWrapper().diconnect();
+            Log.v(this.getClass().getPackage().getName(), "Close BLE connection");
+            request.bleWrapper.close();
         }
 
         return result;

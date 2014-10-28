@@ -37,4 +37,30 @@ public class JSONHelper {
         return array;
     }
 
+    public static JSONObject getJSON(Map map) {
+
+        Iterator iter = map.entrySet().iterator();
+
+        JSONObject holder = new JSONObject();
+
+        while (iter.hasNext()) {
+            Map.Entry pairs = (Map.Entry) iter.next();
+            String key = (String) pairs.getKey();
+            Map m = (Map) pairs.getValue();
+            JSONObject data = new JSONObject();
+
+            try {
+                Iterator iter2 = m.entrySet().iterator();
+                while (iter2.hasNext()) {
+                    Map.Entry pairs2 = (Map.Entry) iter2.next();
+                    data.put((String) pairs2.getKey(), (String) pairs2.getValue());
+                }
+                holder.put(key, data);
+            } catch (JSONException e) {
+                Log.e("Transforming", "There was an error packaging JSON",e);
+            }
+        }
+
+        return holder;
+    }
 }

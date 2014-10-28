@@ -1,32 +1,26 @@
+/**
+ * BLERequest.java
+ * @author Yu-Hua Tseng
+ * @version 0.1
+ * @since 0.0
+ */
 package com.bosswiin.device.bluetooth;
 
+import android.bluetooth.BluetoothDevice;
 import com.bosswiin.device.bluetooth.blehandelr.*;
 
 /**
- * Created by 9708023 on 2014/10/22.
+ * BLERequest
+ * This class is a request of BLE, this class still encapsulates BLEWrapper, BLEActionEnum and BluetoothDevice
  */
 public class BLERequest {
 
-    protected BLEAcionEnum actionEnum=BLEAcionEnum.None;
+    // instance of BLEActionEnum
+    protected BLEAcionEnum actionEnum = BLEAcionEnum.None;
 
-    private BleWrapper bleWrapper;
+    // instance of BLEWrapper
+    protected BleWrapper bleWrapper = null;
 
-    public BLERequest() {
-
-    }
-
-    public synchronized void SetRequestType(BLEAcionEnum  action)
-    {
-        this.actionEnum=action;
-    }
-
-    protected synchronized void SetWrapper(BleWrapper wrapper)
-    {
-        this.bleWrapper=wrapper;
-    }
-
-    protected BleWrapper GetWrapper()
-    {
-        return this.bleWrapper;
-    }
+    // instance of BluetoothDevice
+    protected BluetoothDevice bluetoothDevice = null;
 }

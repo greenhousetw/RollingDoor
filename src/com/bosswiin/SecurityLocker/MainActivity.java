@@ -10,13 +10,12 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import com.bosswiin.UserInterface.Components.RollingAdpater;
-import com.bosswiin.repository.IRepository;
-import com.bosswiin.repository.RepositoryEnum;
-import com.bosswiin.repository.RepositoryFactory;
 import com.bosswiin.device.bluetooth.BLEAcionEnum;
 import com.bosswiin.device.bluetooth.BLERequest;
 import com.bosswiin.device.bluetooth.BossWiinBlueToothManager;
-import com.bosswiin.sharelibs.ContextHelper;
+import com.bosswiin.repository.IRepository;
+import com.bosswiin.repository.RepositoryEnum;
+import com.bosswiin.repository.RepositoryFactory;
 import com.bosswiin.sharelibs.JSONHelper;
 import org.json.JSONArray;
 
@@ -28,10 +27,8 @@ import java.util.UUID;
  */
 public class MainActivity extends Activity implements OnClickListener {
 
-    //private BLERequest bluetoothRequest=new BLERequest();
-    //private BossWiinBlueToothManager btManager=new BossWiinBlueToothManager();
-
     private ListView listView;
+
     private Button scanButton = null, upButton = null, stopButton = null, downButton = null;
 
     private IRepository repository = null;
@@ -42,6 +39,7 @@ public class MainActivity extends Activity implements OnClickListener {
     private BLERequest               bleRequest       = null;
 
     private String                  tableName     = "DeviceList";
+    private String                  deviceAddress = "";
     private Context                 mainContext   = this;
     private HashMap<String, Object> databaseTuple = new HashMap<String, Object>();
 
@@ -51,8 +49,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
         if (this.GetRepository()) {
 
-            ContextHelper.SetGlobalContext(this);
-            this.blueToothManager = new BossWiinBlueToothManager();
+            this.blueToothManager = new BossWiinBlueToothManager(this);
             this.bleRequest = new BLERequest();
 
             super.setContentView(R.layout.main);
@@ -91,18 +88,14 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        this.bleRequest.SetRequestType(BLEAcionEnum.CheckEquipment);
-        this.blueToothManager.Execute(this.bleRequest);
+        this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.CheckEquipment);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        bleRequest.SetRequestType(BLEAcionEnum.Diconnect);
-        this.blueToothManager.Execute(bleRequest);
-        bleRequest.SetRequestType(BLEAcionEnum.Close);
-        this.blueToothManager.Execute(bleRequest);
+        this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Diconnect);
+        this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Close);
     }
 
     @Override
@@ -110,6 +103,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
         if (view.getId() == R.id.buttonScan) {
 
+            this.blueToothManager.Execute("", BLEAcionEnum.Scan);
 
         }
         else if (view.getId() == R.id.buttonUP) {

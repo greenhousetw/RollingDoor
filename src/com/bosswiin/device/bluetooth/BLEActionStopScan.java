@@ -5,9 +5,9 @@ import android.util.Log;
 /**
  * Created by 9708023 on 2014/10/27.
  */
-public class BLEStopScan extends BLEActionBase {
+public class BLEActionStopScan extends BLEActionBase {
 
-    public BLEStopScan(){
+    public BLEActionStopScan(){
     }
 
     @Override
@@ -23,7 +23,7 @@ public class BLEStopScan extends BLEActionBase {
         {
             Log.v(this.getClass().getPackage().getName(), this.getClass().getName());
 
-            request.GetWrapper().startScanning();
+            request.bleWrapper.stopScanning();
         }
 
         return result;

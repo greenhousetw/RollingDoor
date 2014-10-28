@@ -10,9 +10,9 @@ import com.bosswiin.sharelibs.*;
 /**
  * Created by 9708023 on 2014/10/24.
  */
-public class BLECheckEquipment extends BLEActionBase {
+public class BLEActionCheckEquipment extends BLEActionBase {
 
-    public BLECheckEquipment(){
+    public BLEActionCheckEquipment(){
     }
 
     @Override
@@ -28,12 +28,8 @@ public class BLECheckEquipment extends BLEActionBase {
         {
             Log.v(this.getClass().getPackage().getName(), this.getClass().getName());
 
-            Context context = ContextHelper.GetGlobalContext();
-
-            BleWrapper bleWrapper=request.GetWrapper();
-
             // check for Bluetooth enabled on each resume
-            if (bleWrapper.isBtEnabled() == false)
+            if (request.bleWrapper.isBtEnabled() == false)
             {
                 // Bluetooth is not enabled. Request to user to turn it on
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -42,7 +38,7 @@ public class BLECheckEquipment extends BLEActionBase {
             }
 
             // init ble wrapper
-            bleWrapper.initialize();
+            request.bleWrapper.initialize();
         }
 
         return result;
