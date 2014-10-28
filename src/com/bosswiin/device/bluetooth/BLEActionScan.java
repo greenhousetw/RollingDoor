@@ -21,9 +21,15 @@ public class BLEActionScan extends BLEActionBase {
         }
         else
         {
-            Log.v(this.getClass().getPackage().getName(), "Start to scan BLE device");
-            request.bleWrapper.startScanning();
-            result=true;
+            try {
+                Log.v(this.getClass().getPackage().getName(), "Start to scan BLE device");
+                request.bleWrapper.startScanning();
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                Log.e(this.getClass().getName(), ex.getMessage());
+            }
         }
 
         return result;

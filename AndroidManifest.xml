@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.bosswiin.SecurityLocker">
 
-    <uses-sdk android:minSdkVersion="18"/>
+    <uses-sdk android:minSdkVersion="19"/>
 
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+   <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-    <uses-feature
+   <uses-feature
             android:name="android.hardware.bluetooth_le"
             android:required="false" />
 

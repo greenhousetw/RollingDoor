@@ -47,8 +47,6 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (this.GetRepository()) {
-
             this.blueToothManager = new BossWiinBlueToothManager(this);
             this.bleRequest = new BLERequest();
 
@@ -79,23 +77,26 @@ public class MainActivity extends Activity implements OnClickListener {
                     MyAlertDialog.show();
                 }
             });
+    }
 
-            this.InitDoorList();
-            //ContextHelper.SetGlobalContext(this);
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        this.GetRepository();
+        //this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.CheckEquipment);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.CheckEquipment);
+        //this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.CheckEquipment);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Diconnect);
-        this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Close);
+        //this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Diconnect);
+       // this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Close);
     }
 
     @Override

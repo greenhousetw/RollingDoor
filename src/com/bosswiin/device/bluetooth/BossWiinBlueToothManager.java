@@ -32,24 +32,18 @@ public class BossWiinBlueToothManager {
 
     // log tag
     private final String logTag = this.getClass().getName();
-
+    // instance of activity runtime context
+    protected Context context = null;
+    // the wrapper for ble
+    protected BleWrapper bleWrapper = null;
+    // collection of BluetoothDevice
+    protected HashMap<String, BLEDeviceInfo> deviceMap = new HashMap<String, BLEDeviceInfo>();
+    // instance of self, which will be used by BLEWarpper for callback
+    protected BossWiinBlueToothManager btManager = this;
     // action of open, close, scan, stop and check
     private BLEActionBase openAction = null, closeAction = null, scanAction = null, stopScan = null, checkBLE = null;
-
     // action of dis and send
     private BLEActionBase disConnect = null, sendAction = null;
-
-    // instance of activity runtime context
-    private Context context = null;
-
-    // the wrapper for ble
-    private BleWrapper bleWrapper = null;
-
-    // collection of BluetoothDevice
-    private HashMap<String, BLEDeviceInfo> deviceMap = new HashMap<String, BLEDeviceInfo>();
-
-    // instance of self, which will be used by BLEWarpper for callback
-    private BossWiinBlueToothManager btManager = this;
 
     /**
      * Initializes a new instance of the BossWiinBlueToothManager class.
@@ -64,10 +58,7 @@ public class BossWiinBlueToothManager {
 
         this.bleWrapper = new BleWrapper((Activity) this.context, new BleWrapperUiCallbacks.Null() {
             @Override
-            public void uiDeviceFound(final BluetoothDevice device,
-                                      final int rssi,
-                                      final byte[] record
-            ) {
+            public void uiDeviceFound(final BluetoothDevice device, final int rssi, final byte[] record) {
                 btManager.PushData(device.getAddress(), Integer.toString(rssi), device);
             }
         });
@@ -78,6 +69,8 @@ public class BossWiinBlueToothManager {
             Toast.makeText(((Activity) this.context), "BLE Hardware is required but not available!", Toast.LENGTH_LONG).show();
             ((Activity) this.context).finish();
         }
+
+        this.bleWrapper.initialize();
 
         this.openAction = new BLEActionOpen();
         this.scanAction = new BLEActionScan();
@@ -110,18 +103,22 @@ public class BossWiinBlueToothManager {
         boolean result = false;
         BLERequest request = null;
 
-        if (this.deviceMap.containsKey(deviecAddress)) {
+        boolean isScan = action.equals(BLEAcionEnum.Scan) ? true : false;
+
+        if (isScan || this.deviceMap.containsKey(deviecAddress)) {
             Log.d(this.logTag, "BT device:" + deviecAddress + "will do" + action.toString());
             request = new BLERequest();
             request.actionEnum = action;
             request.bleWrapper = this.bleWrapper;
-            request.bluetoothDevice = this.deviceMap.get(deviecAddress).bluetoothDevice;
+
+            if (!isScan) {
+                request.bluetoothDevice = this.deviceMap.get(deviecAddress).bluetoothDevice;
+            }
         }
 
         if (request != null) {
             result = this.openAction.Execute(request);
-        }
-        else {
+        } else {
             Log.w(this.logTag, deviecAddress + " is not available");
         }
 
@@ -159,10 +156,12 @@ public class BossWiinBlueToothManager {
 
             int index = 0;
 
-            for (ParcelUuid uuid : uuids) {
-                String prefixKey = "uuid" + Integer.toString(index);
-                uuidMap.put(prefixKey, uuid.getUuid().toString());
-                ++index;
+            if (uuids != null) {
+                for (ParcelUuid uuid : uuids) {
+                    String prefixKey = "uuid" + Integer.toString(index);
+                    uuidMap.put(prefixKey, uuid.getUuid().toString());
+                    ++index;
+                }
             }
 
             JSONObject uuidRecords = JSONHelper.getJSON(uuidMap);
@@ -211,11 +210,11 @@ public class BossWiinBlueToothManager {
 
         ArrayList<String> serviceNameList = new ArrayList<String>();
 
-        if(this.bleWrapper.isConnected()) {
+        if (this.bleWrapper.isConnected()) {
             for (BluetoothGattService service : this.bleWrapper.getCachedServices()) {
                 serviceNameList.add(BleNamesResolver.resolveUuid(service.getUuid().toString()));
             }
-        }else{
+        } else {
             Toast.makeText(this.context, "No connection", Toast.LENGTH_SHORT);
         }
 

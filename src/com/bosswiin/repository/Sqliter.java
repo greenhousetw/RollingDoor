@@ -119,8 +119,8 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
 
         Log.v(LOGTAGNAME, "Open database:" + databaseName);
 
-        if (this.database == null || !this.database.isOpen()) {
-            this.database = new Sqliter(this.context, databaseName, null, this.version).getWritableDatabase();
+        if (this.database == null) {
+            this.database = this.getWritableDatabase();
             this.createTableString = initString;
             this.onCreate(this.database);
         }
