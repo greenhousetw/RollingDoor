@@ -44,38 +44,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
+      <file leaf-file-name="Activity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://I:/Android/android-sdk/sources/android-18/android/app/Activity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2208" max-vertical-offset="2700">
-              <caret line="153" column="20" selection-start-line="153" selection-start-column="20" selection-end-line="153" selection-end-column="20" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1538#1554#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RepositoryFactory.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/repository/RepositoryFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="570">
-              <caret line="22" column="38" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="75539" max-vertical-offset="76875">
+              <caret line="5246" column="28" selection-start-line="5246" selection-start-column="28" selection-end-line="5246" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Sqliter.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="RepositoryFactory.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/repository/RepositoryFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.42307693" vertical-offset="232" max-vertical-offset="570">
+              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Sqliter.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/repository/Sqliter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.689349" vertical-offset="2296" max-vertical-offset="5835">
-              <caret line="121" column="36" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1898" max-vertical-offset="6000">
+              <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2817#2818#0" expanded="true" />
-                <element signature="e#2862#2863#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -131,10 +126,10 @@
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionGetServices.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLERequest.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEDeviceInfo.java" />
-        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionScan.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BossWiinBlueToothManager.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java" />
+        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/repository/Sqliter.java" />
       </list>
     </option>
@@ -493,7 +488,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -502,7 +497,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.399361" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.399361" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.327212" sideWeight="0.50037795" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -578,18 +573,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/bosswiin/repository/Sqliter.java</url>
-          <line>119</line>
+          <line>128</line>
           <properties />
-          <option name="timeStamp" value="60" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/bosswiin/repository/Sqliter.java</url>
-          <line>122</line>
-          <properties />
-          <option name="timeStamp" value="61" />
+          <option name="timeStamp" value="64" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="62" />
+      <option name="time" value="65" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -597,14 +586,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLERequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="884">
-          <caret line="41" column="50" selection-start-line="41" selection-start-column="50" selection-end-line="41" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/bosswiin/core/IAction.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="272">
@@ -833,14 +814,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://I:/Android/android-sdk/sources/android-18/android/app/Instrumentation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31360948" vertical-offset="15284" max-vertical-offset="25545">
-          <caret line="1097" column="0" selection-start-line="1097" selection-start-column="0" selection-end-line="1097" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
       <provider editor-type-id="android-designer">
         <state />
@@ -852,36 +825,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47008547" vertical-offset="0" max-vertical-offset="420">
-          <caret line="11" column="39" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
-          <folding>
-            <element signature="e#520#538#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://I:/Android/android-sdk/sources/android-18/android/app/Activity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31360948" vertical-offset="75419" max-vertical-offset="76875">
-          <caret line="5244" column="0" selection-start-line="5244" selection-start-column="0" selection-end-line="5244" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEAcionEnum.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
           <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://I:/Android/android-sdk/sources/android-18/android/os/Looper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1675" max-vertical-offset="4230">
-          <caret line="143" column="24" selection-start-line="143" selection-start-column="24" selection-end-line="143" selection-end-column="24" />
           <folding />
         </state>
       </provider>
@@ -908,14 +855,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3133903" vertical-offset="268030" max-vertical-offset="273285">
           <caret line="18445" column="0" selection-start-line="18445" selection-start-column="0" selection-end-line="18445" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://I:/Android/android-sdk/sources/android-18/android/os/Handler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.4852071" vertical-offset="1454" max-vertical-offset="10770">
-          <caret line="103" column="21" selection-start-line="103" selection-start-column="21" selection-end-line="103" selection-end-column="21" />
           <folding />
         </state>
       </provider>
@@ -970,10 +909,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://I:/Android/android-sdk/sources/android-18/com/android/internal/os/ZygoteInit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10950">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#25702#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
+          <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://I:/Android/android-sdk/sources/android-18/android/database/sqlite/SQLiteOpenHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2043" max-vertical-offset="5475">
+          <caret line="164" column="0" selection-start-line="164" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/repository/Sqliter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1898" max-vertical-offset="6000">
+          <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://I:/Android/android-sdk/sources/android-18/android/os/Looper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3323263" vertical-offset="1675" max-vertical-offset="4230">
+          <caret line="137" column="0" selection-start-line="137" selection-start-column="0" selection-end-line="137" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://I:/Android/android-sdk/sources/android-18/android/os/Handler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="1154" max-vertical-offset="10770">
+          <caret line="101" column="0" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2208" max-vertical-offset="2700">
-          <caret line="153" column="20" selection-start-line="153" selection-start-column="20" selection-end-line="153" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.35347432" vertical-offset="1113" max-vertical-offset="2700">
+          <caret line="86" column="0" selection-start-line="86" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1538#1554#0" expanded="true" />
@@ -981,41 +972,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/repository/RepositoryFactory.java">
+    <entry file="file://I:/Android/android-sdk/sources/android-18/android/app/Instrumentation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="570">
-          <caret line="22" column="38" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://I:/Android/android-sdk/sources/android-18/com/android/internal/os/ZygoteInit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10950">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="16334" max-vertical-offset="25575">
+          <caret line="1171" column="0" selection-start-line="1171" selection-start-column="0" selection-end-line="1171" selection-end-column="0" />
           <folding>
-            <element signature="e#0#25702#0" expanded="true" />
+            <element signature="e#44838#44839#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://I:/Android/android-sdk/sources/android-18/android/app/ActivityThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46153846" vertical-offset="29808" max-vertical-offset="73725">
-          <caret line="2184" column="0" selection-start-line="2184" selection-start-column="0" selection-end-line="2184" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.3133903" vertical-offset="15595" max-vertical-offset="73725">
+          <caret line="1199" column="0" selection-start-line="1199" selection-start-column="0" selection-end-line="1199" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/repository/Sqliter.java">
+    <entry file="file://I:/Android/android-sdk/sources/android-18/android/app/Activity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.689349" vertical-offset="2296" max-vertical-offset="5835">
-          <caret line="121" column="36" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2817#2818#0" expanded="true" />
-            <element signature="e#2862#2863#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="75539" max-vertical-offset="76875">
+          <caret line="5246" column="28" selection-start-line="5246" selection-start-column="28" selection-end-line="5246" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/repository/RepositoryFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42307693" vertical-offset="232" max-vertical-offset="570">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

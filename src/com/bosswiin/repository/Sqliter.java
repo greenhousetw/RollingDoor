@@ -77,6 +77,11 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        if(db.isOpen()){
+            db.close();
+        }
+
         db.execSQL(createTableString);
     }
 
@@ -119,13 +124,19 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
 
         Log.v(LOGTAGNAME, "Open database:" + databaseName);
 
-        if (this.database == null) {
-            this.database = this.getWritableDatabase();
-            this.createTableString = initString;
-            this.onCreate(this.database);
-        }
+        try {
+            if (this.database == null) {
+                this.database = this.getWritableDatabase();
+                this.createTableString = initString;
+                this.onCreate(this.database);
+            }
 
-        result = true;
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            Log.e(LOGTAGNAME, ex.getMessage());
+        }
 
         return result;
     }
