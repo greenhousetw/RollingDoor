@@ -23,4 +23,7 @@ public class BLERequest {
 
     // instance of BluetoothDevice
     protected BluetoothDevice bluetoothDevice = null;
+
+    // service uuid
+    protected String serviceUUID="";
 }

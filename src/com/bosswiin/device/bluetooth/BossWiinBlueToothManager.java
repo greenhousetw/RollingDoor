@@ -1,7 +1,7 @@
 /**
  * BossWiinBlueToothManager.java
  * @author Yu-Hua Tseng
- * @version 0.1
+ * @version 0.2
  * @since 0.0
  */
 package com.bosswiin.device.bluetooth;
@@ -10,40 +10,44 @@ import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
-import android.os.ParcelUuid;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
+import com.bosswiin.UserInterface.Components.BLEAdpaterBase;
 import com.bosswiin.device.bluetooth.blehandelr.BleNamesResolver;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapper;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapperUiCallbacks;
-import com.bosswiin.sharelibs.JSONHelper;
-import org.json.JSONObject;
+import com.bosswiin.sharelibs.CommonHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-
 
 /**
  * BossWiinBlueToothManager
  * This class provides bluetooth device collection access and action transmition
  */
-public class BossWiinBlueToothManager {
+public class BossWiinBlueToothManager{
 
     // log tag
-    private final String logTag = this.getClass().getName();
+    private final String                           logTag     = this.getClass().getName();
     // instance of activity runtime context
-    protected Context context = null;
-    // the wrapper for ble
-    protected BleWrapper bleWrapper = null;
-    // collection of BluetoothDevice
-    protected HashMap<String, BLEDeviceInfo> deviceMap = new HashMap<String, BLEDeviceInfo>();
+    protected     Context                          context    = null;
     // instance of self, which will be used by BLEWarpper for callback
-    protected BossWiinBlueToothManager btManager = this;
+    protected     BossWiinBlueToothManager         btManager  = this;
+    // the wrapper for ble
+    private       BleWrapper                       bleWrapper = null;
+    // collection of BluetoothDevice
+    private       HashMap<String, BluetoothDevice> deviceMap  = new HashMap<String, BluetoothDevice>();
     // action of open, close, scan, stop and check
-    private BLEActionBase openAction = null, closeAction = null, scanAction = null, stopScan = null, checkBLE = null;
+    private       BLEActionBase                    openAction = null, closeAction = null, scanAction = null, stopScan = null, checkBLE = null;
     // action of dis and send
     private BLEActionBase disConnect = null, sendAction = null;
+    // handler for thread processing
+    private Handler        threadHandler  = new Handler();
+    // timeout value for scanning
+    private double         timeoutSeconds = 8;
+    // Adapter for UI operation
+    private BLEAdpaterBase uiAdapter      = null;
 
     /**
      * Initializes a new instance of the BossWiinBlueToothManager class.
@@ -52,14 +56,16 @@ public class BossWiinBlueToothManager {
      * @param externalContext to use to open or create the database
      * @author Yu-Hua Tseng
      */
-    public BossWiinBlueToothManager(Context externalContext) {
+    public BossWiinBlueToothManager(Context externalContext, BLEAdpaterBase adpater) {
 
         this.context = externalContext;
+        this.uiAdapter = adpater;
 
         this.bleWrapper = new BleWrapper((Activity) this.context, new BleWrapperUiCallbacks.Null() {
             @Override
             public void uiDeviceFound(final BluetoothDevice device, final int rssi, final byte[] record) {
-                btManager.PushData(device.getAddress(), Integer.toString(rssi), device);
+                btManager.PushData(device.getAddress(), device);
+                btManager.PassToAdapter(device, rssi, record);
             }
         });
 
@@ -103,22 +109,32 @@ public class BossWiinBlueToothManager {
         boolean result = false;
         BLERequest request = null;
 
-        boolean isScan = action.equals(BLEAcionEnum.Scan) ? true : false;
+        boolean isScanRelated = action.equals(BLEAcionEnum.Scan) || action.equals(BLEAcionEnum.StopScan) ? true : false;
 
-        if (isScan || this.deviceMap.containsKey(deviecAddress)) {
+        if (isScanRelated || this.deviceMap.containsKey(deviecAddress)) {
             Log.d(this.logTag, "BT device:" + deviecAddress + "will do" + action.toString());
             request = new BLERequest();
             request.actionEnum = action;
             request.bleWrapper = this.bleWrapper;
 
-            if (!isScan) {
-                request.bluetoothDevice = this.deviceMap.get(deviecAddress).bluetoothDevice;
+            if (!isScanRelated) {
+                request.bluetoothDevice = this.deviceMap.get(deviecAddress);
             }
         }
 
         if (request != null) {
+
+            if (action.equals(BLEAcionEnum.Scan)) {
+                this.StartScanningTimeout();
+            }
+
+            if(request.bleWrapper.isConnected()) {
+                request.bleWrapper.diconnect();
+            }
+
             result = this.openAction.Execute(request);
-        } else {
+        }
+        else {
             Log.w(this.logTag, deviecAddress + " is not available");
         }
 
@@ -126,16 +142,38 @@ public class BossWiinBlueToothManager {
     }
 
     /**
+     * This method will notify the Activity that bundles with Manager
+     * date: 2014/10/29
+     *
+     * @param device instance of bluetooth device
+     * @param rssi   signal strength of this instance
+     * @param record records of the BLE device
+     * @author Yu-Hua Tseng
+     */
+    public void PassToAdapter(final BluetoothDevice device, final int rssi, final byte[] record) {
+
+        ((Activity) this.context).runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        uiAdapter.AddNewDevice(device, rssi, record);
+                        // start to update UI
+                        uiAdapter.notifyDataSetChanged();
+                    }
+                }
+        );
+    }
+
+    /**
      * Insert BluetoothDevice into collection for future using
      * date: 2014/10/27
      *
      * @param address address of bluetooth peripheral
-     * @param rssi    rssi of bluetooth peripheral
      * @param device  instance of bluetooth peripheral
      * @return true for successful and false for fail.
      * @author Yu-Hua Tseng
      */
-    public synchronized boolean PushData(String address, String rssi, BluetoothDevice device) {
+    public synchronized boolean PushData(String address, BluetoothDevice device) {
         boolean result = false;
 
         try {
@@ -144,30 +182,7 @@ public class BossWiinBlueToothManager {
                 this.deviceMap.remove(address);
             }
 
-            BLEDeviceInfo bluetoothDeviceInfo = new BLEDeviceInfo();
-            bluetoothDeviceInfo.deviceName = device.getName();
-            bluetoothDeviceInfo.deviceAddress = device.getAddress();
-            bluetoothDeviceInfo.rssi = rssi;
-            bluetoothDeviceInfo.bluetoothDevice = device;
-
-            Map<String, String> uuidMap = new HashMap<String, String>();
-
-            ParcelUuid[] uuids = device.getUuids();
-
-            int index = 0;
-
-            if (uuids != null) {
-                for (ParcelUuid uuid : uuids) {
-                    String prefixKey = "uuid" + Integer.toString(index);
-                    uuidMap.put(prefixKey, uuid.getUuid().toString());
-                    ++index;
-                }
-            }
-
-            JSONObject uuidRecords = JSONHelper.getJSON(uuidMap);
-            uuidMap.clear();
-            bluetoothDeviceInfo.uuidList = uuidRecords;
-            this.deviceMap.put(address, bluetoothDeviceInfo);
+            this.deviceMap.put(address, device);
             result = true;
         } catch (Exception ex) {
             Log.e(this.logTag, ex.getMessage());
@@ -189,8 +204,8 @@ public class BossWiinBlueToothManager {
 
         try {
             for (String address : this.deviceMap.keySet()) {
-                BLEDeviceInfo deviceInfo = this.deviceMap.get(address);
-                deviceNameList.add(deviceInfo.deviceName + "," + deviceInfo.deviceAddress);
+                BluetoothDevice deviceInfo = this.deviceMap.get(address);
+                deviceNameList.add(deviceInfo.getName() + "," + deviceInfo.getAddress());
             }
         } catch (Exception ex) {
             Log.e(this.logTag, ex.getMessage());
@@ -214,7 +229,8 @@ public class BossWiinBlueToothManager {
             for (BluetoothGattService service : this.bleWrapper.getCachedServices()) {
                 serviceNameList.add(BleNamesResolver.resolveUuid(service.getUuid().toString()));
             }
-        } else {
+        }
+        else {
             Toast.makeText(this.context, "No connection", Toast.LENGTH_SHORT);
         }
 
@@ -233,9 +249,32 @@ public class BossWiinBlueToothManager {
         BluetoothDevice bluetoothDevice = null;
 
         if (this.deviceMap.containsKey(address)) {
-            bluetoothDevice = this.deviceMap.get(address).bluetoothDevice;
+            bluetoothDevice = this.deviceMap.get(address);
         }
 
         return bluetoothDevice;
+    }
+
+    /**
+     * Stop scanning as timeout value reaching
+     * date: 2014/10/29
+     *
+     * @author Yu-Hua Tseng
+     */
+    private void StartScanningTimeout() {
+
+        Runnable timeoutExecutor = new Runnable() {
+            @Override
+            public void run() {
+                if (btManager.bleWrapper == null) {
+                    return;
+                }
+
+                btManager.Execute("", BLEAcionEnum.StopScan);
+            }
+        };
+
+        Log.d(this.logTag, "Stop scanning in " + this.timeoutSeconds + " seconds");
+        this.threadHandler.postDelayed(timeoutExecutor, (long) CommonHelper.SecsToMilliSeconds(this.timeoutSeconds));
     }
 }

@@ -1,15 +1,13 @@
 package com.bosswiin.SecurityLocker;
 
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.format.Time;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import com.bosswiin.UserInterface.Components.RollingAdpater;
+import com.bosswiin.UserInterface.Components.BLEAdapter;
 import com.bosswiin.device.bluetooth.BLEAcionEnum;
 import com.bosswiin.device.bluetooth.BLERequest;
 import com.bosswiin.device.bluetooth.BossWiinBlueToothManager;
@@ -20,7 +18,6 @@ import com.bosswiin.sharelibs.JSONHelper;
 import org.json.JSONArray;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 /**
  * Created by 9708023 on 2014/10/22.
@@ -33,13 +30,14 @@ public class MainActivity extends Activity implements OnClickListener {
 
     private IRepository repository = null;
 
-    private RollingAdpater rollingAdpater = null;
+    private BLEAdapter bleAdpater = null;
+
+    private String selectedAddress = null;
 
     private BossWiinBlueToothManager blueToothManager = null;
     private BLERequest               bleRequest       = null;
 
     private String                  tableName     = "DeviceList";
-    private String                  deviceAddress = "";
     private Context                 mainContext   = this;
     private HashMap<String, Object> databaseTuple = new HashMap<String, Object>();
 
@@ -47,36 +45,35 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-            this.blueToothManager = new BossWiinBlueToothManager(this);
-            this.bleRequest = new BLERequest();
+        this.bleAdpater = new BLEAdapter(this);
+        this.blueToothManager = new BossWiinBlueToothManager(this, this.bleAdpater);
+        this.bleRequest = new BLERequest();
 
-            super.setContentView(R.layout.main);
+        super.setContentView(R.layout.main);
 
-            this.listView = (ListView) this.findViewById(R.id.listView);
-            this.scanButton = (Button) this.findViewById(R.id.buttonScan);
-            this.upButton = (Button) this.findViewById(R.id.buttonUP);
-            this.downButton = (Button) this.findViewById(R.id.buttonDown);
-            this.stopButton = (Button) this.findViewById(R.id.buttonStop);
+        this.listView = (ListView) this.findViewById(R.id.listView);
+        this.scanButton = (Button) this.findViewById(R.id.buttonScan);
+        this.upButton = (Button) this.findViewById(R.id.buttonUP);
+        this.downButton = (Button) this.findViewById(R.id.buttonDown);
+        this.stopButton = (Button) this.findViewById(R.id.buttonStop);
 
-            this.scanButton.setOnClickListener(this);
-            this.upButton.setOnClickListener(this);
-            this.stopButton.setOnClickListener(this);
-            this.downButton.setOnClickListener(this);
+        this.scanButton.setOnClickListener(this);
+        this.upButton.setOnClickListener(this);
+        this.stopButton.setOnClickListener(this);
+        this.downButton.setOnClickListener(this);
 
-            this.listView.setSelector(R.drawable.listrowhighlighter);
-            this.listView.setOnItemClickListener(new OnItemClickListener() {
+        this.listView.setSelector(R.drawable.listrowhighlighter);
+        this.listView.setOnItemClickListener(new OnItemClickListener() {
 
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
 
-                    TextView info = (TextView) view.findViewById(R.id.info);
-
-                    Builder MyAlertDialog = new Builder(mainContext);
-                    MyAlertDialog.setTitle("標題");
-                    MyAlertDialog.setMessage(info.getTag().toString());
-                    MyAlertDialog.show();
-                }
-            });
+                TextView info = (TextView) view.findViewById(R.id.info);
+                selectedAddress = info.getTag().toString();
+                blueToothManager.Execute("", BLEAcionEnum.StopScan);
+            }
+        });
+        this.listView.setAdapter(this.bleAdpater);
     }
 
     @Override
@@ -96,7 +93,7 @@ public class MainActivity extends Activity implements OnClickListener {
     protected void onPause() {
         super.onPause();
         //this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Diconnect);
-       // this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Close);
+        // this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Close);
     }
 
     @Override
@@ -105,10 +102,11 @@ public class MainActivity extends Activity implements OnClickListener {
         if (view.getId() == R.id.buttonScan) {
 
             this.blueToothManager.Execute("", BLEAcionEnum.Scan);
-
         }
         else if (view.getId() == R.id.buttonUP) {
 
+            this.blueToothManager.Execute(this.selectedAddress, BLEAcionEnum.Send);
+            /*
             this.databaseTuple.put("UUID", UUID.randomUUID().toString());
             this.databaseTuple.put("Name", "Joey");
             this.databaseTuple.put("Location", "1F");
@@ -120,6 +118,7 @@ public class MainActivity extends Activity implements OnClickListener {
             this.repository.Insert(this.tableName, this.databaseTuple);
 
             this.databaseTuple.clear();
+            */
         }
         else if (view.getId() == R.id.buttonDown) {
 
@@ -144,11 +143,11 @@ public class MainActivity extends Activity implements OnClickListener {
 
         JSONArray array = JSONHelper.GetJSON(this.repository.Query(this.tableName, this.databaseTuple));
 
-        if (this.rollingAdpater == null) {
-            this.rollingAdpater = new RollingAdpater(this, array);
+        /*if (this.bleAdpater == null) {
+            this.bleAdpater = new RollingAdpater(this, array);
         }
 
-        this.listView.setAdapter(this.rollingAdpater);
+        this.listView.setAdapter(this.bleAdpater);*/
     }
 
     private boolean GetRepository() {
