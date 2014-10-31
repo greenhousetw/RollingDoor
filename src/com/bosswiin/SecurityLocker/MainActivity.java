@@ -3,6 +3,7 @@ package com.bosswiin.SecurityLocker;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -24,6 +25,10 @@ import java.util.HashMap;
  */
 public class MainActivity extends Activity implements OnClickListener {
 
+    private final String uuidDoorService               = "713d0000-503e-4c75-ba94-3148f18d941e";
+    private final String uuidDoorCharactristicsForUP   = "713d0003-503e-4c75-ba94-3148f18d941e";
+    private final String uuidDoorCharactristicsForDown = "713d0003-503e-4c75-ba94-3148f18d941e";
+    private final String uuidDoorCharactristicsForStop = "713d0003-503e-4c75-ba94-3148f18d941e";
     private ListView listView;
     private Button scanButton = null, upButton = null, stopButton = null, downButton = null;
     private IRepository              repository       = null;
@@ -106,12 +111,18 @@ public class MainActivity extends Activity implements OnClickListener {
         }
         else if (view.getId() == R.id.buttonUP) {
 
-            this.bleRequest.actionEnum=BLEAcionEnum.Send;
-            this.bleRequest.remoteAddress=this.selectedAddress;
-            this.bleRequest.serviceUUID="713d0000-503e-4c75-ba94-3148f18d941e";
-            this.bleRequest.characteristicsUUID="713d0003-503e-4c75-ba94-3148f18d941e";
-            this.bleRequest.transmittedContent="0001";
-            this.blueToothManager.Execute(this.bleRequest);
+            if(this.selectedAddress!=null) {
+                this.bleRequest.actionEnum = BLEAcionEnum.Send;
+                this.bleRequest.remoteAddress = this.selectedAddress;
+                this.bleRequest.serviceUUID = this.uuidDoorCharactristicsForUP;
+                this.bleRequest.characteristicsUUID = "713d0003-503e-4c75-ba94-3148f18d941e";
+                this.bleRequest.transmittedContent = "100";
+                this.blueToothManager.Execute(this.bleRequest);
+            }
+            else
+            {
+                this.ShowToast(this,"請先點擊欲控制的門");
+            }
             /*
             this.databaseTuple.put("UUID", UUID.randomUUID().toString());
             this.databaseTuple.put("Name", "Joey");
@@ -128,17 +139,21 @@ public class MainActivity extends Activity implements OnClickListener {
         }
         else if (view.getId() == R.id.buttonDown) {
 
-            this.bleRequest.actionEnum=BLEAcionEnum.Send;
-            this.bleRequest.remoteAddress=this.selectedAddress;
-            this.bleRequest.serviceUUID="713d0000-503e-4c75-ba94-3148f18d941e";
-            this.bleRequest.characteristicsUUID="713d0003-503e-4c75-ba94-3148f18d941e";
-            this.bleRequest.transmittedContent="0001";
+            this.bleRequest.actionEnum = BLEAcionEnum.Send;
+            this.bleRequest.remoteAddress = this.selectedAddress;
+            this.bleRequest.serviceUUID = this.uuidDoorService;
+            this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForDown;
+            this.bleRequest.transmittedContent = "110";
             this.blueToothManager.Execute(this.bleRequest);
         }
         else if (view.getId() == R.id.buttonStop) {
 
-            this.listView.setAdapter(new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1, this.repository.GetTableList()));
+            this.bleRequest.actionEnum = BLEAcionEnum.Send;
+            this.bleRequest.remoteAddress = this.selectedAddress;
+            this.bleRequest.serviceUUID = this.uuidDoorService;
+            this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForStop;
+            this.bleRequest.transmittedContent = "100";
+            this.blueToothManager.Execute(this.bleRequest);
         }
     }
 
@@ -152,6 +167,14 @@ public class MainActivity extends Activity implements OnClickListener {
         this.databaseTuple.put("UpdateTime", "UpdateTime");
 
         JSONArray array = JSONHelper.GetJSON(this.repository.Query(this.tableName, this.databaseTuple));
+    }
+
+    private void ShowToast(Context context, String resId) {
+        Toast toast = Toast.makeText(context, resId, Toast.LENGTH_SHORT);
+        LinearLayout toastLayout = (LinearLayout) toast.getView();
+        TextView toastTV = (TextView) toastLayout.getChildAt(0);
+        toastTV.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.TEXT_SIZE));
+        toast.show();
     }
 
     private boolean GetRepository() {

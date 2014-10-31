@@ -3,4 +3,5 @@
     <string name="app_name">SecurityLocker</string>
     <string name="UP">New Button</string>
     <string name="empty">Empty Hint</string>
+    <dimen name="TEXT_SIZE">26sp</dimen>
 </resources>
