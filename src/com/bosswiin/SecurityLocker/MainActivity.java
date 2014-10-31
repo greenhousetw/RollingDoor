@@ -25,20 +25,21 @@ import java.util.HashMap;
  */
 public class MainActivity extends Activity implements OnClickListener {
 
-    private final String uuidDoorService               = "713d0000-503e-4c75-ba94-3148f18d941e";
-    private final String uuidDoorCharactristicsForUP   = "713d0003-503e-4c75-ba94-3148f18d941e";
+    private final String uuidDoorService = "713d0000-503e-4c75-ba94-3148f18d941e";
+    private final String uuidDoorCharactristicsForUP = "713d0003-503e-4c75-ba94-3148f18d941e";
     private final String uuidDoorCharactristicsForDown = "713d0003-503e-4c75-ba94-3148f18d941e";
     private final String uuidDoorCharactristicsForStop = "713d0003-503e-4c75-ba94-3148f18d941e";
+
     private ListView listView;
     private Button scanButton = null, upButton = null, stopButton = null, downButton = null;
-    private IRepository              repository       = null;
-    private BLEAdapter               bleAdpater       = null;
-    private String                   selectedAddress  = null;
+    private IRepository repository = null;
+    private BLEAdapter bleAdpater = null;
+    private String selectedAddress = null;
     private BossWiinBlueToothManager blueToothManager = null;
-    private BLERequest               bleRequest       = null;
-    private String                   tableName        = "DeviceList";
-    private Context                  mainContext      = this;
-    private HashMap<String, Object>  databaseTuple    = new HashMap<String, Object>();
+    private BLERequest bleRequest = null;
+    private String tableName = "DeviceList";
+    private Context mainContext = this;
+    private HashMap<String, Object> databaseTuple = new HashMap<String, Object>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,11 +72,22 @@ public class MainActivity extends Activity implements OnClickListener {
                                     int position, long id) {
 
                 TextView info = (TextView) view.findViewById(R.id.info);
-                selectedAddress = info.getTag().toString();
 
-                bleRequest.actionEnum = BLEAcionEnum.StopScan;
+                // means that the remote device is in connected status
+                if (selectedAddress != null) {
+                    if (!selectedAddress.equals(info.getTag().toString())) {
+                        bleRequest.actionEnum = BLEAcionEnum.Diconnect;
+                        bleRequest.remoteAddress = selectedAddress;
+                        blueToothManager.Execute(bleRequest);
+                    }
+                }
+
+                selectedAddress = info.getTag().toString();
+                bleRequest.actionEnum = BLEAcionEnum.Open;
+                bleRequest.remoteAddress = selectedAddress;
                 blueToothManager.Execute(bleRequest);
             }
+
         });
 
         this.listView.setAdapter(this.bleAdpater);
@@ -108,51 +120,33 @@ public class MainActivity extends Activity implements OnClickListener {
 
             this.bleRequest.actionEnum = BLEAcionEnum.Scan;
             this.blueToothManager.Execute(this.bleRequest);
-        }
-        else if (view.getId() == R.id.buttonUP) {
+        } else if (view.getId() == R.id.buttonUP) {
 
-            if(this.selectedAddress!=null) {
+            if (this.selectedAddress != null) {
                 this.bleRequest.actionEnum = BLEAcionEnum.Send;
                 this.bleRequest.remoteAddress = this.selectedAddress;
-                this.bleRequest.serviceUUID = this.uuidDoorCharactristicsForUP;
-                this.bleRequest.characteristicsUUID = "713d0003-503e-4c75-ba94-3148f18d941e";
-                this.bleRequest.transmittedContent = "100";
+                this.bleRequest.serviceUUID = this.uuidDoorService;
+                this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForUP;
+                this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
                 this.blueToothManager.Execute(this.bleRequest);
+            } else {
+                this.ShowToast(this, "@R.string.DoorHint");
             }
-            else
-            {
-                this.ShowToast(this,"請先點擊欲控制的門");
-            }
-            /*
-            this.databaseTuple.put("UUID", UUID.randomUUID().toString());
-            this.databaseTuple.put("Name", "Joey");
-            this.databaseTuple.put("Location", "1F");
-            this.databaseTuple.put("Frequency", Integer.parseInt("0"));
-
-            Time now = new Time();
-            now.setToNow();
-            this.databaseTuple.put("UpdateTime", now.format("%Y.%m.%d %H:%M:%S"));
-            this.repository.Insert(this.tableName, this.databaseTuple);
-
-            this.databaseTuple.clear();
-            */
-        }
-        else if (view.getId() == R.id.buttonDown) {
+        } else if (view.getId() == R.id.buttonDown) {
 
             this.bleRequest.actionEnum = BLEAcionEnum.Send;
             this.bleRequest.remoteAddress = this.selectedAddress;
             this.bleRequest.serviceUUID = this.uuidDoorService;
             this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForDown;
-            this.bleRequest.transmittedContent = "110";
+            this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
             this.blueToothManager.Execute(this.bleRequest);
-        }
-        else if (view.getId() == R.id.buttonStop) {
+        } else if (view.getId() == R.id.buttonStop) {
 
             this.bleRequest.actionEnum = BLEAcionEnum.Send;
             this.bleRequest.remoteAddress = this.selectedAddress;
             this.bleRequest.serviceUUID = this.uuidDoorService;
             this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForStop;
-            this.bleRequest.transmittedContent = "100";
+            this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
             this.blueToothManager.Execute(this.bleRequest);
         }
     }

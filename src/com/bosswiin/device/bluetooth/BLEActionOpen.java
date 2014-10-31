@@ -19,12 +19,10 @@ public class BLEActionOpen extends BLEActionBase {
 
         boolean result = false;
 
-        Log.d(this.getClass().getPackage().getName(), "Start to open connection");
-
         if (request.actionEnum != BLEAcionEnum.Open) {
             result = this.successor.Execute(request);
-        }
-        else {
+        } else {
+            Log.d(this.getClass().getPackage().getName(), "Start to open connection");
             try {
                 result = request.bleWrapper.connect(request.remoteAddress);
                 Log.d(this.getClass().getPackage().getName(), "Connect to Bluetooth Device:" + request.remoteAddress + ", status=" + Boolean.toString(result));

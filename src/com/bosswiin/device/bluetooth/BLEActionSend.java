@@ -43,8 +43,6 @@ public class BLEActionSend extends BLEActionBase {
 
             try {
 
-                request.bleWrapper.connect(request.remoteAddress);
-
                 int retryTimes = 10;
                 int waitSeconds = 1;
 
@@ -63,11 +61,10 @@ public class BLEActionSend extends BLEActionBase {
 
                     for (BluetoothGattService service : request.bleWrapper.getCachedServices()) {
                         if (service.getUuid().equals(UUID.fromString(request.serviceUUID))) {
-                            Thread.sleep((int) CommonHelper.SecsToMilliSeconds(waitSeconds));
+                            Thread.sleep((int) CommonHelper.SecsToMilliSeconds(0.3));
                             for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
                                 if (characteristic.getUuid().equals(UUID.fromString(request.characteristicsUUID))) {
-                                    request.bleWrapper.writeDataToCharacteristic(characteristic,
-                                            URLEncoder.encode(request.transmittedContent, "utf-8").getBytes());
+                                    request.bleWrapper.writeDataToCharacteristic(characteristic, request.transmittedContent);
                                 }
                             }
                         }

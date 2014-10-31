@@ -26,7 +26,7 @@ public class BLERequest {
     // uuid of characteristics
     public    String            characteristicsUUID = "";
     // content for receieving or transmitting
-    public    String transmittedContent  = "";
+    public   byte[] transmittedContent  = null;
     // instance of BLEWrapper
     protected BleWrapper        bleWrapper          = null;
     // instance of BluetoothDevice

@@ -137,8 +137,8 @@ public class BossWiinBlueToothManager {
 
         boolean isScanRelated = request.actionEnum.equals(BLEAcionEnum.Scan) || request.actionEnum.equals(BLEAcionEnum.StopScan) ? true : false;
 
-        if (isScanRelated || this.deviceMap.containsKey(request.remoteAddress)) {
-            Log.d(this.logTag, "BT device:" + request.remoteAddress + "will do" + request.actionEnum.toString());
+        if (isScanRelated) {
+            Log.d(this.logTag, "BT device:" + request.remoteAddress + " will do" + request.actionEnum.toString());
             request.bleWrapper = this.bleWrapper;
 
             if (!isScanRelated) {
@@ -150,10 +150,6 @@ public class BossWiinBlueToothManager {
 
             if (request.actionEnum.equals(BLEAcionEnum.Scan)) {
                 this.StartScanningTimeout();
-            }
-
-            if (request.bleWrapper.isConnected()) {
-                request.bleWrapper.diconnect();
             }
 
             result = this.openAction.Execute(request);

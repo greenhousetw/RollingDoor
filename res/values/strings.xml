@@ -3,5 +3,6 @@
     <string name="app_name">SecurityLocker</string>
     <string name="UP">New Button</string>
     <string name="empty">Empty Hint</string>
+    <string name="DoorHint">請先點擊自動門</string>
     <dimen name="TEXT_SIZE">26sp</dimen>
 </resources>
