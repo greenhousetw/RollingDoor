@@ -1,9 +1,14 @@
+/**
+ * BLEActionDisconnect.java
+ * @author Yu-Hua Tseng
+ * @version 0.2
+ * @since 0.0
+ */
 package com.bosswiin.device.bluetooth;
 
-import android.util.Log;
-
 /**
- * Created by 9708023 on 2014/10/27.
+ * BLEActionDisconnect
+ * This class will disconnect from remote peripheral
  */
 public class BLEActionDisconnect extends BLEActionBase {
 

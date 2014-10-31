@@ -7,14 +7,16 @@
 package com.bosswiin.device.bluetooth;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 import com.bosswiin.UserInterface.Components.BLEAdpaterBase;
-import com.bosswiin.device.bluetooth.blehandelr.BleNamesResolver;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapper;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapperUiCallbacks;
 import com.bosswiin.sharelibs.CommonHelper;
@@ -26,20 +28,21 @@ import java.util.HashMap;
  * BossWiinBlueToothManager
  * This class provides bluetooth device collection access and action transmition
  */
-public class BossWiinBlueToothManager{
+public class BossWiinBlueToothManager {
 
+    private static final int                              REQUEST_ENABLE_BT = 1;
     // log tag
-    private final String                           logTag     = this.getClass().getName();
+    private final        String                           logTag            = this.getClass().getName();
     // instance of activity runtime context
-    protected     Context                          context    = null;
+    protected            Context                          context           = null;
     // instance of self, which will be used by BLEWarpper for callback
-    protected     BossWiinBlueToothManager         btManager  = this;
+    protected            BossWiinBlueToothManager         btManager         = this;
     // the wrapper for ble
-    private       BleWrapper                       bleWrapper = null;
+    private              BleWrapper                       bleWrapper        = null;
     // collection of BluetoothDevice
-    private       HashMap<String, BluetoothDevice> deviceMap  = new HashMap<String, BluetoothDevice>();
+    private              HashMap<String, BluetoothDevice> deviceMap         = new HashMap<String, BluetoothDevice>();
     // action of open, close, scan, stop and check
-    private       BLEActionBase                    openAction = null, closeAction = null, scanAction = null, stopScan = null, checkBLE = null;
+    private              BLEActionBase                    openAction        = null, closeAction = null, scanAction = null, stopScan = null, checkBLE = null;
     // action of dis and send
     private BLEActionBase disConnect = null, sendAction = null;
     // handler for thread processing
@@ -99,43 +102,64 @@ public class BossWiinBlueToothManager{
      * To execute the action.
      * date: 2014/10/24
      *
-     * @param deviecAddress uuid of bluetooth device
-     * @param action        action that this device will execute
+     * @param context instance of Context
      * @return true for successful and false for fail
      * @author Yu-Hua Tseng
      */
-    public boolean Execute(String deviecAddress, BLEAcionEnum action) {
+    public static boolean IsHardwareEanble(Context context) {
 
         boolean result = false;
-        BLERequest request = null;
 
-        boolean isScanRelated = action.equals(BLEAcionEnum.Scan) || action.equals(BLEAcionEnum.StopScan) ? true : false;
+        BluetoothAdapter adapter = ((BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
 
-        if (isScanRelated || this.deviceMap.containsKey(deviecAddress)) {
-            Log.d(this.logTag, "BT device:" + deviecAddress + "will do" + action.toString());
-            request = new BLERequest();
-            request.actionEnum = action;
+        if (adapter != null && !adapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            ((Activity) context).startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }
+
+        PackageManager pm = context.getPackageManager();
+        result = pm.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
+
+        return result;
+    }
+
+    /**
+     * To execute the action.
+     * date: 2014/10/24
+     *
+     * @param request instance of BLERequest
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
+    public boolean Execute(BLERequest request) {
+
+        boolean result = false;
+
+        boolean isScanRelated = request.actionEnum.equals(BLEAcionEnum.Scan) || request.actionEnum.equals(BLEAcionEnum.StopScan) ? true : false;
+
+        if (isScanRelated || this.deviceMap.containsKey(request.remoteAddress)) {
+            Log.d(this.logTag, "BT device:" + request.remoteAddress + "will do" + request.actionEnum.toString());
             request.bleWrapper = this.bleWrapper;
 
             if (!isScanRelated) {
-                request.bluetoothDevice = this.deviceMap.get(deviecAddress);
+                request.bluetoothDevice = this.deviceMap.get(request.remoteAddress);
             }
         }
 
         if (request != null) {
 
-            if (action.equals(BLEAcionEnum.Scan)) {
+            if (request.actionEnum.equals(BLEAcionEnum.Scan)) {
                 this.StartScanningTimeout();
             }
 
-            if(request.bleWrapper.isConnected()) {
+            if (request.bleWrapper.isConnected()) {
                 request.bleWrapper.diconnect();
             }
 
             result = this.openAction.Execute(request);
         }
         else {
-            Log.w(this.logTag, deviecAddress + " is not available");
+            Log.w(this.logTag, request.remoteAddress + " is not available");
         }
 
         return result;
@@ -215,29 +239,6 @@ public class BossWiinBlueToothManager{
     }
 
     /**
-     * Get service name list
-     * date: 2014/10/27
-     *
-     * @return instance of BluetoothDevice
-     * @author Yu-Hua Tseng
-     */
-    public ArrayList<String> GetDeviceServiceList() {
-
-        ArrayList<String> serviceNameList = new ArrayList<String>();
-
-        if (this.bleWrapper.isConnected()) {
-            for (BluetoothGattService service : this.bleWrapper.getCachedServices()) {
-                serviceNameList.add(BleNamesResolver.resolveUuid(service.getUuid().toString()));
-            }
-        }
-        else {
-            Toast.makeText(this.context, "No connection", Toast.LENGTH_SHORT);
-        }
-
-        return serviceNameList;
-    }
-
-    /**
      * Get BluetoothDevice instance, according to the given deviceName
      * date: 2014/10/27
      *
@@ -270,7 +271,9 @@ public class BossWiinBlueToothManager{
                     return;
                 }
 
-                btManager.Execute("", BLEAcionEnum.StopScan);
+                BLERequest request = new BLERequest();
+                request.actionEnum = BLEAcionEnum.StopScan;
+                btManager.Execute(request);
             }
         };
 

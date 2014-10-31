@@ -1,3 +1,9 @@
+/**
+ * BLEAdpaterBase.java
+ * @author Yu-Hua Tseng
+ * @version 0.1
+ * @since 0.0
+ */
 package com.bosswiin.UserInterface.Components;
 
 import android.app.Activity;
@@ -14,7 +20,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
- * Created by 9708023 on 2014/10/29.
+ * BLEAdpaterBase
+ * This class is a adpater class which used by UI component
  */
 public class BLEAdpaterBase extends BaseAdapter {
 

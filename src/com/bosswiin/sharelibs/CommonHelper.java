@@ -1,6 +1,7 @@
 /**
- * This class provides common using methods
+ * CommonHelper.java
  * @author Yu-Hua Tseng
+ * @version 0.1
  * @since 0.0
  */
 package com.bosswiin.sharelibs;

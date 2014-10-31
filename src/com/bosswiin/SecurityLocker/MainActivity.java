@@ -25,25 +25,22 @@ import java.util.HashMap;
 public class MainActivity extends Activity implements OnClickListener {
 
     private ListView listView;
-
     private Button scanButton = null, upButton = null, stopButton = null, downButton = null;
-
-    private IRepository repository = null;
-
-    private BLEAdapter bleAdpater = null;
-
-    private String selectedAddress = null;
-
+    private IRepository              repository       = null;
+    private BLEAdapter               bleAdpater       = null;
+    private String                   selectedAddress  = null;
     private BossWiinBlueToothManager blueToothManager = null;
     private BLERequest               bleRequest       = null;
-
-    private String                  tableName     = "DeviceList";
-    private Context                 mainContext   = this;
-    private HashMap<String, Object> databaseTuple = new HashMap<String, Object>();
+    private String                   tableName        = "DeviceList";
+    private Context                  mainContext      = this;
+    private HashMap<String, Object>  databaseTuple    = new HashMap<String, Object>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        BossWiinBlueToothManager.IsHardwareEanble(this);
 
         this.bleAdpater = new BLEAdapter(this);
         this.blueToothManager = new BossWiinBlueToothManager(this, this.bleAdpater);
@@ -70,9 +67,12 @@ public class MainActivity extends Activity implements OnClickListener {
 
                 TextView info = (TextView) view.findViewById(R.id.info);
                 selectedAddress = info.getTag().toString();
-                blueToothManager.Execute("", BLEAcionEnum.StopScan);
+
+                bleRequest.actionEnum = BLEAcionEnum.StopScan;
+                blueToothManager.Execute(bleRequest);
             }
         });
+
         this.listView.setAdapter(this.bleAdpater);
     }
 
@@ -101,11 +101,17 @@ public class MainActivity extends Activity implements OnClickListener {
 
         if (view.getId() == R.id.buttonScan) {
 
-            this.blueToothManager.Execute("", BLEAcionEnum.Scan);
+            this.bleRequest.actionEnum = BLEAcionEnum.Scan;
+            this.blueToothManager.Execute(this.bleRequest);
         }
         else if (view.getId() == R.id.buttonUP) {
 
-            this.blueToothManager.Execute(this.selectedAddress, BLEAcionEnum.Send);
+            this.bleRequest.actionEnum=BLEAcionEnum.Send;
+            this.bleRequest.remoteAddress=this.selectedAddress;
+            this.bleRequest.serviceUUID="713d0000-503e-4c75-ba94-3148f18d941e";
+            this.bleRequest.characteristicsUUID="713d0003-503e-4c75-ba94-3148f18d941e";
+            this.bleRequest.transmittedContent="0001";
+            this.blueToothManager.Execute(this.bleRequest);
             /*
             this.databaseTuple.put("UUID", UUID.randomUUID().toString());
             this.databaseTuple.put("Name", "Joey");
@@ -122,8 +128,12 @@ public class MainActivity extends Activity implements OnClickListener {
         }
         else if (view.getId() == R.id.buttonDown) {
 
-            this.listView.setAdapter(new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1, this.repository.GetTableList()));
+            this.bleRequest.actionEnum=BLEAcionEnum.Send;
+            this.bleRequest.remoteAddress=this.selectedAddress;
+            this.bleRequest.serviceUUID="713d0000-503e-4c75-ba94-3148f18d941e";
+            this.bleRequest.characteristicsUUID="713d0003-503e-4c75-ba94-3148f18d941e";
+            this.bleRequest.transmittedContent="0001";
+            this.blueToothManager.Execute(this.bleRequest);
         }
         else if (view.getId() == R.id.buttonStop) {
 
@@ -142,12 +152,6 @@ public class MainActivity extends Activity implements OnClickListener {
         this.databaseTuple.put("UpdateTime", "UpdateTime");
 
         JSONArray array = JSONHelper.GetJSON(this.repository.Query(this.tableName, this.databaseTuple));
-
-        /*if (this.bleAdpater == null) {
-            this.bleAdpater = new RollingAdpater(this, array);
-        }
-
-        this.listView.setAdapter(this.bleAdpater);*/
     }
 
     private boolean GetRepository() {

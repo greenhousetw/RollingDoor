@@ -1,15 +1,27 @@
+/**
+ * BLEActionStopScan.java
+ * @author Yu-Hua Tseng
+ * @version 0.1
+ * @since 0.0
+ */
 package com.bosswiin.device.bluetooth;
 
 import android.util.Log;
 
 /**
- * Created by 9708023 on 2014/10/27.
+ * BLEActionStopScan
+ * This class stops BLE scanning
  */
 public class BLEActionStopScan extends BLEActionBase {
 
-    public BLEActionStopScan(){
-    }
-
+    /**
+     * To execute the action.
+     * date: 2014/10/31
+     *
+     * @param request instance of BLERequest
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
     @Override
     public boolean Execute(BLERequest request) {
 
@@ -22,8 +34,8 @@ public class BLEActionStopScan extends BLEActionBase {
         else
         {
             Log.v(this.getClass().getPackage().getName(), this.getClass().getName());
-
             request.bleWrapper.stopScanning();
+            result=true;
         }
 
         return result;

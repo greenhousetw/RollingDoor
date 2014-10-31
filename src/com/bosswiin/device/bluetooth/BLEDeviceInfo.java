@@ -6,7 +6,6 @@
  */
 package com.bosswiin.device.bluetooth;
 
-import android.bluetooth.BluetoothDevice;
 import org.json.JSONObject;
 
 /**
@@ -25,7 +24,4 @@ public class BLEDeviceInfo {
 
     // uuid list for device's sub services
     public JSONObject uuidList = null;
-
-    // the instance of BLE device
-    // public BluetoothDevice bluetoothDevice = null;
 }

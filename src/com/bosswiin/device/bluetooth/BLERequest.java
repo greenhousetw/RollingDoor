@@ -7,7 +7,9 @@
 package com.bosswiin.device.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
-import com.bosswiin.device.bluetooth.blehandelr.*;
+import com.bosswiin.device.bluetooth.blehandelr.BleWrapper;
+
+import java.util.ArrayList;
 
 /**
  * BLERequest
@@ -16,14 +18,17 @@ import com.bosswiin.device.bluetooth.blehandelr.*;
 public class BLERequest {
 
     // instance of BLEActionEnum
-    protected BLEAcionEnum actionEnum = BLEAcionEnum.None;
-
+    public    BLEAcionEnum      actionEnum          = BLEAcionEnum.None;
+    // address that we want to connect
+    public    String            remoteAddress       = "";
+    // uudi of service
+    public    String            serviceUUID         = "";
+    // uuid of characteristics
+    public    String            characteristicsUUID = "";
+    // content for receieving or transmitting
+    public    String transmittedContent  = "";
     // instance of BLEWrapper
-    protected BleWrapper bleWrapper = null;
-
+    protected BleWrapper        bleWrapper          = null;
     // instance of BluetoothDevice
-    protected BluetoothDevice bluetoothDevice = null;
-
-    // service uuid
-    protected String serviceUUID="";
+    protected BluetoothDevice   bluetoothDevice     = null;
 }

@@ -367,6 +367,7 @@ public class BleWrapper {
             if (status == BluetoothGatt.GATT_SUCCESS) {
             	// now, when services discovery is finished, we can call getServices() for Gatt
             	getSupportedServices();
+                isServiceDiscvoeryDone=true;
             }
         }
 
@@ -418,6 +419,8 @@ public class BleWrapper {
         	}
         };
     };
+
+    public boolean isServiceDiscvoeryDone=false;
     
 	private Activity mParent = null;    
 	private boolean mConnected = false;
