@@ -3,6 +3,7 @@ package com.bosswiin.SecurityLocker;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -130,24 +131,32 @@ public class MainActivity extends Activity implements OnClickListener {
                 this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
                 this.blueToothManager.Execute(this.bleRequest);
             } else {
-                this.ShowToast(this, "@R.string.DoorHint");
+                this.ShowToast(this, this.getString(R.string.DoorHint));
             }
         } else if (view.getId() == R.id.buttonDown) {
 
-            this.bleRequest.actionEnum = BLEAcionEnum.Send;
-            this.bleRequest.remoteAddress = this.selectedAddress;
-            this.bleRequest.serviceUUID = this.uuidDoorService;
-            this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForDown;
-            this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
-            this.blueToothManager.Execute(this.bleRequest);
+            if (this.selectedAddress != null) {
+                this.bleRequest.actionEnum = BLEAcionEnum.Send;
+                this.bleRequest.remoteAddress = this.selectedAddress;
+                this.bleRequest.serviceUUID = this.uuidDoorService;
+                this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForDown;
+                this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
+                this.blueToothManager.Execute(this.bleRequest);
+            } else {
+                this.ShowToast(this, this.getString(R.string.DoorHint));
+            }
         } else if (view.getId() == R.id.buttonStop) {
 
-            this.bleRequest.actionEnum = BLEAcionEnum.Send;
-            this.bleRequest.remoteAddress = this.selectedAddress;
-            this.bleRequest.serviceUUID = this.uuidDoorService;
-            this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForStop;
-            this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
-            this.blueToothManager.Execute(this.bleRequest);
+            if (this.selectedAddress != null) {
+                this.bleRequest.actionEnum = BLEAcionEnum.Send;
+                this.bleRequest.remoteAddress = this.selectedAddress;
+                this.bleRequest.serviceUUID = this.uuidDoorService;
+                this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForStop;
+                this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
+                this.blueToothManager.Execute(this.bleRequest);
+            } else {
+                this.ShowToast(this, this.getString(R.string.DoorHint));
+            }
         }
     }
 
@@ -161,6 +170,18 @@ public class MainActivity extends Activity implements OnClickListener {
         this.databaseTuple.put("UpdateTime", "UpdateTime");
 
         JSONArray array = JSONHelper.GetJSON(this.repository.Query(this.tableName, this.databaseTuple));
+    }
+
+    private boolean IsEmptyDeviceList() {
+
+        boolean result = false;
+
+        if (this.listView.getCount() != 0) {
+            Log.v(this.getClass().getName(), "BLE device list has " + Integer.toString(this.listView.getCount()));
+            result = true;
+        }
+
+        return result;
     }
 
     private void ShowToast(Context context, String resId) {
