@@ -1,51 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 这是列表项的布局文件，每一行长什么样子，修改这里 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="80dp"
-              android:orientation="horizontal"
-              android:padding="5dip"
-              android:paddingBottom="15dp" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                android:background="@drawable/listrowhighlighter"
+                android:padding="6dip" >
 
     <ImageView
-            android:id="@+id/img"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp" />
+            android:id="@+id/bleIcon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dip"
+            android:contentDescription="photo"
+            android:focusable="false"
+            android:src="@android:drawable/ic_btn_speak_now" />
 
-    <LinearLayout
+    <ProgressBar
+            android:id="@+id/bleProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/bleIcon"
+            android:layout_marginTop="6dp"
+            android:max="100"
+            android:progress="0"
+            android:focusable="false"
+            android:progressDrawable="@drawable/custom_progressbar" />
 
-        <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-            <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
-
-            <TextView
-                    android:id="@+id/location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="110dp"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
-        </LinearLayout>
-
-        <TextView
-                android:id="@+id/info"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="3dp"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-    </LinearLayout>
-
-</LinearLayout>
+    <TextView
+            android:id="@+id/bleDeviceName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bleProgressBar"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toRightOf="@id/bleIcon"
+            android:layout_marginBottom="3dp"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:focusable="false"
+            android:text="DeviceName" />
+</RelativeLayout>

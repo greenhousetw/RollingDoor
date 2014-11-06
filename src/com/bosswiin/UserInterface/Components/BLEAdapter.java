@@ -159,9 +159,8 @@ public class BLEAdapter extends BLEAdpaterBase {
         if (convertView == null) {
             convertView = this.mInflater.inflate(R.layout.rollingitemlayout, parent, false);
             holder = new ViewHolder();
-            holder.image = (ImageView) convertView.findViewById(R.id.img);
-            holder.nameField = (TextView) convertView.findViewById(R.id.name);
-            holder.infoField = (TextView) convertView.findViewById(R.id.info);
+            holder.image = (ImageView) convertView.findViewById(R.id.bleIcon);
+            holder.nameField = (TextView) convertView.findViewById(R.id.bleDeviceName);
             convertView.setTag(holder);
         }
         else {
@@ -171,10 +170,8 @@ public class BLEAdapter extends BLEAdpaterBase {
         // start to create view
         try {
             BLEDeviceInfo record = (BLEDeviceInfo) this.GetDevice(position);
-            holder.image.setBackgroundResource((Integer) R.drawable.door2);
             holder.nameField.setText(record.deviceName);
-            holder.infoField.setText(record.deviceAddress);
-            holder.infoField.setTag(record.deviceAddress);
+            holder.nameField.setTag(record.deviceAddress);
         } catch (Exception ex) {
             Log.e(LOGTAG, ex.getMessage());
         }
@@ -191,10 +188,6 @@ public class BLEAdapter extends BLEAdpaterBase {
         ImageView image         = null;
         // TextView in rollingitemlayout
         TextView  nameField     = null;
-        // TextView in rollingitemlayout
-        TextView  infoField     = null;
-        // uuid that we want to hide
-        String    equipmentUUID = "";
     }
 }
 

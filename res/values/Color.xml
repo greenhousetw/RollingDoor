@@ -20,4 +20,6 @@
     <color name="pressed">#fff22fff</color>
     <color name="selected">#fff33fff</color>
     <color name="focused">#ffff44ff</color>
+    <color name="joeygray">#BFBFBF</color>
+    <color name="joeyselected">#87D37C</color>
 </resources>

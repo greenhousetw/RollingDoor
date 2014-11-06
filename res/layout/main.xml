@@ -1,68 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<TableLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:stretchColumns="1"
         >
-
-    <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-      <FrameLayout
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:textSize="36sp"
+              android:layout_marginTop="24dp"
+              android:layout_marginBottom="12dp"
+              android:text="@string/app_internalTitle"
+            />
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            >
+        <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1.5">
-            <ListView
-                    android:choiceMode="singleChoice"
-                    android:divider="@color/white"
-                    android:dividerHeight="1dip"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/listView"/>
-      </FrameLayout>
-      <FrameLayout
+                android:text="@string/btnScanTitle"
+                android:textSize="24sp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/flatbuttonorgange"
+                android:id="@+id/buttonScan"/>
+        <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1">
-          <LinearLayout
-                  xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:layout_gravity="center"
-                  android:orientation="vertical"
-                  android:padding="0dp">
-            <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="0dip"
-                    android:text="▲"
-                    android:textSize="30dp"
-                    style="@style/box_sky_blue"
-                    android:id="@+id/buttonUP"/>
-            <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="◼"
-                    android:textSize="30dp"
-                    style="@style/box_sky_blue"
-                    android:id="@+id/buttonStop"/>
-            <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="▼"
-                    android:textSize="30dp"
-                    style="@style/box_sky_blue"
-                    android:id="@+id/buttonDown"/>
-             <Button
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:text="♲"
-                      android:textSize="30dp"
-                      style="@style/box_sky_blue"
-                      android:id="@+id/buttonScan"/>
-          </LinearLayout>
-      </FrameLayout>
-    </TableRow>
-</TableLayout>
+                android:paddingTop="0dip"
+                android:layout_marginRight="10dp"
+                android:text="▲"
+                android:textSize="24sp"
+                android:background="@drawable/flatbutton"
+                android:id="@+id/buttonUP"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="◼"
+                android:layout_marginRight="10dp"
+                android:textSize="24sp"
+                android:background="@drawable/flatbutton"
+                android:id="@+id/buttonStop"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="▼"
+                android:layout_marginRight="10dp"
+                android:textSize="24sp"
+                android:background="@drawable/flatbutton"
+                android:id="@+id/buttonDown"/>
+    </LinearLayout>
+    <ListView
+      android:choiceMode="singleChoice"
+      android:divider="@color/white"
+      android:dividerHeight="1dip"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/listView"/>
+</LinearLayout>

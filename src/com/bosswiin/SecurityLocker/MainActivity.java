@@ -65,13 +65,13 @@ public class MainActivity extends Activity implements OnClickListener {
         this.stopButton.setOnClickListener(this);
         this.downButton.setOnClickListener(this);
 
-        this.listView.setSelector(R.drawable.listrowhighlighter);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                TextView info = (TextView) view.findViewById(R.id.info);
+                view.setSelected(true);
+                TextView info = (TextView) view.findViewById(R.id.bleDeviceName);
 
                 // means that the remote device is in connected status
                 if (selectedAddress != null) {
