@@ -33,6 +33,28 @@ public class BLEAdpaterBase extends BaseAdapter {
         this.mInflater = activity.getLayoutInflater();
     }
 
+    /**
+     * To add new device into a UI component that can accept Adapater
+     * date: 2014/11/07
+     *
+     * @param bleDeviceName name of this Device
+     * @param address       address of peripheral
+     * @author Yu-Hua Tseng
+     */
+    public void AddNewDevice(final String bleDeviceName, final String address)
+    {
+        Log.e(BLEAdpaterBase.class.getSimpleName(), "You should not call this method directly");
+    }
+
+    /**
+     * To add new device into a UI component that can accept Adapater
+     * date: 2014/10/29
+     *
+     * @param device     instance of BluetoothDevice
+     * @param rssi       signal strength
+     * @param scanRecord the record of scanning
+     * @author Yu-Hua Tseng
+     */
     public void AddNewDevice(final BluetoothDevice device,
                              final int rssi,
                              final byte[] scanRecord) {

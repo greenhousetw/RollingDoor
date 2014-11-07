@@ -5,6 +5,7 @@
     <string name="UP">New Button</string>
     <string name="empty">Empty Hint</string>
     <string name="DoorHint">請先選取目標門位</string>
+    <string name="DoorHint_IsNotConnected">門控連線失敗</string>
     <string name="btnScanTitle">掃瞄</string>
     <dimen name="TEXT_SIZE">26sp</dimen>
 </resources>

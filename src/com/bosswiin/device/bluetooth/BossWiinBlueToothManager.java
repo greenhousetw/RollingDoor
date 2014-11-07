@@ -23,6 +23,7 @@ import com.bosswiin.sharelibs.CommonHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * BossWiinBlueToothManager
@@ -52,6 +53,21 @@ public class BossWiinBlueToothManager {
     // Adapter for UI operation
     private BLEAdpaterBase uiAdapter      = null;
 
+    private LinkedHashMap<String, BleWrapper> bleWrapperList = new LinkedHashMap<String, BleWrapper>();
+
+    /**
+     * Initializes a new instance of the BossWiinBlueToothManager class.
+     * date: 2014/10/23
+     *
+     * @param context to use to open or create the database
+     * @author Yu-Hua Tseng
+     */
+    public BossWiinBlueToothManager(Context context) {
+
+        this.context = context;
+        this.SetResponsibilityChain();
+    }
+
     /**
      * Initializes a new instance of the BossWiinBlueToothManager class.
      * date: 2014/10/23
@@ -72,6 +88,41 @@ public class BossWiinBlueToothManager {
             }
         });
 
+        this.SetResponsibilityChain();
+    }
+
+    /**
+     * To execute the action.
+     * date: 2014/10/24
+     *
+     * @param context instance of Context
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
+    public static boolean IsHardwareEanble(Context context) {
+
+        boolean result = false;
+
+        BluetoothAdapter adapter = ((BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
+
+        if (adapter != null && !adapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            ((Activity) context).startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }
+
+        PackageManager pm = context.getPackageManager();
+        result = pm.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
+
+        return result;
+    }
+
+    /**
+     * Set command chain
+     * date: 2014/11/07
+     *
+     * @author Yu-Hua Tseng
+     */
+    private void SetResponsibilityChain() {
         if (!this.bleWrapper.checkBleHardwareAvailable()) {
             String errorMessage = "bluetooth device is not availabe";
             Log.e(this.getClass().getName(), errorMessage);
@@ -102,31 +153,6 @@ public class BossWiinBlueToothManager {
      * To execute the action.
      * date: 2014/10/24
      *
-     * @param context instance of Context
-     * @return true for successful and false for fail
-     * @author Yu-Hua Tseng
-     */
-    public static boolean IsHardwareEanble(Context context) {
-
-        boolean result = false;
-
-        BluetoothAdapter adapter = ((BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
-
-        if (adapter != null && !adapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            ((Activity) context).startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-        }
-
-        PackageManager pm = context.getPackageManager();
-        result = pm.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
-
-        return result;
-    }
-
-    /**
-     * To execute the action.
-     * date: 2014/10/24
-     *
      * @param request instance of BLERequest
      * @return true for successful and false for fail
      * @author Yu-Hua Tseng
@@ -137,9 +163,11 @@ public class BossWiinBlueToothManager {
 
         boolean isScanRelated = request.actionEnum.equals(BLEAcionEnum.Scan) || request.actionEnum.equals(BLEAcionEnum.StopScan) ? true : false;
 
+        request.bleWrapper = this.bleWrapper;
+
         if (isScanRelated) {
             Log.d(this.logTag, "BT device:" + request.remoteAddress + " will do" + request.actionEnum.toString());
-            request.bleWrapper = this.bleWrapper;
+            //request.bleWrapper = this.bleWrapper;
 
             if (!isScanRelated) {
                 request.bluetoothDevice = this.deviceMap.get(request.remoteAddress);
@@ -182,6 +210,21 @@ public class BossWiinBlueToothManager {
                     }
                 }
         );
+    }
+
+    public synchronized boolean AddBLEPeripheral(String address) {
+
+        boolean result=false;
+
+        try {
+            BleWrapper blePeripheral = new BleWrapper((Activity) this.context, null);
+            this.bleWrapperList.put(address, blePeripheral);
+            result=true;
+        } catch (Exception ex) {
+            Log.e(BossWiinBlueToothManager.class.getName(), ex.getMessage());
+        }
+
+        return true;
     }
 
     /**
@@ -250,6 +293,34 @@ public class BossWiinBlueToothManager {
         }
 
         return bluetoothDevice;
+    }
+
+    /**
+     * Check peripheral connection is available
+     * date: 2014/11/07
+     *
+     * @return true for connected, false for no connection
+     * @author Yu-Hua Tseng
+     */
+    public boolean IsConnectedPeripheral(String address) {
+        boolean result = false;
+
+        try {
+            this.bleWrapper.close();
+            if (this.deviceMap.containsKey(address)) {
+                double waitSeconds = 0.3;
+                this.bleWrapper.connect(address);
+                Thread.sleep((long) CommonHelper.SecsToMilliSeconds(waitSeconds));
+                result = this.bleWrapper.isConnected();
+                if (result) {
+                    this.deviceMap.put(address, this.bleWrapper.getDevice());
+                }
+            }
+        } catch (Exception ex) {
+            Log.e(BossWiinBlueToothManager.class.getName(), ex.getMessage());
+        }
+
+        return result;
     }
 
     /**

@@ -102,6 +102,7 @@ public class BleWrapper {
 
     /* connect to the device with specified address */
     public boolean connect(final String deviceAddress) {
+
         if (mBluetoothAdapter == null || deviceAddress == null) return false;
         mDeviceAddress = deviceAddress;
         
@@ -121,7 +122,8 @@ public class BleWrapper {
             // connect with remote device
         	mBluetoothGatt = mBluetoothDevice.connectGatt(mParent, false, mBleCallback);
         }
-        return true;
+
+        return this.isConnected();
     }  
     
     /* disconnect the device. It is still possible to reconnect to it later with this Gatt client */
