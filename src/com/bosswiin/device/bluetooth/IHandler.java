@@ -20,6 +20,6 @@ public interface IHandler {
      * @return true for successful and false for fail.
      * @author Yu-Hua Tseng
      */
-    boolean Execute(BLERequest request);
+    boolean execute(BLERequest request);
 
 }

@@ -7,6 +7,7 @@
 package com.bosswiin.device.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapper;
 
 import java.util.ArrayList;
@@ -31,4 +32,6 @@ public class BLERequest {
     protected BleWrapper        bleWrapper          = null;
     // instance of BluetoothDevice
     protected BluetoothDevice   bluetoothDevice     = null;
+    // context in runtime, usually is Activity
+    protected Context context;
 }

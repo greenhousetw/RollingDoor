@@ -13,7 +13,8 @@ import com.bosswiin.UserInterface.Components.BLEAdpaterBase;
 import com.bosswiin.UserInterface.Components.BLESimpleAdapter;
 import com.bosswiin.device.bluetooth.BLEAcionEnum;
 import com.bosswiin.device.bluetooth.BLERequest;
-import com.bosswiin.device.bluetooth.BossWiinBlueToothManager;
+import com.bosswiin.device.bluetooth.IDeviceFoundCallback;
+import com.bosswiin.device.bluetooth.JBluetoothManager;
 import com.bosswiin.repository.IRepository;
 import com.bosswiin.repository.RepositoryEnum;
 import com.bosswiin.repository.RepositoryFactory;
@@ -25,38 +26,38 @@ import java.util.HashMap;
 /**
  * Created by 9708023 on 2014/10/22.
  */
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends Activity implements OnClickListener, IDeviceFoundCallback {
 
-    private final String uuidDoorService               = "713d0000-503e-4c75-ba94-3148f18d941e";
-    private final String uuidDoorCharactristicsForUP   = "713d0003-503e-4c75-ba94-3148f18d941e";
+    private final String uuidDoorService = "713d0000-503e-4c75-ba94-3148f18d941e";
+    private final String uuidDoorCharactristicsForRead = "713d0002-503e-4c75-ba94-3148f18d941e";
+    private final String uuidDoorCharactristicsForUP = "713d0003-503e-4c75-ba94-3148f18d941e";
     private final String uuidDoorCharactristicsForDown = "713d0003-503e-4c75-ba94-3148f18d941e";
     private final String uuidDoorCharactristicsForStop = "713d0003-503e-4c75-ba94-3148f18d941e";
 
-    private ListView listView;
+    private ListView listView = null;
     private Button scanButton = null, upButton = null, stopButton = null, downButton = null;
-    private IRepository              repository       = null;
-    private BLEAdpaterBase           bleAdpater       = null;
-    private String                   selectedAddress  = null;
-    private BossWiinBlueToothManager blueToothManager = null;
-    private BLERequest               bleRequest       = null;
-    private String                   tableName        = "DeviceList";
-    private Context                  mainContext      = this;
-    private HashMap<String, Object>  databaseTuple    = new HashMap<String, Object>();
+    private IRepository repository = null;
+
+    private String selectedAddress = "";
+
+    private String tableName = "DeviceList";
+    private Context mainContext = this;
+    private HashMap<String, Object> databaseTuple = new HashMap<String, Object>();
+
+    private JBluetoothManager mJBluetootManager = null;
+    private BLEAdpaterBase bleAdpater = null;
+    private BLERequest request = new BLERequest();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        BossWiinBlueToothManager.IsHardwareEanble(this);
-
-        //this.bleAdpater = new BLEAdapter(this);
-        //this.blueToothManager = new BossWiinBlueToothManager(this, this.bleAdpater);
-        this.bleAdpater = new BLESimpleAdapter(this);
-        this.bleRequest = new BLERequest();
-
         super.setContentView(R.layout.main);
 
+        this.mJBluetootManager = new JBluetoothManager(this);
+        this.mJBluetootManager.setBluetoothLowEnergyWrapper(this);
+
+        this.bleAdpater = new BLESimpleAdapter(this);
         this.listView = (ListView) this.findViewById(R.id.listView);
         this.scanButton = (Button) this.findViewById(R.id.buttonScan);
         this.upButton = (Button) this.findViewById(R.id.buttonUP);
@@ -75,8 +76,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
                 view.setSelected(true);
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
+                mJBluetootManager.changeBleDevice();
                 selectedAddress = peripheralName.getTag().toString();
-                Log.v(MainActivity.class.getSimpleName(), "user selects address=" + selectedAddress);
+
                 /**
                  *
                  * below codes for BLEAdapter
@@ -97,62 +99,71 @@ public class MainActivity extends Activity implements OnClickListener {
             }
         });
 
+
         this.listView.setAdapter(this.bleAdpater);
-        this.scanButton.setVisibility(View.GONE);
-        this.GetPeripheralList();
-        this.blueToothManager = new BossWiinBlueToothManager(this);
+        //this.scanButton.setVisibility(View.GONE);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         //this.GetRepository();
-        //this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.CheckEquipment);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.CheckEquipment);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Diconnect);
-        // this.blueToothManager.Execute(this.deviceAddress, BLEAcionEnum.Close);
     }
 
     @Override
     public void onClick(android.view.View view) {
 
-            try {
-                if (view.getId() == R.id.buttonScan) {
-                    this.bleRequest.actionEnum = BLEAcionEnum.Scan;
-                }
-                else if (view.getId() == R.id.buttonUP) {
-                    this.bleRequest.actionEnum = BLEAcionEnum.Send;
-                    this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForUP;
-                    this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
-                }
-                else if (view.getId() == R.id.buttonDown) {
-                    this.bleRequest.actionEnum = BLEAcionEnum.Send;
-                    this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForDown;
-                    this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
-                }
-                else if (view.getId() == R.id.buttonStop) {
-                    this.bleRequest.actionEnum = BLEAcionEnum.Send;
-                    this.bleRequest.characteristicsUUID = this.uuidDoorCharactristicsForStop;
-                    this.bleRequest.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
-                }
+        try {
 
-                this.bleRequest.remoteAddress = this.selectedAddress;
-                this.bleRequest.serviceUUID = this.uuidDoorService;
-                this.blueToothManager.Execute(this.bleRequest);
+            String chatService="Up";
+            this.request.actionEnum = BLEAcionEnum.Send;
+            this.request.serviceUUID = this.uuidDoorService;
+            this.request.remoteAddress = selectedAddress;
 
-            } catch (Exception ex) {
-                Log.e(MainActivity.class.getName(), ex.getMessage());
+            if (view.getId() == R.id.buttonScan) {
+
+                this.mJBluetootManager.stopScanning();
+                this.mJBluetootManager.startScanning();
+
+            } else if (this.request.remoteAddress.length() != 0) {
+
+                if (view.getId() == R.id.buttonUP) {
+
+                    this.request.characteristicsUUID = this.uuidDoorCharactristicsForUP;
+                    //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
+                    this.request.transmittedContent = chatService.getBytes();
+                    this.mJBluetootManager.executeRequest(this.request);
+
+                } else if (view.getId() == R.id.buttonDown) {
+
+                    this.request.characteristicsUUID = this.uuidDoorCharactristicsForDown;
+                    chatService="Down";
+                    this.request.transmittedContent = chatService.getBytes();
+                    //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
+                    this.mJBluetootManager.executeRequest(this.request);
+                } else if (view.getId() == R.id.buttonStop) {
+
+                    this.request.characteristicsUUID = this.uuidDoorCharactristicsForStop;
+                    chatService="Stop";
+                    this.request.transmittedContent = chatService.getBytes();
+                    //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
+                    this.mJBluetootManager.executeRequest(this.request);
+                }
             }
+
+        } catch (Exception ex) {
+            Log.e(MainActivity.class.getName(), ex.getMessage());
+        }
     }
 
     private void InitDoorList() {
@@ -165,26 +176,6 @@ public class MainActivity extends Activity implements OnClickListener {
         this.databaseTuple.put("UpdateTime", "UpdateTime");
 
         JSONArray array = JSONHelper.GetJSON(this.repository.Query(this.tableName, this.databaseTuple));
-    }
-
-    private boolean IsEmptyDeviceList() {
-
-        boolean result = false;
-
-        if (this.listView.getCount() != 0) {
-            Log.v(this.getClass().getName(), "BLE device list has " + Integer.toString(this.listView.getCount()));
-            result = true;
-        }
-
-        return result;
-    }
-
-    private void ShowToast(Context context, String resId) {
-        Toast toast = Toast.makeText(context, resId, Toast.LENGTH_SHORT);
-        LinearLayout toastLayout = (LinearLayout) toast.getView();
-        TextView toastTV = (TextView) toastLayout.getChildAt(0);
-        toastTV.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.TEXT_SIZE));
-        toast.show();
     }
 
     private boolean GetRepository() {
@@ -213,51 +204,14 @@ public class MainActivity extends Activity implements OnClickListener {
         return result;
     }
 
-    /**
-     * Get all peripherals from storage
-     * date: 2014/11/07
-     *
-     * @return true for successful and false for fail
-     * @author Yu-Hua Tseng
-     */
-    private boolean GetPeripheralList() {
-
-        boolean result = false;
-
-        final String peripheralMatrix[][] =
-                {
-                        {"裕樺門", "F9:28:FC:F1:A3:5B"},
-                        {"寶添門", "76:F0:28:07:56:19"}
-                };
-
-        for (int i = 0; i < peripheralMatrix.length; i++) {
-            this.blueToothManager.PushData(peripheralMatrix[i][1], null);
-            this.SetRecordToAdpater(peripheralMatrix[i][0], peripheralMatrix[i][1]);
-        }
-
-        result = true;
-
-        return result;
-    }
-
-    /**
-     * This method will notify the Activity that bundles with Manager
-     * date: 2014/11/07
-     *
-     * @param peripheralName name of this Device
-     * @param address        address of peripheral
-     * @author Yu-Hua Tseng
-     */
-    public void SetRecordToAdpater(final String peripheralName, final String address) {
-
-        this.runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        bleAdpater.AddNewDevice(peripheralName, address);
-                        bleAdpater.notifyDataSetChanged();
-                    }
-                }
-        );
+    @Override
+    public void addNewDevices(final String deviceName, final String address, final int rssi, final byte[] record) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                bleAdpater.AddNewDevice(deviceName, address);
+                bleAdpater.notifyDataSetChanged();
+            }
+        });
     }
 }

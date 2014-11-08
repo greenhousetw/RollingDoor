@@ -11,7 +11,6 @@ import android.bluetooth.BluetoothGattService;
 import android.util.Log;
 import com.bosswiin.sharelibs.CommonHelper;
 
-import java.net.URLEncoder;
 import java.util.UUID;
 
 /**
@@ -32,46 +31,61 @@ public class BLEActionSend extends BLEActionBase {
      * @author Yu-Hua Tseng
      */
     @Override
-    public boolean Execute(BLERequest request) {
+    public boolean execute(BLERequest request) {
 
         boolean result = false;
 
         if (request.actionEnum != BLEAcionEnum.Send) {
-            result = this.successor.Execute(request);
-        }
-        else {
+            result = this.successor.execute(request);
+        } else {
 
             try {
 
                 int retryTimes = 10;
-                int waitSeconds = 1;
+                double waitSeconds = 1;
+                boolean isConnect = false;
 
-                // discover services for 10 seconds
-                while (!request.bleWrapper.isServiceDiscvoeryDone) {
-                    if (retryTimes == 0) {
+                while (!isConnect) {
+                    isConnect = request.bleWrapper.connect(request.remoteAddress);
+                    if (retryTimes == 0 || isConnect) {
                         break;
                     }
                     Thread.sleep((int) CommonHelper.SecsToMilliSeconds(waitSeconds));
                     retryTimes--;
                 }
 
-                if (request.bleWrapper.isServiceDiscvoeryDone) {
+                if (isConnect) {
 
-                    Log.d(logTag, "send data:" + request.transmittedContent + " to Characteristic:" + request.characteristicsUUID + " of service uuid:" + request.serviceUUID);
+                    request.bleWrapper.startServicesDiscovery();
+                    retryTimes = 10;
+                    // discover services for 10 seconds
+                    while (!request.bleWrapper.isServiceDiscvoeryDone) {
+                        if (retryTimes == 0) {
+                            break;
+                        }
+                        Thread.sleep((int) CommonHelper.SecsToMilliSeconds(waitSeconds));
+                        retryTimes--;
+                    }
 
-                    for (BluetoothGattService service : request.bleWrapper.getCachedServices()) {
-                        if (service.getUuid().equals(UUID.fromString(request.serviceUUID))) {
-                            Thread.sleep((int) CommonHelper.SecsToMilliSeconds(0.3));
-                            for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                                if (characteristic.getUuid().equals(UUID.fromString(request.characteristicsUUID))) {
-                                    request.bleWrapper.writeDataToCharacteristic(characteristic, request.transmittedContent);
+                    if (request.bleWrapper.isServiceDiscvoeryDone) {
+
+                        Log.d(logTag, "send data:" + request.transmittedContent + " to Characteristic:" + request.characteristicsUUID + " of service uuid:" + request.serviceUUID);
+
+                        for (BluetoothGattService service : request.bleWrapper.getCachedServices()) {
+                            if (service.getUuid().equals(UUID.fromString(request.serviceUUID))) {
+                                Thread.sleep((int) CommonHelper.SecsToMilliSeconds(0.3));
+                                for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+                                    if (characteristic.getUuid().equals(UUID.fromString(request.characteristicsUUID))) {
+                                        request.bleWrapper.writeDataToCharacteristic(characteristic, request.transmittedContent);
+                                    }
                                 }
                             }
                         }
                     }
+                    result = true;
+                } else {
+                        CommonHelper.ShowToast(request.context, "no this service");
                 }
-
-                result = true;
 
             } catch (Exception ex) {
                 Log.e(logTag, ex.getMessage());

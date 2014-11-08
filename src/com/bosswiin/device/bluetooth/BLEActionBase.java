@@ -21,7 +21,7 @@ public class BLEActionBase implements IHandler {
      * @param handler instance of BLEAction of successor
      * @author Yu-Hua Tseng
      */
-    public void SetSuccessor(IHandler handler){
+    public void setSuccessor(IHandler handler){
         this.successor=handler;
     }
 
@@ -34,7 +34,7 @@ public class BLEActionBase implements IHandler {
      * @author Yu-Hua Tseng
      */
     @Override
-    public boolean Execute(BLERequest request) {
+    public boolean execute(BLERequest request) {
         return false;
     }
 }
