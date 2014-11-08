@@ -213,7 +213,7 @@ public class JBluetoothManager {
         gattService = null;
         gatt = null;
 
-        if(specialCharacteristic.length()!=0) {
+        /*if(specialCharacteristic.length()!=0) {
             if (this.connectToService(request)) {
                 try {
                     Log.d(this.mLogTag, "send data:" + request.transmittedContent + " to Characteristic:" + request.characteristicsUUID + " of service uuid:" + request.serviceUUID);
@@ -222,6 +222,7 @@ public class JBluetoothManager {
                         if (characteristic.getUuid().equals(UUID.fromString(request.characteristicsUUID))) {
                             this.mBleWrapper.setNotificationForCharacteristic(characteristic, true);
                             this.mBleWrapper.requestCharacteristicValue(characteristic);
+                            byte[] dd=characteristic.getValue();
                             break;
                         }
                     }
@@ -230,7 +231,7 @@ public class JBluetoothManager {
                     Log.e(this.mLogTag, ex.getMessage());
                 }
             }
-        }
+        }*/
     }
 
     /**
