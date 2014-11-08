@@ -7,6 +7,7 @@
 package com.bosswiin.device.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapper;
 
@@ -34,4 +35,6 @@ public class BLERequest {
     protected BluetoothDevice   bluetoothDevice     = null;
     // context in runtime, usually is Activity
     protected Context context;
+    // target service
+    protected BluetoothGattService targetService=null;
 }

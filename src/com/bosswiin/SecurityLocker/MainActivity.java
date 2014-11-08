@@ -76,9 +76,12 @@ public class MainActivity extends Activity implements OnClickListener, IDeviceFo
 
                 view.setSelected(true);
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
-                mJBluetootManager.changeBleDevice();
                 selectedAddress = peripheralName.getTag().toString();
 
+                request.remoteAddress=selectedAddress;
+                request.characteristicsUUID=uuidDoorCharactristicsForRead;
+                request.serviceUUID=uuidDoorService;
+                mJBluetootManager.changeBleDevice(request);
                 /**
                  *
                  * below codes for BLEAdapter

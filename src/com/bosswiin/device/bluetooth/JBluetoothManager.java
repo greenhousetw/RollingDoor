@@ -18,6 +18,7 @@ import com.bosswiin.device.bluetooth.blehandelr.BleWrapperUiCallbacks;
 import com.bosswiin.sharelibs.CommonHelper;
 
 import java.util.LinkedHashMap;
+import java.util.UUID;
 
 /**
  * BossWiinBlueToothManager
@@ -179,7 +180,9 @@ public class JBluetoothManager {
             request.context = this.context;
             request.bluetoothDevice = this.bluetoothDeviceList.get(request.remoteAddress);
             request.bleWrapper = this.mBleWrapper;
-            result = this.mBleAction.execute(request);
+            if(this.connectToService(request)) {
+                result = this.mBleAction.execute(request);
+            }
         } else {
             Log.e(this.mLogTag, "orz! mBleWrapper is null");
         }
@@ -187,7 +190,14 @@ public class JBluetoothManager {
         return result;
     }
 
-    public void changeBleDevice() {
+    /**
+     * Change target device
+     * date: 2014/11/09
+     *
+     * @param request instance of BLERequest
+     * @author Yu-Hua Tseng
+     */
+    public void changeBleDevice(BLERequest request) {
 
         if (this.mBleWrapper.isConnected()) {
             this.mBleWrapper.diconnect();
@@ -202,6 +212,8 @@ public class JBluetoothManager {
         BluetoothGatt gatt = this.mBleWrapper.getGatt();
         gattService = null;
         gatt = null;
+
+        this.mBleWrapper.connect(request.remoteAddress);
     }
 
     /**
@@ -235,5 +247,66 @@ public class JBluetoothManager {
         };
 
         this.mHandler.postDelayed(mTimeout, (long) CommonHelper.SecsToMilliSeconds(this.mScanningTimeoutSeconds));
+    }
+
+    /**
+     * Connec to the specific service
+     * date: 2014/11/09
+     *
+     * @param request instance of BLERequest
+     * @author Yu-Hua Tseng
+     */
+    private boolean connectToService(BLERequest request) {
+        int retryTimes = 10;
+        double waitSeconds = 1;
+        boolean isConnect = false;
+
+        while (!isConnect) {
+            isConnect = this.mBleWrapper.connect(request.remoteAddress);
+            if (retryTimes == 0 || isConnect) {
+                break;
+            }
+
+            try {
+                Thread.sleep((int) CommonHelper.SecsToMilliSeconds(waitSeconds));
+            } catch (Exception ex) {
+                Log.e(mLogTag, ex.getMessage());
+            }
+            retryTimes--;
+        }
+
+        if (isConnect) {
+
+            isConnect=false;
+            this.mBleWrapper.startServicesDiscovery();
+            retryTimes = 10;
+            // discover services for 10 seconds
+            while (!this.mBleWrapper.isServiceDiscvoeryDone) {
+
+                if (retryTimes == 0) {
+                    break;
+                }
+
+                try {
+                    Thread.sleep((int) CommonHelper.SecsToMilliSeconds(waitSeconds));
+                } catch (Exception ex) {
+                    Log.e(mLogTag, ex.getMessage());
+                }
+
+                retryTimes--;
+            }
+
+            if(this.mBleWrapper.isServiceDiscvoeryDone){
+                for (BluetoothGattService service : this.mBleWrapper.getCachedServices()) {
+                    if (service.getUuid().equals(UUID.fromString(request.serviceUUID))) {
+                        request.targetService=service;
+                        isConnect=true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return isConnect;
     }
 }

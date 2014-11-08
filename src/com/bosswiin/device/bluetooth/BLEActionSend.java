@@ -7,7 +7,6 @@
 package com.bosswiin.device.bluetooth;
 
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.util.Log;
 import com.bosswiin.sharelibs.CommonHelper;
 
@@ -41,50 +40,13 @@ public class BLEActionSend extends BLEActionBase {
 
             try {
 
-                int retryTimes = 10;
-                double waitSeconds = 1;
-                boolean isConnect = false;
-
-                while (!isConnect) {
-                    isConnect = request.bleWrapper.connect(request.remoteAddress);
-                    if (retryTimes == 0 || isConnect) {
-                        break;
+                Log.d(logTag, "send data:" + request.transmittedContent + " to Characteristic:" + request.characteristicsUUID + " of service uuid:" + request.serviceUUID);
+                Thread.sleep((int) CommonHelper.SecsToMilliSeconds(0.3));
+                for (BluetoothGattCharacteristic characteristic : request.targetService.getCharacteristics()) {
+                    if (characteristic.getUuid().equals(UUID.fromString(request.characteristicsUUID))) {
+                        request.bleWrapper.writeDataToCharacteristic(characteristic, request.transmittedContent);
+                        result = true;
                     }
-                    Thread.sleep((int) CommonHelper.SecsToMilliSeconds(waitSeconds));
-                    retryTimes--;
-                }
-
-                if (isConnect) {
-
-                    request.bleWrapper.startServicesDiscovery();
-                    retryTimes = 10;
-                    // discover services for 10 seconds
-                    while (!request.bleWrapper.isServiceDiscvoeryDone) {
-                        if (retryTimes == 0) {
-                            break;
-                        }
-                        Thread.sleep((int) CommonHelper.SecsToMilliSeconds(waitSeconds));
-                        retryTimes--;
-                    }
-
-                    if (request.bleWrapper.isServiceDiscvoeryDone) {
-
-                        Log.d(logTag, "send data:" + request.transmittedContent + " to Characteristic:" + request.characteristicsUUID + " of service uuid:" + request.serviceUUID);
-
-                        for (BluetoothGattService service : request.bleWrapper.getCachedServices()) {
-                            if (service.getUuid().equals(UUID.fromString(request.serviceUUID))) {
-                                Thread.sleep((int) CommonHelper.SecsToMilliSeconds(0.3));
-                                for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                                    if (characteristic.getUuid().equals(UUID.fromString(request.characteristicsUUID))) {
-                                        request.bleWrapper.writeDataToCharacteristic(characteristic, request.transmittedContent);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    result = true;
-                } else {
-                        CommonHelper.ShowToast(request.context, "no this service");
                 }
 
             } catch (Exception ex) {
