@@ -81,7 +81,7 @@ public class MainActivity extends Activity implements OnClickListener, IDeviceFo
                 request.remoteAddress=selectedAddress;
                 request.characteristicsUUID=uuidDoorCharactristicsForRead;
                 request.serviceUUID=uuidDoorService;
-                mJBluetootManager.changeBleDevice(request);
+                mJBluetootManager.changeBleDevice(request, uuidDoorCharactristicsForRead);
                 /**
                  *
                  * below codes for BLEAdapter

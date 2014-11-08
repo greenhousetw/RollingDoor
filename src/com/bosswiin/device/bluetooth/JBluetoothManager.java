@@ -44,7 +44,6 @@ public class JBluetoothManager {
     private boolean mScanning = false;
     // scannin timeout
     private Runnable mTimeout = null;
-
     // action head of BLEAction
     private BLEActionBase mBleAction = null;
 
@@ -195,9 +194,10 @@ public class JBluetoothManager {
      * date: 2014/11/09
      *
      * @param request instance of BLERequest
+     * @param specialCharacteristic special characteristic
      * @author Yu-Hua Tseng
      */
-    public void changeBleDevice(BLERequest request) {
+    public void changeBleDevice(BLERequest request, String specialCharacteristic) {
 
         if (this.mBleWrapper.isConnected()) {
             this.mBleWrapper.diconnect();
@@ -213,7 +213,24 @@ public class JBluetoothManager {
         gattService = null;
         gatt = null;
 
-        this.mBleWrapper.connect(request.remoteAddress);
+        if(specialCharacteristic.length()!=0) {
+            if (this.connectToService(request)) {
+                try {
+                    Log.d(this.mLogTag, "send data:" + request.transmittedContent + " to Characteristic:" + request.characteristicsUUID + " of service uuid:" + request.serviceUUID);
+                    Thread.sleep((int) CommonHelper.SecsToMilliSeconds(0.3));
+                    for (BluetoothGattCharacteristic characteristic : request.targetService.getCharacteristics()) {
+                        if (characteristic.getUuid().equals(UUID.fromString(request.characteristicsUUID))) {
+                            this.mBleWrapper.setNotificationForCharacteristic(characteristic, true);
+                            this.mBleWrapper.requestCharacteristicValue(characteristic);
+                            break;
+                        }
+                    }
+
+                } catch (Exception ex) {
+                    Log.e(this.mLogTag, ex.getMessage());
+                }
+            }
+        }
     }
 
     /**
