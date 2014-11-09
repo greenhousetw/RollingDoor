@@ -9,5 +9,6 @@
     <string name="btnScanTitle">掃瞄</string>
     <string name="listViewTitle">自動門列表▼</string>
     <string name="receTitle">通知內容:</string>
+    <string name="noListItemTitle">沒有任何可控制門項</string>
     <dimen name="TEXT_SIZE">26sp</dimen>
 </resources>

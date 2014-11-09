@@ -60,6 +60,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         this.bleAdpater = new BLESimpleAdapter(this);
         this.listView = (ListView) this.findViewById(R.id.listView);
+        this.listView.setEmptyView(findViewById(R.id.empty));
         this.scanButton = (Button) this.findViewById(R.id.buttonScan);
         this.upButton = (Button) this.findViewById(R.id.buttonUP);
         this.downButton = (Button) this.findViewById(R.id.buttonDown);
@@ -87,12 +88,9 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
             }
         });
 
-        View emptyView = getLayoutInflater().inflate(R.layout.empty, null);
-        //addContentView(emptyView, listView.getLayoutParams()); // You're using the same params as listView
-        listView.setEmptyView(emptyView);
         listView.setAdapter(this.bleAdpater);
-
         //this.scanButton.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -189,7 +187,9 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     public void passContentToActivity(Object data)
     {
         if(data != null){
-            ((EditText)this.findViewById(R.id.editnoticontent)).setText(data.toString());
+            ((EditText)this.findViewById(R.id.editnoticontent)).setText(data.toString().trim());
+            ((EditText)this.findViewById(R.id.editnoticontent)).clearFocus();
+            this.listView.requestFocus();
         }
     }
 

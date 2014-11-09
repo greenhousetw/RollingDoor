@@ -24,7 +24,7 @@ import java.util.UUID;
  * BossWiinBlueToothManager
  * This class provides bluetooth device collection access and action transmition
  */
-public class JBluetoothManager implements INotificationHandler{
+public class JBluetoothManager implements INotificationHandler {
 
     // value for enable bluetooth hardware
     private static final int REQUEST_ENABLE_BT = 1;
@@ -47,7 +47,7 @@ public class JBluetoothManager implements INotificationHandler{
     // action head of BLEAction
     private BLEActionBase mBleAction = null;
     // call back instance
-    private IJBTManagerUICallback mJBTUICallBack=null;
+    private IJBTManagerUICallback mJBTUICallBack = null;
 
     /**
      * Initializes a new instance of the BossWiinBlueToothManager class.
@@ -101,7 +101,7 @@ public class JBluetoothManager implements INotificationHandler{
             throw new IllegalArgumentException("orz! interfaceDeviceFound is null");
         }
 
-        this.mJBTUICallBack=interfaceDeviceFound;
+        this.mJBTUICallBack = interfaceDeviceFound;
 
         this.mBleWrapper = new BleWrapper((Activity) this.context, new BleWrapperUiCallbacks.Null() {
             @Override
@@ -114,7 +114,7 @@ public class JBluetoothManager implements INotificationHandler{
             public void uiNewValueForCharacteristic(BluetoothGatt gatt,
                                                     BluetoothDevice device, BluetoothGattService service,
                                                     BluetoothGattCharacteristic ch, String strValue, int intValue,
-                                                    byte[] rawValue, String timestamp){
+                                                    byte[] rawValue, String timestamp) {
                 handleNotification(gatt, device, service, ch, strValue, intValue, rawValue, timestamp);
             }
         });
@@ -191,7 +191,7 @@ public class JBluetoothManager implements INotificationHandler{
             request.context = this.context;
             request.bluetoothDevice = this.bluetoothDeviceList.get(request.remoteAddress);
             request.bleWrapper = this.mBleWrapper;
-            if(this.connectToService(request)) {
+            if (this.connectToService(request)) {
                 result = this.mBleAction.execute(request);
             }
         } else {
@@ -212,7 +212,7 @@ public class JBluetoothManager implements INotificationHandler{
 
         if (this.mBleWrapper.isConnected()) {
 
-            if(this.mBleWrapper.getDevice().getAddress()!=request.remoteAddress) {
+            if (this.mBleWrapper.getDevice().getAddress() != request.remoteAddress) {
                 this.mBleWrapper.diconnect();
                 this.mBleWrapper.close();
 
@@ -228,10 +228,12 @@ public class JBluetoothManager implements INotificationHandler{
             }
         }
 
-        if(request.actionEnum.equals(BLEAcionEnum.Notification)) {
+        if (request.actionEnum.equals(BLEAcionEnum.Notification)) {
             if (this.connectToService(request)) {
                 request.handler = this;
-                this.executeRequest(request);
+                if(this.mBleWrapper.isConnected()) {
+                    this.executeRequest(request);
+                }
             }
         }
     }
@@ -245,20 +247,20 @@ public class JBluetoothManager implements INotificationHandler{
      */
     @Override
     public void registerNotification(BluetoothGattCharacteristic bluetoothGattCharacteristic) {
-          this.mBleWrapper.requestCharacteristicValue(bluetoothGattCharacteristic);
+        this.mBleWrapper.requestCharacteristicValue(bluetoothGattCharacteristic);
     }
 
     /**
      * This method should notification of bluetoothGattCharacteristic, you should call
      * date: 2014/11/09
      *
-     * @param gatt instance of BluetoothGatt
-     * @param device instance of BluetoothDevice
-     * @param service instance of BluetoothGattService
-     * @param ch instance of BluetoothGattCharacteristic
-     * @param strValue the data is stored in remote peripheral, type in string
-     * @param intValue the data is stored in remote peripheral, type in int
-     * @param rawValue the data is stored in remote peripheral, type in byte
+     * @param gatt      instance of BluetoothGatt
+     * @param device    instance of BluetoothDevice
+     * @param service   instance of BluetoothGattService
+     * @param ch        instance of BluetoothGattCharacteristic
+     * @param strValue  the data is stored in remote peripheral, type in string
+     * @param intValue  the data is stored in remote peripheral, type in int
+     * @param rawValue  the data is stored in remote peripheral, type in byte
      * @param timestamp time stamp for receiving
      * @author Yu-Hua Tseng
      */
@@ -268,7 +270,7 @@ public class JBluetoothManager implements INotificationHandler{
                                    BluetoothGattCharacteristic ch, final String strValue, int intValue,
                                    byte[] rawValue, final String timestamp) {
 
-        Activity activity=((Activity)this.context);
+        Activity activity = ((Activity) this.context);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -339,7 +341,7 @@ public class JBluetoothManager implements INotificationHandler{
 
         if (isConnect) {
 
-            isConnect=false;
+            isConnect = false;
             this.mBleWrapper.startServicesDiscovery();
             retryTimes = 10;
             // discover services for 10 seconds
@@ -358,11 +360,11 @@ public class JBluetoothManager implements INotificationHandler{
                 retryTimes--;
             }
 
-            if(this.mBleWrapper.isServiceDiscvoeryDone){
+            if (this.mBleWrapper.isServiceDiscvoeryDone) {
                 for (BluetoothGattService service : this.mBleWrapper.getCachedServices()) {
                     if (service.getUuid().equals(UUID.fromString(request.serviceUUID))) {
-                        request.targetService=service;
-                        isConnect=true;
+                        request.targetService = service;
+                        isConnect = true;
                         break;
                     }
                 }
