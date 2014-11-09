@@ -55,11 +55,53 @@
                 android:background="@drawable/flatbutton"
                 android:id="@+id/buttonDown"/>
     </LinearLayout>
-    <ListView
-      android:choiceMode="singleChoice"
-      android:divider="@color/white"
-      android:dividerHeight="1dip"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:id="@+id/listView"/>
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/listViewTitle"
+              android:textSize="20sp"
+              android:layout_marginBottom="2dp"
+            />
+    <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                >
+        <ListView
+          android:choiceMode="singleChoice"
+          android:divider="@color/white"
+          android:dividerHeight="1dip"
+          android:background="@color/white"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_alignParentTop="true"
+          android:layout_weight="1"
+          android:id="@+id/listView"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="0"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/receTitle"
+                android:textSize="24sp"
+                android:id="@+id/recvmessage"
+                />
+         <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="24sp"
+                    android:id="@+id/editnoticontent"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

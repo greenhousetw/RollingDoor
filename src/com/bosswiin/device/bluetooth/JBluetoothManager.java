@@ -46,7 +46,8 @@ public class JBluetoothManager implements INotificationHandler{
     private Runnable mTimeout = null;
     // action head of BLEAction
     private BLEActionBase mBleAction = null;
-
+    // call back instance
+    private IJBTManagerUICallback mJBTUICallBack=null;
 
     /**
      * Initializes a new instance of the BossWiinBlueToothManager class.
@@ -93,12 +94,14 @@ public class JBluetoothManager implements INotificationHandler{
      * @return true for successful and false for fail
      * @author Yu-Hua Tseng
      */
-    public boolean setBluetoothLowEnergyWrapper(final IDeviceFoundCallback interfaceDeviceFound) {
+    public boolean setBluetoothLowEnergyWrapper(final IJBTManagerUICallback interfaceDeviceFound) {
         boolean result = false;
 
         if (interfaceDeviceFound == null) {
             throw new IllegalArgumentException("orz! interfaceDeviceFound is null");
         }
+
+        this.mJBTUICallBack=interfaceDeviceFound;
 
         this.mBleWrapper = new BleWrapper((Activity) this.context, new BleWrapperUiCallbacks.Null() {
             @Override
@@ -208,18 +211,22 @@ public class JBluetoothManager implements INotificationHandler{
     public void changeBleDevice(BLERequest request) {
 
         if (this.mBleWrapper.isConnected()) {
-            this.mBleWrapper.diconnect();
-            this.mBleWrapper.close();
-        }
 
-        if (this.mBleWrapper.getCachedServices() != null) {
-            this.mBleWrapper.getCachedServices().clear();
-        }
+            if(this.mBleWrapper.getDevice().getAddress()!=request.remoteAddress) {
+                this.mBleWrapper.diconnect();
+                this.mBleWrapper.close();
 
-        BluetoothGattService gattService = this.mBleWrapper.getCachedService();
-        BluetoothGatt gatt = this.mBleWrapper.getGatt();
-        gattService = null;
-        gatt = null;
+                if (this.mBleWrapper.getCachedServices() != null) {
+                    this.mBleWrapper.getCachedServices().clear();
+                }
+
+                BluetoothGattService gattService = this.mBleWrapper.getCachedService();
+                BluetoothGatt gatt = this.mBleWrapper.getGatt();
+                gattService = null;
+                gatt = null;
+
+            }
+        }
 
         if(request.actionEnum.equals(BLEAcionEnum.Notification)) {
             if (this.connectToService(request)) {
@@ -261,10 +268,11 @@ public class JBluetoothManager implements INotificationHandler{
                                    BluetoothGattCharacteristic ch, final String strValue, int intValue,
                                    byte[] rawValue, final String timestamp) {
 
-        ((Activity)this.context).runOnUiThread(new Runnable() {
+        Activity activity=((Activity)this.context);
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                CommonHelper.ShowToast(context, strValue);
+                mJBTUICallBack.passContentToActivity(strValue);
             }
         });
     }

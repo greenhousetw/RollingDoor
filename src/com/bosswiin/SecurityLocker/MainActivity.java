@@ -6,16 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 import com.bosswiin.UserInterface.Components.BLEAdpaterBase;
 import com.bosswiin.UserInterface.Components.BLESimpleAdapter;
 import com.bosswiin.device.bluetooth.BLEAcionEnum;
 import com.bosswiin.device.bluetooth.BLERequest;
-import com.bosswiin.device.bluetooth.IDeviceFoundCallback;
+import com.bosswiin.device.bluetooth.IJBTManagerUICallback;
 import com.bosswiin.device.bluetooth.JBluetoothManager;
 import com.bosswiin.repository.IRepository;
 import com.bosswiin.repository.RepositoryEnum;
@@ -28,7 +25,7 @@ import java.util.HashMap;
 /**
  * Created by 9708023 on 2014/10/22.
  */
-public class MainActivity extends Activity implements OnClickListener, IDeviceFoundCallback {
+public class MainActivity extends Activity implements OnClickListener, IJBTManagerUICallback {
 
     private final String uuidDoorService = "713d0000-503e-4c75-ba94-3148f18d941e";
     private final String uuidDoorCharactristicsForRead = "713d0002-503e-4c75-ba94-3148f18d941e";
@@ -90,8 +87,11 @@ public class MainActivity extends Activity implements OnClickListener, IDeviceFo
             }
         });
 
+        View emptyView = getLayoutInflater().inflate(R.layout.empty, null);
+        //addContentView(emptyView, listView.getLayoutParams()); // You're using the same params as listView
+        listView.setEmptyView(emptyView);
+        listView.setAdapter(this.bleAdpater);
 
-        this.listView.setAdapter(this.bleAdpater);
         //this.scanButton.setVisibility(View.GONE);
     }
 
@@ -176,6 +176,21 @@ public class MainActivity extends Activity implements OnClickListener, IDeviceFo
                 bleAdpater.notifyDataSetChanged();
             }
         });
+    }
+
+    /**
+     * Pass data to activity for ui related operations
+     * date: 2014/11/09
+     *
+     * @param data data that needs to be process
+     * @author Yu-Hua Tseng
+     */
+    @Override
+    public void passContentToActivity(Object data)
+    {
+        if(data != null){
+            ((EditText)this.findViewById(R.id.editnoticontent)).setText(data.toString());
+        }
     }
 
     private void InitDoorList() {
