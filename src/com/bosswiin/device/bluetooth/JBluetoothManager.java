@@ -24,7 +24,7 @@ import java.util.UUID;
  * BossWiinBlueToothManager
  * This class provides bluetooth device collection access and action transmition
  */
-public class JBluetoothManager {
+public class JBluetoothManager implements INotificationHandler{
 
     // value for enable bluetooth hardware
     private static final int REQUEST_ENABLE_BT = 1;
@@ -46,6 +46,7 @@ public class JBluetoothManager {
     private Runnable mTimeout = null;
     // action head of BLEAction
     private BLEActionBase mBleAction = null;
+
 
     /**
      * Initializes a new instance of the BossWiinBlueToothManager class.
@@ -104,6 +105,14 @@ public class JBluetoothManager {
             public void uiDeviceFound(final BluetoothDevice device, final int rssi, final byte[] record) {
                 interfaceDeviceFound.addNewDevices(device.getName(), device.getAddress(), rssi, record);
                 bluetoothDeviceList.put(device.getAddress(), device);
+            }
+
+            @Override
+            public void uiNewValueForCharacteristic(BluetoothGatt gatt,
+                                                    BluetoothDevice device, BluetoothGattService service,
+                                                    BluetoothGattCharacteristic ch, String strValue, int intValue,
+                                                    byte[] rawValue, String timestamp){
+                handleNotification(gatt, device, service, ch, strValue, intValue, rawValue, timestamp);
             }
         });
 
@@ -194,10 +203,9 @@ public class JBluetoothManager {
      * date: 2014/11/09
      *
      * @param request instance of BLERequest
-     * @param specialCharacteristic special characteristic
      * @author Yu-Hua Tseng
      */
-    public void changeBleDevice(BLERequest request, String specialCharacteristic) {
+    public void changeBleDevice(BLERequest request) {
 
         if (this.mBleWrapper.isConnected()) {
             this.mBleWrapper.diconnect();
@@ -213,25 +221,52 @@ public class JBluetoothManager {
         gattService = null;
         gatt = null;
 
-        /*if(specialCharacteristic.length()!=0) {
+        if(request.actionEnum.equals(BLEAcionEnum.Notification)) {
             if (this.connectToService(request)) {
-                try {
-                    Log.d(this.mLogTag, "send data:" + request.transmittedContent + " to Characteristic:" + request.characteristicsUUID + " of service uuid:" + request.serviceUUID);
-                    Thread.sleep((int) CommonHelper.SecsToMilliSeconds(0.3));
-                    for (BluetoothGattCharacteristic characteristic : request.targetService.getCharacteristics()) {
-                        if (characteristic.getUuid().equals(UUID.fromString(request.characteristicsUUID))) {
-                            this.mBleWrapper.setNotificationForCharacteristic(characteristic, true);
-                            this.mBleWrapper.requestCharacteristicValue(characteristic);
-                            byte[] dd=characteristic.getValue();
-                            break;
-                        }
-                    }
-
-                } catch (Exception ex) {
-                    Log.e(this.mLogTag, ex.getMessage());
-                }
+                request.handler = this;
+                this.executeRequest(request);
             }
-        }*/
+        }
+    }
+
+    /**
+     * To register notification of bluetoothGattCharacteristic, you should call
+     * date: 2014/11/09
+     *
+     * @param bluetoothGattCharacteristic instance of BluetoothGattCharacteristic
+     * @author Yu-Hua Tseng
+     */
+    @Override
+    public void registerNotification(BluetoothGattCharacteristic bluetoothGattCharacteristic) {
+          this.mBleWrapper.requestCharacteristicValue(bluetoothGattCharacteristic);
+    }
+
+    /**
+     * This method should notification of bluetoothGattCharacteristic, you should call
+     * date: 2014/11/09
+     *
+     * @param gatt instance of BluetoothGatt
+     * @param device instance of BluetoothDevice
+     * @param service instance of BluetoothGattService
+     * @param ch instance of BluetoothGattCharacteristic
+     * @param strValue the data is stored in remote peripheral, type in string
+     * @param intValue the data is stored in remote peripheral, type in int
+     * @param rawValue the data is stored in remote peripheral, type in byte
+     * @param timestamp time stamp for receiving
+     * @author Yu-Hua Tseng
+     */
+    @Override
+    public void handleNotification(BluetoothGatt gatt,
+                                   BluetoothDevice device, BluetoothGattService service,
+                                   BluetoothGattCharacteristic ch, final String strValue, int intValue,
+                                   byte[] rawValue, final String timestamp) {
+
+        ((Activity)this.context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                CommonHelper.ShowToast(context, strValue);
+            }
+        });
     }
 
     /**
@@ -242,6 +277,7 @@ public class JBluetoothManager {
      */
     private void setCommandChain() {
         this.mBleAction = new BLEActionSend();
+        this.mBleAction.setSuccessor(new BLEActionNotificaiton());
     }
 
     /**
@@ -268,7 +304,7 @@ public class JBluetoothManager {
     }
 
     /**
-     * Connec to the specific service
+     * Connect to the specific service
      * date: 2014/11/09
      *
      * @param request instance of BLERequest

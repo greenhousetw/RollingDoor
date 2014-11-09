@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.bosswiin.UserInterface.Components.BLEAdpaterBase;
 import com.bosswiin.UserInterface.Components.BLESimpleAdapter;
 import com.bosswiin.device.bluetooth.BLEAcionEnum;
@@ -48,6 +50,8 @@ public class MainActivity extends Activity implements OnClickListener, IDeviceFo
     private BLEAdpaterBase bleAdpater = null;
     private BLERequest request = new BLERequest();
 
+    private MainActivity activity = this;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -78,27 +82,11 @@ public class MainActivity extends Activity implements OnClickListener, IDeviceFo
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
                 selectedAddress = peripheralName.getTag().toString();
 
-                request.remoteAddress=selectedAddress;
-                request.characteristicsUUID=uuidDoorCharactristicsForRead;
-                request.serviceUUID=uuidDoorService;
-                mJBluetootManager.changeBleDevice(request, uuidDoorCharactristicsForRead);
-                /**
-                 *
-                 * below codes for BLEAdapter
-                 // means that the remote device is in connected status
-                 if (selectedAddress != null) {
-                 if (!selectedAddress.equals(info.getTag().toString())) {
-                 bleRequest.actionEnum = BLEAcionEnum.Diconnect;
-                 bleRequest.remoteAddress = selectedAddress;
-                 blueToothManager.Execute(bleRequest);
-                 }
-                 }
-
-                 selectedAddress = info.getTag().toString();
-                 bleRequest.actionEnum = BLEAcionEnum.Open;
-                 bleRequest.remoteAddress = selectedAddress;
-                 blueToothManager.Execute(bleRequest);
-                 */
+                request.remoteAddress = selectedAddress;
+                request.characteristicsUUID = uuidDoorCharactristicsForRead;
+                request.serviceUUID = uuidDoorService;
+                request.actionEnum = BLEAcionEnum.Notification;
+                mJBluetootManager.changeBleDevice(request);
             }
         });
 
@@ -128,7 +116,7 @@ public class MainActivity extends Activity implements OnClickListener, IDeviceFo
 
         try {
 
-            String chatService="Up";
+            String chatService = "Up";
             this.request.actionEnum = BLEAcionEnum.Send;
             this.request.serviceUUID = this.uuidDoorService;
             this.request.remoteAddress = selectedAddress;
@@ -150,14 +138,14 @@ public class MainActivity extends Activity implements OnClickListener, IDeviceFo
                 } else if (view.getId() == R.id.buttonDown) {
 
                     this.request.characteristicsUUID = this.uuidDoorCharactristicsForDown;
-                    chatService="Down";
+                    chatService = "Down";
                     this.request.transmittedContent = chatService.getBytes();
                     //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
                     this.mJBluetootManager.executeRequest(this.request);
                 } else if (view.getId() == R.id.buttonStop) {
 
                     this.request.characteristicsUUID = this.uuidDoorCharactristicsForStop;
-                    chatService="Stop";
+                    chatService = "Stop";
                     this.request.transmittedContent = chatService.getBytes();
                     //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
                     this.mJBluetootManager.executeRequest(this.request);
@@ -167,6 +155,27 @@ public class MainActivity extends Activity implements OnClickListener, IDeviceFo
         } catch (Exception ex) {
             Log.e(MainActivity.class.getName(), ex.getMessage());
         }
+    }
+
+    /**
+     * This method should notification of bluetoothGattCharacteristic, you should call
+     * date: 2014/11/09
+     *
+     * @param deviceName name of peripheral
+     * @param address address of peripheral
+     * @param rssi signal strength of peripheral
+     * @param record other record of peripheral
+     * @author Yu-Hua Tseng
+     */
+    @Override
+    public void addNewDevices(final String deviceName, final String address, final int rssi, final byte[] record) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                bleAdpater.AddNewDevice(deviceName, address);
+                bleAdpater.notifyDataSetChanged();
+            }
+        });
     }
 
     private void InitDoorList() {
@@ -205,16 +214,5 @@ public class MainActivity extends Activity implements OnClickListener, IDeviceFo
         }
 
         return result;
-    }
-
-    @Override
-    public void addNewDevices(final String deviceName, final String address, final int rssi, final byte[] record) {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                bleAdpater.AddNewDevice(deviceName, address);
-                bleAdpater.notifyDataSetChanged();
-            }
-        });
     }
 }

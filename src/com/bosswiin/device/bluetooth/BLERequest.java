@@ -11,8 +11,6 @@ import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapper;
 
-import java.util.ArrayList;
-
 /**
  * BLERequest
  * This class is a request of BLE, this class still encapsulates BLEWrapper, BLEActionEnum and BluetoothDevice
@@ -29,6 +27,8 @@ public class BLERequest {
     public    String            characteristicsUUID = "";
     // content for receieving or transmitting
     public   byte[] transmittedContent  = null;
+    // handler for notification
+    public INotificationHandler handler=null;
     // instance of BLEWrapper
     protected BleWrapper        bleWrapper          = null;
     // instance of BluetoothDevice

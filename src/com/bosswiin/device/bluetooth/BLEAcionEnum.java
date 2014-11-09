@@ -33,6 +33,9 @@ public enum BLEAcionEnum {
     // to disconnect BLE connection
     Diconnect,
 
+    // to get data from notification
+    Notification,
+
     // no meaning
     None
 }
