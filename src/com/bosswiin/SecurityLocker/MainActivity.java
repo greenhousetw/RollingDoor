@@ -114,7 +114,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         try {
 
-            String chatService = "Up";
+            String chatService = "up";
             this.request.actionEnum = BLEAcionEnum.Send;
             this.request.serviceUUID = this.uuidDoorService;
             this.request.remoteAddress = selectedAddress;
@@ -136,14 +136,14 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 } else if (view.getId() == R.id.buttonDown) {
 
                     this.request.characteristicsUUID = this.uuidDoorCharactristicsForDown;
-                    chatService = "Down";
+                    chatService = "down";
                     this.request.transmittedContent = chatService.getBytes();
                     //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
                     this.mJBluetootManager.executeRequest(this.request);
                 } else if (view.getId() == R.id.buttonStop) {
 
                     this.request.characteristicsUUID = this.uuidDoorCharactristicsForStop;
-                    chatService = "Stop";
+                    chatService = "stop";
                     this.request.transmittedContent = chatService.getBytes();
                     //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
                     this.mJBluetootManager.executeRequest(this.request);
