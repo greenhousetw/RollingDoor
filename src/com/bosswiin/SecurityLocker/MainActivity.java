@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         super.setContentView(R.layout.main);
 
         this.mJBluetootManager = new JBluetoothManager(this);
-        this.mJBluetootManager.setBluetoothLowEnergyWrapper(this);
+        //this.mJBluetootManager.setBluetoothLowEnergyWrapper(this);
 
         this.bleAdpater = new BLESimpleAdapter(this);
         this.listView = (ListView) this.findViewById(R.id.listView);
@@ -103,6 +103,9 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     protected void onResume() {
         super.onResume();
         Log.d(this.logTag, "Application in resume phase");
+
+        this.mJBluetootManager.enableBluetoothHardware(this);
+        this.mJBluetootManager.setBluetoothLowEnergyWrapper(this);
     }
 
     @Override

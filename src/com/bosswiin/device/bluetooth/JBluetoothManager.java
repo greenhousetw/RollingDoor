@@ -58,7 +58,6 @@ public class JBluetoothManager implements INotificationHandler {
      */
     public JBluetoothManager(Context context) {
         this.context = context;
-        this.enableBluetoothHardware(context);
     }
 
     /**

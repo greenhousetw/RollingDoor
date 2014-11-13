@@ -62,11 +62,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainActivity.java" pinned="true" current="false" current-in-tab="false">
+      <file leaf-file-name="MainActivity.java" pinned="true" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1157" max-vertical-offset="5321">
-              <caret line="112" column="46" selection-start-line="112" selection-start-column="46" selection-end-line="112" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.6179775" vertical-offset="1616" max-vertical-offset="5372">
+              <caret line="112" column="20" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2224#2240#0" expanded="true" />
@@ -75,12 +75,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JBluetoothManager.java" pinned="true" current="true" current-in-tab="true">
+      <file leaf-file-name="JBluetoothManager.java" pinned="true" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/JBluetoothManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.36314848" vertical-offset="766" max-vertical-offset="7072">
-              <caret line="74" column="33" selection-start-line="74" selection-start-column="33" selection-end-line="74" selection-end-column="33" />
-              <folding />
+            <state vertical-scroll-proportion="-4.3703704" vertical-offset="596" max-vertical-offset="7055">
+              <caret line="59" column="31" selection-start-line="59" selection-start-column="31" selection-end-line="59" selection-end-column="31" />
+              <folding>
+                <element signature="e#1935#1936#0" expanded="true" />
+                <element signature="e#1973#1974#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -536,7 +539,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32888147" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29382303" sideWeight="0.4989858" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29382303" sideWeight="0.4989858" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29716194" sideWeight="0.5010142" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -607,7 +610,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/JBluetoothManager.java</url>
-          <line>273</line>
+          <line>272</line>
           <properties />
           <option name="timeStamp" value="173" />
         </line-breakpoint>
@@ -627,7 +630,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="3944" max-vertical-offset="6494">
           <caret line="232" column="39" selection-start-line="232" selection-start-column="39" selection-end-line="232" selection-end-column="39" />
-          <folding />
+          <folding>
+            <element signature="e#1935#1936#0" expanded="true" />
+            <element signature="e#1973#1974#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -654,7 +660,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="3540" max-vertical-offset="5700">
           <caret line="236" column="5" selection-start-line="236" selection-start-column="5" selection-end-line="236" selection-end-column="5" />
-          <folding />
+          <folding>
+            <element signature="e#1935#1936#0" expanded="true" />
+            <element signature="e#1973#1974#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -699,7 +708,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2618" max-vertical-offset="4845">
           <caret line="154" column="54" selection-start-line="154" selection-start-column="54" selection-end-line="154" selection-end-column="54" />
-          <folding />
+          <folding>
+            <element signature="e#1935#1936#0" expanded="true" />
+            <element signature="e#1973#1974#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -733,7 +745,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="3420" max-vertical-offset="3705">
           <caret line="228" column="13" selection-start-line="228" selection-start-column="13" selection-end-line="228" selection-end-column="13" />
-          <folding />
+          <folding>
+            <element signature="e#1935#1936#0" expanded="true" />
+            <element signature="e#1973#1974#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1013,22 +1028,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/JBluetoothManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1616" max-vertical-offset="5321">
-          <caret line="112" column="46" selection-start-line="112" selection-start-column="46" selection-end-line="112" selection-end-column="46" />
+        <state vertical-scroll-proportion="-4.3703704" vertical-offset="596" max-vertical-offset="7055">
+          <caret line="59" column="31" selection-start-line="59" selection-start-column="31" selection-end-line="59" selection-end-column="31" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2224#2240#0" expanded="true" />
+            <element signature="e#1935#1936#0" expanded="true" />
+            <element signature="e#1973#1974#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/JBluetoothManager.java">
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36314848" vertical-offset="766" max-vertical-offset="7072">
-          <caret line="74" column="33" selection-start-line="74" selection-start-column="33" selection-end-line="74" selection-end-column="33" />
-          <folding />
+        <state vertical-scroll-proportion="0.6179775" vertical-offset="1616" max-vertical-offset="5372">
+          <caret line="112" column="20" selection-start-line="112" selection-start-column="20" selection-end-line="112" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2224#2240#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
