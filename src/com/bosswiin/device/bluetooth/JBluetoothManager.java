@@ -62,6 +62,65 @@ public class JBluetoothManager implements INotificationHandler {
     }
 
     /**
+     * To stop monitoring rssi
+     * date: 2014/11/13
+     *
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
+    public boolean stopMonitoringRSSI() {
+
+        boolean result=false;
+
+        if(this.mBleWrapper!=null)
+        {
+            this.mBleWrapper.stopMonitoringRssiValue();
+            result=true;
+        }
+
+        return result;
+    }
+
+    /**
+     * To disconnect from remote peripheral
+     * date: 2014/11/13
+     *
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
+    public boolean disconnect(){
+
+        boolean result=false;
+
+        if(this.mBleWrapper!=null)
+        {
+            this.mBleWrapper.diconnect();
+            result=true;
+        }
+
+        return result;
+    }
+
+    /**
+     * To close connection
+     * date: 2014/11/13
+     *
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
+    public boolean closeConnection(){
+        boolean result=false;
+
+        if(this.mBleWrapper!=null)
+        {
+            this.mBleWrapper.close();
+            result=true;
+        }
+
+        return result;
+    }
+
+    /**
      * To execute the action.
      * date: 2014/10/24
      *

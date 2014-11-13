@@ -8,7 +8,7 @@ import android.util.Log;
  */
 public class RepositoryFactory {
 
-    private static final String LOGTAG="RepositoryFactory";
+    private static final String LOGTAG=RepositoryFactory.class.getName();
 
     public static IRepository GetRepository(Context context, String dbName, int version, RepositoryEnum chooser, String initString)
     {

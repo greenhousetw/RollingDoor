@@ -78,11 +78,9 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        if(db.isOpen()){
-            db.close();
+        if (db.isOpen()) {
+            db.execSQL(createTableString);
         }
-
-        db.execSQL(createTableString);
     }
 
     /**
@@ -124,20 +122,18 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
 
         Log.v(LOGTAGNAME, "Open database:" + databaseName);
 
-        try {
-            if (this.database == null) {
+        if (this.database == null) {
+            try {
                 this.database = this.getWritableDatabase();
-                this.createTableString = initString;
-                this.onCreate(this.database);
+            } catch (Exception ex) {
+                Log.e(LOGTAGNAME, ex.getMessage());
+                this.database=this.getWritableDatabase();
             }
-
-            result = true;
-        }
-        catch (Exception ex)
-        {
-            Log.e(LOGTAGNAME, ex.getMessage());
+            this.createTableString = initString;
+            this.onCreate(this.database);
         }
 
+        result = true;
         return result;
     }
 
@@ -361,8 +357,6 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
      * Query data from the given table
      * date: 2014/10/23
      *
-     * @param tableName name of table, like: info.db
-     * @param data      you can give any data that will be used during query
      * @return return value will be encapsulate into ArrayList
      * @author Yu-Hua Tseng
      */

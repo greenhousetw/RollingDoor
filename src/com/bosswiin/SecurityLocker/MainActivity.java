@@ -19,7 +19,11 @@ import com.bosswiin.repository.RepositoryEnum;
 import com.bosswiin.repository.RepositoryFactory;
 import com.bosswiin.sharelibs.JSONHelper;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -27,31 +31,28 @@ import java.util.HashMap;
  */
 public class MainActivity extends Activity implements OnClickListener, IJBTManagerUICallback {
 
-    private final String uuidDoorService = "713d0000-503e-4c75-ba94-3148f18d941e";
-    private final String uuidDoorCharactristicsForRead = "713d0002-503e-4c75-ba94-3148f18d941e";
-    private final String uuidDoorCharactristicsForUP = "713d0003-503e-4c75-ba94-3148f18d941e";
-    private final String uuidDoorCharactristicsForDown = "713d0003-503e-4c75-ba94-3148f18d941e";
-    private final String uuidDoorCharactristicsForStop = "713d0003-503e-4c75-ba94-3148f18d941e";
-
-    private ListView listView = null;
-    private Button scanButton = null, upButton = null, stopButton = null, downButton = null;
-    private IRepository repository = null;
-
-    private String selectedAddress = "";
-
-    private String tableName = "DeviceList";
-    private Context mainContext = this;
-    private HashMap<String, Object> databaseTuple = new HashMap<String, Object>();
-
-    private JBluetoothManager mJBluetootManager = null;
-    private BLEAdpaterBase bleAdpater = null;
-    private BLERequest request = new BLERequest();
-
-    private MainActivity activity = this;
+    private final String   uuidDoorService               = "713d0000-503e-4c75-ba94-3148f18d941e";
+    private final String   uuidDoorCharactristicsForRead = "713d0002-503e-4c75-ba94-3148f18d941e";
+    private final String   uuidDoorCharactristicsForUP   = "713d0003-503e-4c75-ba94-3148f18d941e";
+    private final String   uuidDoorCharactristicsForDown = "713d0003-503e-4c75-ba94-3148f18d941e";
+    private final String   uuidDoorCharactristicsForStop = "713d0003-503e-4c75-ba94-3148f18d941e";
+    private final String   logTag                        = MainActivity.class.getName();
+    private       ListView listView                      = null;
+    private       Button   scanButton                    = null, upButton = null, stopButton = null, downButton = null;
+    private IRepository             repository        = null;
+    private String                  selectedAddress   = "";
+    private String                  tableName         = "DeviceList";
+    private Context                 mainContext       = this;
+    private HashMap<String, Object> databaseTuple     = new HashMap<String, Object>();
+    private JBluetoothManager       mJBluetootManager = null;
+    private BLEAdpaterBase          bleAdpater        = null;
+    private BLERequest              request           = new BLERequest();
+    private MainActivity            activity          = this;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+        Log.d(this.logTag, "Application in onCreate phase");
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.main);
 
@@ -90,23 +91,41 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         listView.setAdapter(this.bleAdpater);
         //this.scanButton.setVisibility(View.GONE);
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        //this.GetRepository();
+        Log.d(this.logTag, "Application in start phase");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(this.logTag, "Application in resume phase");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(this.logTag, "Application in pause phase");
+
+        this.mJBluetootManager.stopScanning();
+        this.mJBluetootManager.stopMonitoringRSSI();
+        this.mJBluetootManager.disconnect();
+        this.mJBluetootManager.closeConnection();
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        Log.d(this.logTag, "Application in stop phase");
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        Log.d(this.logTag, "Application in destroy phase");
     }
 
     @Override
@@ -121,10 +140,10 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
             if (view.getId() == R.id.buttonScan) {
 
-                this.mJBluetootManager.stopScanning();
-                this.mJBluetootManager.startScanning();
-
-            } else if (this.request.remoteAddress.length() != 0) {
+                //this.mJBluetootManager.stopScanning();
+                //this.mJBluetootManager.startScanning();
+            }
+            else if (this.request.remoteAddress.length() != 0) {
 
                 if (view.getId() == R.id.buttonUP) {
 
@@ -133,14 +152,16 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                     this.request.transmittedContent = chatService.getBytes();
                     this.mJBluetootManager.executeRequest(this.request);
 
-                } else if (view.getId() == R.id.buttonDown) {
+                }
+                else if (view.getId() == R.id.buttonDown) {
 
                     this.request.characteristicsUUID = this.uuidDoorCharactristicsForDown;
                     chatService = "down";
                     this.request.transmittedContent = chatService.getBytes();
                     //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
                     this.mJBluetootManager.executeRequest(this.request);
-                } else if (view.getId() == R.id.buttonStop) {
+                }
+                else if (view.getId() == R.id.buttonStop) {
 
                     this.request.characteristicsUUID = this.uuidDoorCharactristicsForStop;
                     chatService = "stop";
@@ -160,9 +181,9 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
      * date: 2014/11/09
      *
      * @param deviceName name of peripheral
-     * @param address address of peripheral
-     * @param rssi signal strength of peripheral
-     * @param record other record of peripheral
+     * @param address    address of peripheral
+     * @param rssi       signal strength of peripheral
+     * @param record     other record of peripheral
      * @author Yu-Hua Tseng
      */
     @Override
@@ -184,28 +205,89 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
      * @author Yu-Hua Tseng
      */
     @Override
-    public void passContentToActivity(Object data)
-    {
-        if(data != null){
-            ((EditText)this.findViewById(R.id.editnoticontent)).setText(data.toString().trim());
-            ((EditText)this.findViewById(R.id.editnoticontent)).clearFocus();
+    public void passContentToActivity(Object data) {
+        if (data != null) {
+            ((EditText) this.findViewById(R.id.editnoticontent)).setText(data.toString().trim());
+            ((EditText) this.findViewById(R.id.editnoticontent)).clearFocus();
             this.listView.requestFocus();
         }
     }
 
+    /**
+     * This is trail method
+     * date: 2014/11/10
+     *
+     * @author Yu-Hua Tseng
+     */
     private void InitDoorList() {
 
+        String testData[][]={
+            {"01:02:03:04:05:06","A","1F","1"},
+            {"0a:0b:0c:0d:0e:0f","B","B1","1"}
+        };
+
+        for(int i=0; i< testData.length;i++){
+            this.addDataToTable(testData[i][0],testData[i][1],testData[i][2],testData[i][3]);
+        }
+
         // set column name
-        this.databaseTuple.put("UUID", "UUID");
+        this.databaseTuple.put("Address", "Address");
         this.databaseTuple.put("Name", "Name");
         this.databaseTuple.put("Location", "Location");
         this.databaseTuple.put("Frequency", "Frequency");
         this.databaseTuple.put("UpdateTime", "UpdateTime");
 
         JSONArray array = JSONHelper.GetJSON(this.repository.Query(this.tableName, this.databaseTuple));
+
+        for (int i = 0; i < array.length(); i++) {
+            try {
+                JSONObject record = array.getJSONObject(i);
+                this.addNewDevices(record.get("Name").toString(),
+                        record.get("Address").toString(),
+                        0,
+                        null);
+            } catch (JSONException jsonEx) {
+                Log.e(this.logTag, jsonEx.getMessage());
+            }
+
+        }
     }
 
-    private boolean GetRepository() {
+    /**
+     * Set data into data collection and save to database
+     * date: 2014/11/10
+     *
+     * @param address address of peripheral
+     * @param name    name of address
+     * @param location location of address
+     * @param freq use frequency
+     * @author Yu-Hua Tseng
+     */
+    private void addDataToTable(String address, String name, String location, String freq) {
+
+        try {
+            this.databaseTuple.clear();
+            this.databaseTuple.put("Address", address);
+            this.databaseTuple.put("Name", name);
+            this.databaseTuple.put("Location", location);
+            this.databaseTuple.put("Frequency", freq);
+            this.databaseTuple.put("UpdateTime", new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(new Date()));
+            this.repository.Insert("DeviceList", this.databaseTuple);
+        }
+        catch (Exception ex)
+        {
+            Log.e(this.logTag, ex.getMessage());
+        }
+    }
+
+    /**
+     * Pass data to activity for ui related operations
+     * date: 2014/11/09
+     *
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
+    private boolean getRepository() {
 
         boolean result = false;
 
@@ -214,7 +296,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
             String dbName = "info.db";
             int dbVersion = 1;
             final String dbInitString = "CREATE TABLE IF NOT EXISTS DeviceList(" +
-                    "UUID       VARCHAR( 60 )   PRIMARY KEY," +
+                    "Address    VARCHAR( 60 )   PRIMARY KEY," +
                     "Name       VARCHAR( 100 )," +
                     "Location   VARCHAR( 50 )," +
                     "Frequency  INT," +
