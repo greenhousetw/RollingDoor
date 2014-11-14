@@ -126,9 +126,9 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                             try {
 
                                 if (!mJBluetootManager.checkConnection(selectedAddress)) {
-                                    acts.runOnUiThread(new Runnable(){
+                                    acts.runOnUiThread(new Runnable() {
                                         @Override
-                                        public void run(){
+                                        public void run() {
                                             acts.resetSelectedItemUI();
                                         }
                                     });
