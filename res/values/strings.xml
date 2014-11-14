@@ -12,8 +12,10 @@
     <string name="noListItemTitle">沒有任何可控制門項</string>
     <string name="connectionStatus">連線狀態:尚未連線</string>
     <string name="connectionStringForSuccessful">連線狀態:已連線</string>
-    <string name="connectionStringForUnknown">連線狀態:尚未連線</string>
+    <string name="connectionStringForUnknown">連線狀態:點擊連線</string>
     <string name="connectionStringForPause">連線狀態:暫停連線</string>
     <string name="exitApp">再按一次本鍵: ← 會退出本控制器</string>
+    <string name="rssiPrefixValue">強度:</string>
+    <string name="retryHintValue">重試次數:</string>
     <dimen name="TEXT_SIZE">26sp</dimen>
 </resources>

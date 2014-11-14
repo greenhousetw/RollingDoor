@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
+import com.bosswiin.SecurityLocker.R;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapper;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapperUiCallbacks;
 import com.bosswiin.sharelibs.CommonHelper;
@@ -158,21 +159,28 @@ public class JBluetoothManager implements INotificationHandler {
 
         this.mJBTUICallBack = interfaceDeviceFound;
 
-        this.mBleWrapper = new BleWrapper((Activity) this.context, new BleWrapperUiCallbacks.Null() {
-            @Override
-            public void uiDeviceFound(final BluetoothDevice device, final int rssi, final byte[] record) {
-                interfaceDeviceFound.addNewDevices(device.getName(), device.getAddress(), rssi, record);
-                bluetoothDeviceList.put(device.getAddress(), device);
-            }
+        if(this.mBleWrapper==null) {
+            this.mBleWrapper = new BleWrapper((Activity) this.context, new BleWrapperUiCallbacks.Null() {
+                @Override
+                public void uiDeviceFound(final BluetoothDevice device, final int rssi, final byte[] record) {
+                    interfaceDeviceFound.addNewDevices(device.getName(), device.getAddress(), rssi, record);
+                    bluetoothDeviceList.put(device.getAddress(), device);
+                }
 
-            @Override
-            public void uiNewValueForCharacteristic(BluetoothGatt gatt,
-                                                    BluetoothDevice device, BluetoothGattService service,
-                                                    BluetoothGattCharacteristic ch, String strValue, int intValue,
-                                                    byte[] rawValue, String timestamp) {
-                handleNotification(gatt, device, service, ch, strValue, intValue, rawValue, timestamp);
-            }
-        });
+                @Override
+                public void uiNewValueForCharacteristic(BluetoothGatt gatt,
+                                                        BluetoothDevice device, BluetoothGattService service,
+                                                        BluetoothGattCharacteristic ch, String strValue, int intValue,
+                                                        byte[] rawValue, String timestamp) {
+                    handleNotification(gatt, device, service, ch, strValue, intValue, rawValue, timestamp);
+                }
+
+                @Override
+                public void uiNewRssiAvailable(final BluetoothGatt gatt, final BluetoothDevice device, final int rssi) {
+                    handleNewRssiAvailable(gatt, device, rssi);
+                }
+            });
+        }
 
         if (this.mBleWrapper.initialize()) {
             Log.d(this.mLogTag, "BleWrapper initialization is successful");
@@ -242,11 +250,15 @@ public class JBluetoothManager implements INotificationHandler {
 
         boolean result = false;
 
+        BLEAcionEnum action = request.actionEnum;
+
         if (mBleWrapper != null) {
             request.context = this.context;
             request.bluetoothDevice = this.bluetoothDeviceList.get(request.remoteAddress);
             request.bleWrapper = this.mBleWrapper;
+
             if (this.connectToService(request)) {
+
                 result = this.mBleAction.execute(request);
             }
         }
@@ -267,23 +279,7 @@ public class JBluetoothManager implements INotificationHandler {
     public void changeBleDevice(BLERequest request) {
 
         // clean current connection
-        if (this.mBleWrapper.isConnected()) {
-
-            if (this.mBleWrapper.getDevice().getAddress() != request.remoteAddress) {
-                this.mBleWrapper.diconnect();
-                this.mBleWrapper.close();
-
-                if (this.mBleWrapper.getCachedServices() != null) {
-                    this.mBleWrapper.getCachedServices().clear();
-                }
-
-                BluetoothGattService gattService = this.mBleWrapper.getCachedService();
-                BluetoothGatt gatt = this.mBleWrapper.getGatt();
-                gattService = null;
-                gatt = null;
-
-            }
-        }
+        this.resetBLEWrapper(request.remoteAddress);
 
         // start to connect to the given peripheral
         if (request.actionEnum.equals(BLEAcionEnum.Notification)) {
@@ -335,6 +331,67 @@ public class JBluetoothManager implements INotificationHandler {
                 mJBTUICallBack.passContentToActivity(strValue);
             }
         });
+    }
+
+    /**
+     * process new Rssi value
+     * date: 2014/11/14
+     *
+     * @param gatt   instance of BluetoothGatt
+     * @param device instance of BluetoothDevice
+     * @param rssi   strength of signal
+     * @author Yu-Hua Tseng
+     */
+    public void handleNewRssiAvailable(final BluetoothGatt gatt, final BluetoothDevice device, final int rssi) {
+        final Activity activity = ((Activity) this.context);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String rssiValue = activity.getString(R.string.rssiPrefixValue) + Integer.toString(rssi);
+                mJBTUICallBack.passContentToActivity(rssiValue);
+            }
+        });
+    }
+
+    /**
+     * reset instance of BLE peripheral
+     * date: 2014/10/31
+     *
+     * @param remoteAddress address of remote peripheral
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
+    public boolean resetBLEWrapper(String remoteAddress) {
+
+        boolean result = false;
+
+        try {
+            // clean current connection
+            if (this.mBleWrapper.isConnected()) {
+
+                if (this.mBleWrapper.getDevice().getAddress() != remoteAddress) {
+                    this.mBleWrapper.diconnect();
+                    this.mBleWrapper.close();
+
+                    if (this.mBleWrapper.getCachedServices() != null) {
+                        this.mBleWrapper.getCachedServices().clear();
+                    }
+
+                    BluetoothGattService gattService = this.mBleWrapper.getCachedService();
+                    BluetoothGatt gatt = this.mBleWrapper.getGatt();
+                    gattService = null;
+                    gatt = null;
+
+                }
+            }
+
+            result = true;
+
+        } catch (Exception ex) {
+            Log.e(JBluetoothManager.class.getName(), ex.getMessage());
+        }
+
+        return result;
     }
 
     /**

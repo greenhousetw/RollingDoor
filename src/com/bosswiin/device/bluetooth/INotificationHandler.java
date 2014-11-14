@@ -45,4 +45,16 @@ public interface INotificationHandler {
                                    BluetoothGattCharacteristic ch, String strValue, int intValue,
                                    byte[] rawValue, String timestamp);
 
+
+    /**
+     * process new Rssi value
+     * date: 2014/11/14
+     *
+     * @param gatt instance of BluetoothGatt
+     * @param device instance of BluetoothDevice
+     * @param rssi strength of signal
+     * @author Yu-Hua Tseng
+     */
+    public void handleNewRssiAvailable(final BluetoothGatt gatt, final BluetoothDevice device, final int rssi);
+
 }

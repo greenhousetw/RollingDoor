@@ -1,14 +1,17 @@
 package com.bosswiin.SecurityLocker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import android.app.AlertDialog;
 import android.widget.AdapterView.OnItemClickListener;
 import com.bosswiin.UserInterface.Components.BLEAdpaterBase;
 import com.bosswiin.UserInterface.Components.BLESimpleAdapter;
@@ -19,14 +22,16 @@ import com.bosswiin.device.bluetooth.JBluetoothManager;
 import com.bosswiin.repository.IRepository;
 import com.bosswiin.repository.RepositoryEnum;
 import com.bosswiin.repository.RepositoryFactory;
+import com.bosswiin.sharelibs.CommonHelper;
 import com.bosswiin.sharelibs.JSONHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.view.View.OnClickListener;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Handler;
 
 /**
  * Created by 9708023 on 2014/10/22.
@@ -41,20 +46,23 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     private final String   logTag                        = MainActivity.class.getName();
     private       ListView listView                      = null;
     private       Button   scanButton                    = null, upButton = null, stopButton = null, downButton = null;
-    private IRepository             repository              = null;
-    private String                  selectedAddress         = "";
-    private String                  tableName               = "DeviceList";
-    private Context                 mainContext             = this;
-    private HashMap<String, Object> databaseTuple           = new HashMap<String, Object>();
-    private JBluetoothManager       mJBluetootManager       = null;
-    private BLEAdpaterBase          bleAdpater              = null;
-    private BLERequest              request                 = new BLERequest();
-    private MainActivity            acts                    = this;
-    private int                     currentSelection        = Integer.MAX_VALUE;
-    private TextView                currentSelectedTextview = null;
-    private boolean                 isPauseBack             = false;
-    private boolean                 isDestroyBack           = false;
-    private boolean isBTHardwareAvaialbe=false;
+    private IRepository             repository                  = null;
+    private String                  selectedAddress             = "";
+    private String                  tableName                   = "DeviceList";
+    private Context                 mainContext                 = this;
+    private HashMap<String, Object> databaseTuple               = new HashMap<String, Object>();
+    private JBluetoothManager       mJBluetootManager           = null;
+    private BLEAdpaterBase          bleAdpater                  = null;
+    private BLERequest              request                     = new BLERequest();
+    private MainActivity            acts                        = this;
+    private int                     currentSelection            = Integer.MAX_VALUE;
+    private TextView                currentSelectedTextview     = null;
+    private TextView                currentSelectedRSSITextview = null;
+    private boolean                 isPauseBack                 = false;
+    private boolean                 isDestroyBack               = false;
+    private boolean                 isBTHardwareAvaialbe        = false;
+
+    private Thread checkDeviceConnectionThread = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +72,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         super.setContentView(R.layout.main);
 
         this.mJBluetootManager = new JBluetoothManager(this);
-        //this.mJBluetootManager.setBluetoothLowEnergyWrapper(this);
 
         this.bleAdpater = new BLESimpleAdapter(this);
         this.listView = (ListView) this.findViewById(R.id.listView);
@@ -97,7 +104,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 mJBluetootManager.changeBleDevice(request);
 
                 if (currentSelection != Integer.MAX_VALUE) {
-                    currentSelectedTextview.setText(acts.getString(R.string.connectionStringForUnknown));
+                    acts.resetSelectedItemUI();
                 }
 
                 if (mJBluetootManager.checkConnection(selectedAddress)) {
@@ -107,6 +114,36 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
                 currentSelection = position;
                 currentSelectedTextview = (TextView) acts.findViewById(R.id.bleProgressBar);
+                currentSelectedRSSITextview = (TextView) acts.findViewById(R.id.RssiTextView);
+
+                final double waitSeconds = 0.3;
+
+                acts.checkDeviceConnectionThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        while (true) {
+                            try {
+
+                                if (!mJBluetootManager.checkConnection(selectedAddress)) {
+                                    acts.runOnUiThread(new Runnable(){
+                                        @Override
+                                        public void run(){
+                                            acts.resetSelectedItemUI();
+                                        }
+                                    });
+                                }
+
+                                Thread.sleep((long) CommonHelper.SecsToMilliSeconds(waitSeconds));
+                                // Log.d(logTag, "monitoring");
+                            } catch (Exception ex) {
+                                Log.e(logTag, ex.getMessage());
+                            }
+                        }
+                    }
+                });
+
+                acts.checkDeviceConnectionThread.start();
             }
         });
 
@@ -119,7 +156,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         super.onStart();
 
         if (this.mJBluetootManager.enableBluetoothHardware(this)) {
-            this.isBTHardwareAvaialbe=true;
+            this.isBTHardwareAvaialbe = true;
         }
 
         Log.d(this.logTag, "Application in start phase");
@@ -131,17 +168,19 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         Log.d(this.logTag, "Application in resume phase");
 
         if (this.mJBluetootManager.enableBluetoothHardware(this)) {
-            this.isBTHardwareAvaialbe=true;
+            this.isBTHardwareAvaialbe = true;
         }
 
-        if(isBTHardwareAvaialbe && !this.isDestroyBack){
-            this.mJBluetootManager.setBluetoothLowEnergyWrapper(this);
-            this.mJBluetootManager.startScanning();
+        if (isBTHardwareAvaialbe && !this.isDestroyBack) {
+            mJBluetootManager.setBluetoothLowEnergyWrapper(this);
+            mJBluetootManager.startScanning();
         }
 
-        if(this.isPauseBack) {
+        if (this.isPauseBack) {
             if (this.listView != null && this.currentSelection != Integer.MAX_VALUE) {
                 Log.d(logTag, "the index of current peripheral=" + this.currentSelection);
+                this.listView.setSelection(this.currentSelection);
+                this.listView.setItemsCanFocus(true);
                 this.listView.performItemClick(this.listView, this.currentSelection, this.listView.getItemIdAtPosition(this.currentSelection));
             }
         }
@@ -165,7 +204,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         }
 
         this.isPauseBack = true;
-        this.isBTHardwareAvaialbe=false;
+        this.isBTHardwareAvaialbe = false;
     }
 
     @Override
@@ -175,6 +214,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         if (this.currentSelectedTextview != null) {
             this.currentSelectedTextview.setText(this.getString(R.string.connectionStringForUnknown));
+            this.currentSelectedRSSITextview.setText(this.getText(R.string.rssiPrefixValue) + "?");
         }
     }
 
@@ -189,6 +229,12 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+    @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setTitle(this.getString(R.string.app_name))
@@ -197,6 +243,8 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
                         MainActivity.super.onBackPressed();
+                        acts.finish();
+                        System.exit(0);
                     }
                 }).create().show();
     }
@@ -218,29 +266,37 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
             }
             else if (this.request.remoteAddress.length() != 0) {
 
-                if (view.getId() == R.id.buttonUP) {
+                if (this.mJBluetootManager.checkConnection(this.request.remoteAddress)) {
 
-                    this.request.characteristicsUUID = this.uuidDoorCharactristicsForUP;
-                    //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
-                    this.request.transmittedContent = chatService.getBytes();
-                    this.mJBluetootManager.executeRequest(this.request);
+                    if (view.getId() == R.id.buttonUP) {
 
+                        this.request.characteristicsUUID = this.uuidDoorCharactristicsForUP;
+                        //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
+                        this.request.transmittedContent = chatService.getBytes();
+                        this.mJBluetootManager.executeRequest(this.request);
+
+                    }
+                    else if (view.getId() == R.id.buttonDown) {
+
+                        this.request.characteristicsUUID = this.uuidDoorCharactristicsForDown;
+                        chatService = "down";
+                        this.request.transmittedContent = chatService.getBytes();
+                        //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
+                        this.mJBluetootManager.executeRequest(this.request);
+                    }
+                    else if (view.getId() == R.id.buttonStop) {
+
+                        this.request.characteristicsUUID = this.uuidDoorCharactristicsForStop;
+                        chatService = "stop";
+                        this.request.transmittedContent = chatService.getBytes();
+                        //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
+                        this.mJBluetootManager.executeRequest(this.request);
+                    }
                 }
-                else if (view.getId() == R.id.buttonDown) {
-
-                    this.request.characteristicsUUID = this.uuidDoorCharactristicsForDown;
-                    chatService = "down";
-                    this.request.transmittedContent = chatService.getBytes();
-                    //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
-                    this.mJBluetootManager.executeRequest(this.request);
-                }
-                else if (view.getId() == R.id.buttonStop) {
-
-                    this.request.characteristicsUUID = this.uuidDoorCharactristicsForStop;
-                    chatService = "stop";
-                    this.request.transmittedContent = chatService.getBytes();
-                    //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
-                    this.mJBluetootManager.executeRequest(this.request);
+                else {
+                    CommonHelper.ShowToast(this, this.getString(R.string.DoorHint_IsNotConnected));
+                    this.resetSelectedItemUI();
+                    this.listView.removeViewAt(currentSelection);
                 }
             }
 
@@ -282,10 +338,33 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     @Override
     public void passContentToActivity(Object data) {
         if (data != null) {
-            ((EditText) this.findViewById(R.id.editnoticontent)).setText(data.toString().trim());
-            ((EditText) this.findViewById(R.id.editnoticontent)).clearFocus();
-            this.listView.requestFocus();
+
+            if (data instanceof String) {
+
+                String value = data.toString();
+
+                if (value.startsWith(this.getString(R.string.rssiPrefixValue))) {
+                    ((TextView) this.findViewById(R.id.RssiTextView)).setText(value + " db");
+                    ((TextView) this.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStringForSuccessful);
+                }
+                else {
+                    ((EditText) this.findViewById(R.id.editnoticontent)).setText(value.trim());
+                    ((EditText) this.findViewById(R.id.editnoticontent)).clearFocus();
+                    this.listView.requestFocus();
+                }
+            }
         }
+    }
+
+    /**
+     * Reset selected item ui to default
+     * date: 2014/11/14
+     *
+     * @author Yu-Hua Tseng
+     */
+    private void resetSelectedItemUI() {
+        this.currentSelectedTextview.setText(acts.getString(R.string.connectionStringForUnknown));
+        this.currentSelectedRSSITextview.setText(acts.getString(R.string.rssiPrefixValue) + "?");
     }
 
     /**

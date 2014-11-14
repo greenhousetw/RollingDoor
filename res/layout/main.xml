@@ -78,6 +78,7 @@
           android:layout_height="match_parent"
           android:layout_alignParentTop="true"
           android:drawSelectorOnTop="false"
+          android:addStatesFromChildren="true"
           android:layout_weight="1"
           android:id="@+id/listView"/>
         <!-- Here is the view to show if the list is emtpy -->

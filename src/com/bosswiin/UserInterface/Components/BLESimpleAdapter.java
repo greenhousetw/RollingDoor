@@ -8,6 +8,7 @@ package com.bosswiin.UserInterface.Components;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ public class BLESimpleAdapter extends BLEAdpaterBase {
 
     // tag for logging
     private final String LOGTAG = BLESimpleAdapter.class.getSimpleName();
+    // runtime context
+    private Context context=null;
 
     /**
      * Initializes a new instance of the RollingAdpater class.
@@ -35,6 +38,7 @@ public class BLESimpleAdapter extends BLEAdpaterBase {
      */
     public BLESimpleAdapter(Activity activity) {
         super(activity);
+        this.context=activity;
     }
 
     /**
@@ -147,6 +151,7 @@ public class BLESimpleAdapter extends BLEAdpaterBase {
             holder = new ViewHolder();
             holder.image = (ImageView) convertView.findViewById(R.id.bleIcon);
             holder.nameField = (TextView) convertView.findViewById(R.id.bleDeviceName);
+            holder.rssiField = (TextView) convertView.findViewById(R.id.RssiTextView);
             holder.connectionStatus = (TextView) convertView.findViewById(R.id.bleProgressBar);
             convertView.setTag(holder);
         }
@@ -158,6 +163,7 @@ public class BLESimpleAdapter extends BLEAdpaterBase {
         try {
             BLEDeviceInfo record = (BLEDeviceInfo) this.GetDevice(position);
             holder.nameField.setText(record.deviceName);
+            holder.rssiField.setText(this.context.getString(R.string.rssiPrefixValue) + "?");
             holder.nameField.setTag(record.deviceAddress);
         } catch (Exception ex) {
             Log.e(LOGTAG, ex.getMessage());
@@ -175,6 +181,8 @@ public class BLESimpleAdapter extends BLEAdpaterBase {
         ImageView image     = null;
         // TextView in rollingitemlayout
         TextView  nameField = null;
+        // TextView in rollingitemlayout
+        TextView  rssiField = null;
         // Textview for connection status
         TextView connectionStatus=null;
     }

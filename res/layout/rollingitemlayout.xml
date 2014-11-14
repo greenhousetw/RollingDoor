@@ -27,7 +27,18 @@
             android:focusable="false"
             android:textSize="14dp"
             android:text="@string/connectionStatus"/>
-
+    <TextView
+            android:id="@+id/RssiTextView"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/bleIcon"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="200dp"
+            android:focusable="false"
+            android:textSize="14dp"
+            android:text="@string/rssiPrefixValue"/>
     <TextView
             android:id="@+id/bleDeviceName"
             android:layout_width="fill_parent"
