@@ -2,11 +2,13 @@ package com.bosswiin.SecurityLocker;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import android.app.AlertDialog;
 import android.widget.AdapterView.OnItemClickListener;
 import com.bosswiin.UserInterface.Components.BLEAdpaterBase;
 import com.bosswiin.UserInterface.Components.BLESimpleAdapter;
@@ -21,7 +23,7 @@ import com.bosswiin.sharelibs.JSONHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import android.view.View.OnClickListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,15 +41,20 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     private final String   logTag                        = MainActivity.class.getName();
     private       ListView listView                      = null;
     private       Button   scanButton                    = null, upButton = null, stopButton = null, downButton = null;
-    private IRepository             repository        = null;
-    private String                  selectedAddress   = "";
-    private String                  tableName         = "DeviceList";
-    private Context                 mainContext       = this;
-    private HashMap<String, Object> databaseTuple     = new HashMap<String, Object>();
-    private JBluetoothManager       mJBluetootManager = null;
-    private BLEAdpaterBase          bleAdpater        = null;
-    private BLERequest              request           = new BLERequest();
-    private MainActivity            activity          = this;
+    private IRepository             repository              = null;
+    private String                  selectedAddress         = "";
+    private String                  tableName               = "DeviceList";
+    private Context                 mainContext             = this;
+    private HashMap<String, Object> databaseTuple           = new HashMap<String, Object>();
+    private JBluetoothManager       mJBluetootManager       = null;
+    private BLEAdpaterBase          bleAdpater              = null;
+    private BLERequest              request                 = new BLERequest();
+    private MainActivity            acts                    = this;
+    private int                     currentSelection        = Integer.MAX_VALUE;
+    private TextView                currentSelectedTextview = null;
+    private boolean                 isPauseBack             = false;
+    private boolean                 isDestroyBack           = false;
+    private boolean isBTHardwareAvaialbe=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,8 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         this.stopButton.setOnClickListener(this);
         this.downButton.setOnClickListener(this);
 
+        this.acts = this;
+
         this.listView.setOnItemClickListener(new OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view,
@@ -86,6 +95,18 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 request.serviceUUID = uuidDoorService;
                 request.actionEnum = BLEAcionEnum.Notification;
                 mJBluetootManager.changeBleDevice(request);
+
+                if (currentSelection != Integer.MAX_VALUE) {
+                    currentSelectedTextview.setText(acts.getString(R.string.connectionStringForUnknown));
+                }
+
+                if (mJBluetootManager.checkConnection(selectedAddress)) {
+                    TextView statusText = (TextView) acts.findViewById(R.id.bleProgressBar);
+                    statusText.setText(acts.getString(R.string.connectionStringForSuccessful));
+                }
+
+                currentSelection = position;
+                currentSelectedTextview = (TextView) acts.findViewById(R.id.bleProgressBar);
             }
         });
 
@@ -96,6 +117,11 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     @Override
     protected void onStart() {
         super.onStart();
+
+        if (this.mJBluetootManager.enableBluetoothHardware(this)) {
+            this.isBTHardwareAvaialbe=true;
+        }
+
         Log.d(this.logTag, "Application in start phase");
     }
 
@@ -104,8 +130,24 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         super.onResume();
         Log.d(this.logTag, "Application in resume phase");
 
-        this.mJBluetootManager.enableBluetoothHardware(this);
-        this.mJBluetootManager.setBluetoothLowEnergyWrapper(this);
+        if (this.mJBluetootManager.enableBluetoothHardware(this)) {
+            this.isBTHardwareAvaialbe=true;
+        }
+
+        if(isBTHardwareAvaialbe && !this.isDestroyBack){
+            this.mJBluetootManager.setBluetoothLowEnergyWrapper(this);
+            this.mJBluetootManager.startScanning();
+        }
+
+        if(this.isPauseBack) {
+            if (this.listView != null && this.currentSelection != Integer.MAX_VALUE) {
+                Log.d(logTag, "the index of current peripheral=" + this.currentSelection);
+                this.listView.performItemClick(this.listView, this.currentSelection, this.listView.getItemIdAtPosition(this.currentSelection));
+            }
+        }
+
+        this.isPauseBack = false;
+        this.isDestroyBack = false;
     }
 
     @Override
@@ -117,18 +159,46 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         this.mJBluetootManager.stopMonitoringRSSI();
         this.mJBluetootManager.disconnect();
         this.mJBluetootManager.closeConnection();
+
+        if (this.currentSelectedTextview != null) {
+            this.currentSelectedTextview.setText(this.getString(R.string.connectionStringForPause));
+        }
+
+        this.isPauseBack = true;
+        this.isBTHardwareAvaialbe=false;
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         Log.d(this.logTag, "Application in stop phase");
+
+        if (this.currentSelectedTextview != null) {
+            this.currentSelectedTextview.setText(this.getString(R.string.connectionStringForUnknown));
+        }
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
         Log.d(this.logTag, "Application in destroy phase");
+        this.isDestroyBack = true;
+        int pid = android.os.Process.myPid();
+        android.os.Process.killProcess(pid);
+        System.exit(0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(this.getString(R.string.app_name))
+                .setMessage(this.getString(R.string.exitApp))
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        MainActivity.super.onBackPressed();
+                    }
+                }).create().show();
     }
 
     @Override
@@ -144,7 +214,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
             if (view.getId() == R.id.buttonScan) {
 
                 //this.mJBluetootManager.stopScanning();
-                //this.mJBluetootManager.startScanning();
+                this.mJBluetootManager.startScanning();
             }
             else if (this.request.remoteAddress.length() != 0) {
 
@@ -194,8 +264,10 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                bleAdpater.AddNewDevice(deviceName, address);
-                bleAdpater.notifyDataSetChanged();
+                if (deviceName != null && deviceName.length() != 0) {
+                    bleAdpater.AddNewDevice(deviceName, address);
+                    bleAdpater.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -224,13 +296,13 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
      */
     private void InitDoorList() {
 
-        String testData[][]={
-            {"01:02:03:04:05:06","A","1F","1"},
-            {"0a:0b:0c:0d:0e:0f","B","B1","1"}
+        String testData[][] = {
+                {"01:02:03:04:05:06", "A", "1F", "1"},
+                {"0a:0b:0c:0d:0e:0f", "B", "B1", "1"}
         };
 
-        for(int i=0; i< testData.length;i++){
-            this.addDataToTable(testData[i][0],testData[i][1],testData[i][2],testData[i][3]);
+        for (int i = 0; i < testData.length; i++) {
+            this.addDataToTable(testData[i][0], testData[i][1], testData[i][2], testData[i][3]);
         }
 
         // set column name
@@ -260,10 +332,10 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
      * Set data into data collection and save to database
      * date: 2014/11/10
      *
-     * @param address address of peripheral
-     * @param name    name of address
+     * @param address  address of peripheral
+     * @param name     name of address
      * @param location location of address
-     * @param freq use frequency
+     * @param freq     use frequency
      * @author Yu-Hua Tseng
      */
     private void addDataToTable(String address, String name, String location, String freq) {
@@ -276,9 +348,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
             this.databaseTuple.put("Frequency", freq);
             this.databaseTuple.put("UpdateTime", new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(new Date()));
             this.repository.Insert("DeviceList", this.databaseTuple);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             Log.e(this.logTag, ex.getMessage());
         }
     }

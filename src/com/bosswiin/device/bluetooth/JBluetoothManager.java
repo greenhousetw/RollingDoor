@@ -27,27 +27,27 @@ import java.util.UUID;
 public class JBluetoothManager implements INotificationHandler {
 
     // value for enable bluetooth hardware
-    private static final int REQUEST_ENABLE_BT = 1;
+    private static final int                                    REQUEST_ENABLE_BT       = 1;
     // timeout value for scan
-    private final double mScanningTimeoutSeconds = 5;
+    private final        double                                 mScanningTimeoutSeconds = 5;
     // string for loggin
-    private final String mLogTag = JBluetoothManager.class.getName();
+    private final        String                                 mLogTag                 = JBluetoothManager.class.getName();
     // wrapper for ble operations
-    private BleWrapper mBleWrapper = null;
+    private              BleWrapper                             mBleWrapper             = null;
     // the storage for bluetooth devices
-    private LinkedHashMap<String, BluetoothDevice> bluetoothDeviceList = new LinkedHashMap<String, BluetoothDevice>();
+    private              LinkedHashMap<String, BluetoothDevice> bluetoothDeviceList     = new LinkedHashMap<String, BluetoothDevice>();
     // context of activity
-    private Context context = null;
+    private              Context                                context                 = null;
     // for thread using
-    private Handler mHandler = null;
+    private              Handler                                mHandler                = null;
     // flag for in scanning
-    private boolean mScanning = false;
+    private              boolean                                mScanning               = false;
     // scannin timeout
-    private Runnable mTimeout = null;
+    private              Runnable                               mTimeout                = null;
     // action head of BLEAction
-    private BLEActionBase mBleAction = null;
+    private              BLEActionBase                          mBleAction              = null;
     // call back instance
-    private IJBTManagerUICallback mJBTUICallBack = null;
+    private              IJBTManagerUICallback                  mJBTUICallBack          = null;
 
     /**
      * Initializes a new instance of the BossWiinBlueToothManager class.
@@ -69,12 +69,11 @@ public class JBluetoothManager implements INotificationHandler {
      */
     public boolean stopMonitoringRSSI() {
 
-        boolean result=false;
+        boolean result = false;
 
-        if(this.mBleWrapper!=null)
-        {
+        if (this.mBleWrapper != null) {
             this.mBleWrapper.stopMonitoringRssiValue();
-            result=true;
+            result = true;
         }
 
         return result;
@@ -87,14 +86,13 @@ public class JBluetoothManager implements INotificationHandler {
      * @return true for successful and false for fail
      * @author Yu-Hua Tseng
      */
-    public boolean disconnect(){
+    public boolean disconnect() {
 
-        boolean result=false;
+        boolean result = false;
 
-        if(this.mBleWrapper!=null)
-        {
+        if (this.mBleWrapper != null) {
             this.mBleWrapper.diconnect();
-            result=true;
+            result = true;
         }
 
         return result;
@@ -107,13 +105,12 @@ public class JBluetoothManager implements INotificationHandler {
      * @return true for successful and false for fail
      * @author Yu-Hua Tseng
      */
-    public boolean closeConnection(){
-        boolean result=false;
+    public boolean closeConnection() {
+        boolean result = false;
 
-        if(this.mBleWrapper!=null)
-        {
+        if (this.mBleWrapper != null) {
             this.mBleWrapper.close();
-            result=true;
+            result = true;
         }
 
         return result;
@@ -252,7 +249,8 @@ public class JBluetoothManager implements INotificationHandler {
             if (this.connectToService(request)) {
                 result = this.mBleAction.execute(request);
             }
-        } else {
+        }
+        else {
             Log.e(this.mLogTag, "orz! mBleWrapper is null");
         }
 
@@ -268,6 +266,7 @@ public class JBluetoothManager implements INotificationHandler {
      */
     public void changeBleDevice(BLERequest request) {
 
+        // clean current connection
         if (this.mBleWrapper.isConnected()) {
 
             if (this.mBleWrapper.getDevice().getAddress() != request.remoteAddress) {
@@ -286,10 +285,11 @@ public class JBluetoothManager implements INotificationHandler {
             }
         }
 
+        // start to connect to the given peripheral
         if (request.actionEnum.equals(BLEAcionEnum.Notification)) {
             if (this.connectToService(request)) {
                 request.handler = this;
-                if(this.mBleWrapper.isConnected()) {
+                if (this.mBleWrapper.isConnected()) {
                     this.executeRequest(request);
                 }
             }
@@ -335,6 +335,28 @@ public class JBluetoothManager implements INotificationHandler {
                 mJBTUICallBack.passContentToActivity(strValue);
             }
         });
+    }
+
+    /**
+     * This method should notification of bluetoothGattCharacteristic, you should call
+     * date: 2014/11/14
+     *
+     * @param address address that we want to check
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
+    public boolean checkConnection(String address) {
+
+        boolean isConnected = false;
+
+        if (address != null && address.length() != 0 && this.mBleWrapper != null) {
+
+            if (this.mBleWrapper.getDevice().getAddress() == address) {
+                isConnected = this.mBleWrapper.isConnected();
+            }
+        }
+
+        return isConnected;
     }
 
     /**

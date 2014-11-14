@@ -7,6 +7,7 @@
 package com.bosswiin.UserInterface.Components;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,6 +147,7 @@ public class BLESimpleAdapter extends BLEAdpaterBase {
             holder = new ViewHolder();
             holder.image = (ImageView) convertView.findViewById(R.id.bleIcon);
             holder.nameField = (TextView) convertView.findViewById(R.id.bleDeviceName);
+            holder.connectionStatus = (TextView) convertView.findViewById(R.id.bleProgressBar);
             convertView.setTag(holder);
         }
         else {
@@ -173,5 +175,7 @@ public class BLESimpleAdapter extends BLEAdpaterBase {
         ImageView image     = null;
         // TextView in rollingitemlayout
         TextView  nameField = null;
+        // Textview for connection status
+        TextView connectionStatus=null;
     }
 }

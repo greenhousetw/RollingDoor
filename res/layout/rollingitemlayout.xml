@@ -16,7 +16,7 @@
             android:focusable="false"
             android:src="@android:drawable/ic_menu_my_calendar" />
 
-    <ProgressBar
+    <TextView
             android:id="@+id/bleProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="fill_parent"
@@ -24,10 +24,9 @@
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/bleIcon"
             android:layout_marginTop="6dp"
-            android:max="100"
-            android:progress="0"
             android:focusable="false"
-            android:progressDrawable="@drawable/custom_progressbar" />
+            android:textSize="14dp"
+            android:text="@string/connectionStatus"/>
 
     <TextView
             android:id="@+id/bleDeviceName"
