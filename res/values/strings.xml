@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">傳捷門控</string>
+    <string name="app_name">傳捷門控 version:alpha.141115</string>
     <string name="app_internalTitle">傳捷門控</string>
     <string name="UP">New Button</string>
     <string name="empty">Empty Hint</string>
