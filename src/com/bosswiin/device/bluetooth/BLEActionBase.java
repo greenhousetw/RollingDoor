@@ -12,7 +12,19 @@ package com.bosswiin.device.bluetooth;
  */
 public class BLEActionBase implements IHandler {
 
+    // execution handler
     protected  IHandler successor=null;
+
+    /**
+     * Check the job belongs to me
+     * date: 2014//11/17
+     *
+     * @param response instance of BLEAction of successor
+     * @author Yu-Hua Tseng
+     */
+    public boolean isMyDuty(BLEAcionEnum response){
+        return false;
+    }
 
     /**
      * Insert BluetoothDevice into collection for future using
@@ -35,6 +47,27 @@ public class BLEActionBase implements IHandler {
      */
     @Override
     public boolean execute(BLERequest request) {
+        boolean result = false;
+
+        if (!this.isMyDuty(request.actionEnum)) {
+            result = this.successor.execute(request);
+        } else {
+           result=this.executeAction(request);
+        }
+
+        return  result;
+    }
+
+
+    /**
+     * To execute the action.
+     * date: 2014/10/31
+     *
+     * @param request instance of BLERequest
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
+    public boolean executeAction(BLERequest request) {
         return false;
     }
 }

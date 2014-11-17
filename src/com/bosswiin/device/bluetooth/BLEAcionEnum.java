@@ -27,6 +27,9 @@ public enum BLEAcionEnum {
     // to send data to remote device that we connect to
     Send,
 
+    // to send data to remote peripheral in ChungJeSend
+    ChungJeSend,
+
     // to check device is BLE capable
     CheckEquipment,
 

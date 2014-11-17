@@ -423,7 +423,9 @@ public class JBluetoothManager implements INotificationHandler {
      * @author Yu-Hua Tseng
      */
     private void setCommandChain() {
-        this.mBleAction = new BLEActionSend();
+
+        //this.mBleAction = new BLEActionSend();
+        this.mBleAction =new BLEActionChungJeSend();
         this.mBleAction.setSuccessor(new BLEActionNotificaiton());
     }
 
