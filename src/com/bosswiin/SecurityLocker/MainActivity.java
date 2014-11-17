@@ -2,6 +2,7 @@ package com.bosswiin.SecurityLocker;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
@@ -9,6 +10,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.util.TimingLogger;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -24,6 +26,7 @@ import com.bosswiin.repository.RepositoryEnum;
 import com.bosswiin.repository.RepositoryFactory;
 import com.bosswiin.sharelibs.CommonHelper;
 import com.bosswiin.sharelibs.JSONHelper;
+import com.bosswiin.sharelibs.Stopwatch;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +34,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Handler;
 
 /**
@@ -274,7 +278,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                         //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
                         this.request.transmittedContent = chatService.getBytes();
                         this.mJBluetootManager.executeRequest(this.request);
-
                     }
                     else if (view.getId() == R.id.buttonDown) {
 

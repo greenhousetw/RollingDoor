@@ -13,10 +13,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
+import android.util.TimingLogger;
 import com.bosswiin.SecurityLocker.R;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapper;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapperUiCallbacks;
 import com.bosswiin.sharelibs.CommonHelper;
+import com.bosswiin.sharelibs.Stopwatch;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;
