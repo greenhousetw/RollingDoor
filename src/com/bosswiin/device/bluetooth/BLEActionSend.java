@@ -38,7 +38,7 @@ public class BLEActionSend extends BLEActionBase {
 
         try {
 
-            double waitTime = 0.08;
+            double waitTime = 0.05;
             int retryTimes = 5;
 
             while (!result) {
