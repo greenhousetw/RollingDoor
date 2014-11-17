@@ -255,7 +255,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         try {
 
             String chatService = "up";
-            this.request.actionEnum = BLEAcionEnum.Send;
+            this.request.actionEnum = BLEAcionEnum.ChungJeSend;
             this.request.serviceUUID = this.uuidDoorService;
             this.request.remoteAddress = selectedAddress;
 

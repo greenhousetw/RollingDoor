@@ -33,6 +33,7 @@ public class BLEActionChungJeSend extends BLEActionSend {
             Log.d(BLEActionSend.class.getName(), "Send data in characteristic id=" + request.characteristicsUUID);
             BluetoothGattCharacteristic bleWriter=request.targetService.getCharacteristic(UUID.fromString(request.characteristicsUUID));
             request.bleWrapper.writeDataToCharacteristic(bleWriter, request.transmittedContent);
+            result=true;
         }
         catch (Exception ex) {
             Log.e(BLEActionChungJeSend.class.getName(), ex.getMessage());

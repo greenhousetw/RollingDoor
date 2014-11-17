@@ -41,10 +41,16 @@ public class BLEActionSend extends BLEActionBase {
             double waitTime = 0.08;
             int retryTimes = 5;
 
-            while (!result && retryTimes > 0) {
+            while (!result) {
+
+                if(retryTimes == 0)
+                {
+                    break;
+                }
 
                 Log.d(logTag, "send data:" + request.transmittedContent + " to Characteristic:" + request.characteristicsUUID + " of service uuid:" + request.serviceUUID);
                 Thread.sleep((int) CommonHelper.SecsToMilliSeconds(waitTime));
+
                 if (this.sendData(request)) {
                     result = true;
                     break;
