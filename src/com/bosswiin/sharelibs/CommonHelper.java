@@ -47,4 +47,23 @@ public class CommonHelper {
         toastTV.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.TEXT_SIZE));
         toast.show();
     }
+
+    /**
+     * Show toast message
+     * date: 2014/11/18
+     *
+     * @param context string content
+     * @return milli seconds.
+     * @author Yu-Hua Tseng
+     */
+    public static boolean stringIsNullOrEmpty(String context){
+
+        boolean result=false;
+
+        if(context == null || context.length()==0){
+            result=true;
+        }
+
+        return result;
+    }
 }

@@ -2,40 +2,30 @@ package com.bosswiin.SecurityLocker;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
-import android.util.TimingLogger;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import com.bosswiin.UserInterface.Components.BLEAdpaterBase;
-import com.bosswiin.UserInterface.Components.BLESimpleAdapter;
+import com.bosswiin.UserInterface.Components.BLEDBAdapter;
 import com.bosswiin.device.bluetooth.BLEAcionEnum;
 import com.bosswiin.device.bluetooth.BLERequest;
 import com.bosswiin.device.bluetooth.IJBTManagerUICallback;
 import com.bosswiin.device.bluetooth.JBluetoothManager;
-import com.bosswiin.repository.IRepository;
-import com.bosswiin.repository.RepositoryEnum;
-import com.bosswiin.repository.RepositoryFactory;
+import com.bosswiin.devicemanager.ChwanJheDeviceManager;
+import com.bosswiin.devicemanager.IJBTDeviceManager;
 import com.bosswiin.sharelibs.CommonHelper;
-import com.bosswiin.sharelibs.JSONHelper;
-import com.bosswiin.sharelibs.Stopwatch;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.UUID;
-import java.util.logging.Handler;
 
 /**
  * Created by 9708023 on 2014/10/22.
@@ -50,7 +40,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     private final String   logTag                        = MainActivity.class.getName();
     private       ListView listView                      = null;
     private       Button   scanButton                    = null, upButton = null, stopButton = null, downButton = null;
-    private IRepository             repository                  = null;
+
     private String                  selectedAddress             = "";
     private String                  tableName                   = "DeviceList";
     private Context                 mainContext                 = this;
@@ -65,8 +55,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     private boolean                 isPauseBack                 = false;
     private boolean                 isDestroyBack               = false;
     private boolean                 isBTHardwareAvaialbe        = false;
-
-    private Thread checkDeviceConnectionThread = null;
+    private IJBTDeviceManager mDeviceManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +66,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         this.mJBluetootManager = new JBluetoothManager(this);
 
-        this.bleAdpater = new BLESimpleAdapter(this);
+        this.bleAdpater = new BLEDBAdapter(this);
         this.listView = (ListView) this.findViewById(R.id.listView);
         this.listView.setEmptyView(findViewById(R.id.empty));
         this.scanButton = (Button) this.findViewById(R.id.buttonScan);
@@ -98,6 +87,8 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                                     int position, long id) {
 
                 view.setSelected(true);
+                acts.resetSelectedItemUI();
+
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
                 selectedAddress = peripheralName.getTag().toString();
 
@@ -105,52 +96,25 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 request.characteristicsUUID = uuidDoorCharactristicsForRead;
                 request.serviceUUID = uuidDoorService;
                 request.actionEnum = BLEAcionEnum.Notification;
-                mJBluetootManager.changeBleDevice(request);
 
-                if (currentSelection != Integer.MAX_VALUE) {
-                    acts.resetSelectedItemUI();
-                }
+                mJBluetootManager.resetConnection(selectedAddress);
 
                 if (mJBluetootManager.checkConnection(selectedAddress)) {
+                    mJBluetootManager.changeBleDevice(request);
                     TextView statusText = (TextView) acts.findViewById(R.id.bleProgressBar);
                     statusText.setText(acts.getString(R.string.connectionStringForSuccessful));
+                }
+                else {
+                    CommonHelper.ShowToast(acts, acts.getString(R.string.DoorHint_RemoteNotConnected));
                 }
 
                 currentSelection = position;
                 currentSelectedTextview = (TextView) acts.findViewById(R.id.bleProgressBar);
                 currentSelectedRSSITextview = (TextView) acts.findViewById(R.id.RssiTextView);
-
-                final double waitSeconds = 0.3;
-
-                acts.checkDeviceConnectionThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        while (true) {
-                            try {
-
-                                if (!mJBluetootManager.checkConnection(selectedAddress)) {
-                                    acts.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            acts.resetSelectedItemUI();
-                                        }
-                                    });
-                                }
-
-                                Thread.sleep((long) CommonHelper.SecsToMilliSeconds(waitSeconds));
-                                // Log.d(logTag, "monitoring");
-                            } catch (Exception ex) {
-                                Log.e(logTag, ex.getMessage());
-                            }
-                        }
-                    }
-                });
-
-                acts.checkDeviceConnectionThread.start();
             }
         });
 
+        this.mDeviceManager = new ChwanJheDeviceManager(this, true);
         listView.setAdapter(this.bleAdpater);
         //this.scanButton.setVisibility(View.GONE);
     }
@@ -163,6 +127,8 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
             this.isBTHardwareAvaialbe = true;
         }
 
+        // restore peripherals into listview
+        this.getDoorList();
         Log.d(this.logTag, "Application in start phase");
     }
 
@@ -175,9 +141,12 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
             this.isBTHardwareAvaialbe = true;
         }
 
+        // if back from "home"
         if (isBTHardwareAvaialbe && !this.isDestroyBack) {
             mJBluetootManager.setBluetoothLowEnergyWrapper(this);
-            mJBluetootManager.startScanning();
+
+            // shutdown automatic scanning
+            //mJBluetootManager.startScanning();
         }
 
         if (this.isPauseBack) {
@@ -198,10 +167,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         super.onPause();
         Log.d(this.logTag, "Application in pause phase");
 
-        this.mJBluetootManager.stopScanning();
-        this.mJBluetootManager.stopMonitoringRSSI();
-        this.mJBluetootManager.disconnect();
-        this.mJBluetootManager.closeConnection();
+        mJBluetootManager.resetConnection(selectedAddress);
 
         if (this.currentSelectedTextview != null) {
             this.currentSelectedTextview.setText(this.getString(R.string.connectionStringForPause));
@@ -366,8 +332,11 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
      * @author Yu-Hua Tseng
      */
     private void resetSelectedItemUI() {
-        this.currentSelectedTextview.setText(acts.getString(R.string.connectionStringForUnknown));
-        this.currentSelectedRSSITextview.setText(acts.getString(R.string.rssiPrefixValue) + "?");
+
+        if (this.currentSelectedTextview != null && this.currentSelectedRSSITextview != null) {
+            this.currentSelectedTextview.setText(acts.getString(R.string.connectionStatus));
+            this.currentSelectedRSSITextview.setText(acts.getString(R.string.rssiPrefixValue) + "?");
+        }
     }
 
     /**
@@ -376,93 +345,36 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
      *
      * @author Yu-Hua Tseng
      */
-    private void InitDoorList() {
+    private boolean getDoorList() {
 
-        String testData[][] = {
-                {"01:02:03:04:05:06", "A", "1F", "1"},
-                {"0a:0b:0c:0d:0e:0f", "B", "B1", "1"}
-        };
-
-        for (int i = 0; i < testData.length; i++) {
-            this.addDataToTable(testData[i][0], testData[i][1], testData[i][2], testData[i][3]);
-        }
+        boolean result = false;
 
         // set column name
-        this.databaseTuple.put("Address", "Address");
-        this.databaseTuple.put("Name", "Name");
-        this.databaseTuple.put("Location", "Location");
-        this.databaseTuple.put("Frequency", "Frequency");
-        this.databaseTuple.put("UpdateTime", "UpdateTime");
+        String columnAddress = "address";
+        String columnName = "name";
+        String columnLocation = "location";
+        String columnFrequency = "frequency";
+        String columnUpdateTime = "updatetime";
+        this.databaseTuple.put(columnAddress, columnAddress);
+        this.databaseTuple.put(columnName, columnName);
+        this.databaseTuple.put(columnLocation, columnLocation);
+        this.databaseTuple.put(columnFrequency, columnFrequency);
+        this.databaseTuple.put(columnUpdateTime, columnUpdateTime);
 
-        JSONArray array = JSONHelper.GetJSON(this.repository.Query(this.tableName, this.databaseTuple));
+        JSONArray array = this.mDeviceManager.getDeviceList(this.tableName, this.databaseTuple);
 
+        // add new device into device list
         for (int i = 0; i < array.length(); i++) {
             try {
                 JSONObject record = array.getJSONObject(i);
-                this.addNewDevices(record.get("Name").toString(),
-                        record.get("Address").toString(),
+                this.addNewDevices(record.get("name").toString(),
+                        record.get("address").toString(),
                         0,
                         null);
             } catch (JSONException jsonEx) {
                 Log.e(this.logTag, jsonEx.getMessage());
             }
 
-        }
-    }
-
-    /**
-     * Set data into data collection and save to database
-     * date: 2014/11/10
-     *
-     * @param address  address of peripheral
-     * @param name     name of address
-     * @param location location of address
-     * @param freq     use frequency
-     * @author Yu-Hua Tseng
-     */
-    private void addDataToTable(String address, String name, String location, String freq) {
-
-        try {
-            this.databaseTuple.clear();
-            this.databaseTuple.put("Address", address);
-            this.databaseTuple.put("Name", name);
-            this.databaseTuple.put("Location", location);
-            this.databaseTuple.put("Frequency", freq);
-            this.databaseTuple.put("UpdateTime", new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(new Date()));
-            this.repository.Insert("DeviceList", this.databaseTuple);
-        } catch (Exception ex) {
-            Log.e(this.logTag, ex.getMessage());
-        }
-    }
-
-    /**
-     * Pass data to activity for ui related operations
-     * date: 2014/11/09
-     *
-     * @return true for successful and false for fail
-     * @author Yu-Hua Tseng
-     */
-    private boolean getRepository() {
-
-        boolean result = false;
-
-        if (this.repository == null) {
-
-            String dbName = "info.db";
-            int dbVersion = 1;
-            final String dbInitString = "CREATE TABLE IF NOT EXISTS DeviceList(" +
-                    "Address    VARCHAR( 60 )   PRIMARY KEY," +
-                    "Name       VARCHAR( 100 )," +
-                    "Location   VARCHAR( 50 )," +
-                    "Frequency  INT," +
-                    "UpdateTime DATETIME" +
-                    ");";
-
-            this.repository = RepositoryFactory.GetRepository(this, dbName, dbVersion, RepositoryEnum.SQLite3, dbInitString);
-
-            if (this.repository != null) {
-                result = true;
-            }
         }
 
         return result;

@@ -166,7 +166,7 @@ public class JBluetoothManager implements INotificationHandler {
                 @Override
                 public void uiDeviceFound(final BluetoothDevice device, final int rssi, final byte[] record) {
                     interfaceDeviceFound.addNewDevices(device.getName(), device.getAddress(), rssi, record);
-                    bluetoothDeviceList.put(device.getAddress(), device);
+                    addDeviceIntoInternalList(device.getAddress(), device);
                 }
 
                 @Override
@@ -371,21 +371,16 @@ public class JBluetoothManager implements INotificationHandler {
             // clean current connection
             if (this.mBleWrapper.isConnected()) {
 
-                if (this.mBleWrapper.getDevice().getAddress() != remoteAddress) {
-                    this.mBleWrapper.diconnect();
-                    this.mBleWrapper.close();
+                BluetoothDevice device=this.mBleWrapper.getDevice();
 
-                    if (this.mBleWrapper.getCachedServices() != null) {
-                        this.mBleWrapper.getCachedServices().clear();
-                    }
-
-                    BluetoothGattService gattService = this.mBleWrapper.getCachedService();
-                    BluetoothGatt gatt = this.mBleWrapper.getGatt();
-                    gattService = null;
-                    gatt = null;
-
+                if (device !=null){
+                   if(device.getAddress() != remoteAddress) {
+                       this.mBleWrapper.resetWrapperData();
+                   }
                 }
             }
+
+            this.mBleWrapper.resetBlueToothDevice();
 
             result = true;
 
@@ -410,12 +405,68 @@ public class JBluetoothManager implements INotificationHandler {
 
         if (address != null && address.length() != 0 && this.mBleWrapper != null) {
 
-            if (this.mBleWrapper.getDevice().getAddress() == address) {
-                isConnected = this.mBleWrapper.isConnected();
+            try {
+
+                int retryTimes=5;
+                double waitSeconds=0.1;
+
+                while (this.mBleWrapper.getDevice() == null) {
+
+                    if(this.mBleWrapper.connect(address)){
+                        break;
+                    }
+
+                    Thread.sleep((long) CommonHelper.SecsToMilliSeconds(waitSeconds));
+
+                    if(retryTimes==0){
+                        break;
+                    }
+
+                    retryTimes--;
+                }
+
+                if (this.mBleWrapper.getDevice().getAddress() == address) {
+                    this.addDeviceIntoInternalList(address, this.mBleWrapper.getDevice());
+                    isConnected = this.mBleWrapper.isConnected();
+                }
+            }catch (Exception ex){
+                Log.e(this.mLogTag, ex.getMessage());
             }
         }
 
         return isConnected;
+    }
+
+    /**
+     * Reset connection
+     * date: 2014/11/18
+     *
+     * @param selectedAddress the target device's address
+     * @author Yu-Hua Tseng
+     */
+    public void resetConnection(String selectedAddress){
+        // shutdown automatic scanning
+        //this.stopScanning();
+
+        this.stopMonitoringRSSI();
+        this.disconnect();
+        this.closeConnection();
+        this.resetBLEWrapper(selectedAddress);
+    }
+
+    /**
+     * To add device into internal list for management
+     * date: 2014/11/18
+     *
+     * @param device instance of BluetoothDevice
+     * @param address address that we want to check
+     * @author Yu-Hua Tseng
+     */
+    private void addDeviceIntoInternalList(String address, BluetoothDevice device){
+
+        if(!CommonHelper.stringIsNullOrEmpty(address) && !this.bluetoothDeviceList.containsKey(address)){
+            this.bluetoothDeviceList.put(address, device);
+        }
     }
 
     /**

@@ -14,18 +14,22 @@ public class RepositoryFactory {
     {
         IRepository repository=null;
 
-        if(chooser.equals(RepositoryEnum.SQLite3)){
-            repository=new Sqliter(context, dbName, null,version);
-        }
+        try {
+            if (chooser.equals(RepositoryEnum.SQLite3)) {
+                repository = new Sqliter(context, dbName, null, version, initString);
+            }
 
-        if(repository != null)
-        {
-            if(repository.OpenDataBase(dbName, initString)){
-                Log.v(LOGTAG, "Open DataBase:" + dbName + " is successful");
+            if (repository != null) {
+                if (repository.OpenDataBase(dbName, initString)) {
+                    Log.v(LOGTAG, "Open DataBase:" + dbName + " is successful");
+                }
+                else {
+                    Log.e(LOGTAG, "Open DataBase:" + dbName + " is fail");
+                }
             }
-            else{
-                Log.e(LOGTAG, "Open DataBase:" + dbName + " is fail");
-            }
+        }
+        catch (Exception ex){
+            Log.e(RepositoryFactory.class.getName(), ex.getMessage());
         }
 
         return repository;

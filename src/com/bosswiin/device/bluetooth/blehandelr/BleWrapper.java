@@ -16,29 +16,29 @@ import java.util.UUID;
 
 public class BleWrapper {
     /* defines (in milliseconds) how often RSSI should be updated */
-    private static final int RSSI_UPDATE_TIME_INTERVAL = 1500; // 1.5 seconds
+    private static final int                             RSSI_UPDATE_TIME_INTERVAL = 1500; // 1.5 seconds
     /* define NULL object for UI callbacks */
-    private static final BleWrapperUiCallbacks NULL_CALLBACK = new BleWrapperUiCallbacks.Null();
-    public boolean isServiceDiscvoeryDone = false;
+    private static final BleWrapperUiCallbacks           NULL_CALLBACK             = new BleWrapperUiCallbacks.Null();
+    public               boolean                         isServiceDiscvoeryDone    = false;
     /* callback object through which we are returning results to the caller */
-    private BleWrapperUiCallbacks mUiCallback = null;
+    private              BleWrapperUiCallbacks           mUiCallback               = null;
     /* defines callback for scanning results */
-    private BluetoothAdapter.LeScanCallback mDeviceFoundCallback = new BluetoothAdapter.LeScanCallback() {
+    private              BluetoothAdapter.LeScanCallback mDeviceFoundCallback      = new BluetoothAdapter.LeScanCallback() {
         @Override
         public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
             mUiCallback.uiDeviceFound(device, rssi, scanRecord);
         }
     };
-    private Activity mParent = null;
-    private boolean mConnected = false;
-    private String mDeviceAddress = "";
-    private BluetoothManager mBluetoothManager = null;
-    private BluetoothAdapter mBluetoothAdapter = null;
-    private BluetoothDevice mBluetoothDevice = null;
-    private BluetoothGatt mBluetoothGatt = null;
-    private BluetoothGattService mBluetoothSelectedService = null;
+    private              Activity                        mParent                   = null;
+    private              boolean                         mConnected                = false;
+    private              String                          mDeviceAddress            = "";
+    private              BluetoothManager                mBluetoothManager         = null;
+    private              BluetoothAdapter                mBluetoothAdapter         = null;
+    private              BluetoothDevice                 mBluetoothDevice          = null;
+    private              BluetoothGatt                   mBluetoothGatt            = null;
+    private              BluetoothGattService            mBluetoothSelectedService = null;
     /* callbacks called for any action on particular Ble Device */
-    private final BluetoothGattCallback mBleCallback = new BluetoothGattCallback() {
+    private final        BluetoothGattCallback           mBleCallback              = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
@@ -54,7 +54,8 @@ public class BleWrapper {
 
                 // and we also want to get RSSI value to be updated periodically
                 startMonitoringRssiValue();
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+            }
+            else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 mConnected = false;
                 mUiCallback.uiDeviceDisconnected(mBluetoothGatt, mBluetoothDevice);
             }
@@ -101,7 +102,8 @@ public class BleWrapper {
             // let see if it failed or not
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 mUiCallback.uiSuccessfulWrite(mBluetoothGatt, mBluetoothDevice, mBluetoothSelectedService, characteristic, description);
-            } else {
+            }
+            else {
                 mUiCallback.uiFailedWrite(mBluetoothGatt, mBluetoothDevice, mBluetoothSelectedService, characteristic, description + " STATUS = " + status);
             }
         }
@@ -118,9 +120,9 @@ public class BleWrapper {
 
         ;
     };
-    private List<BluetoothGattService> mBluetoothGattServices = null;
-    private Handler mTimerHandler = new Handler();
-    private boolean mTimerEnabled = false;
+    private              List<BluetoothGattService>      mBluetoothGattServices    = null;
+    private              Handler                         mTimerHandler             = new Handler();
+    private              boolean                         mTimerEnabled             = false;
 
     /* creates BleWrapper object, set its parent activity and callback object */
     public BleWrapper(Activity parent, BleWrapperUiCallbacks callback) {
@@ -221,7 +223,8 @@ public class BleWrapper {
         if (mBluetoothGatt != null && mBluetoothGatt.getDevice().getAddress().equals(deviceAddress)) {
             // just reconnect
             return mBluetoothGatt.connect();
-        } else {
+        }
+        else {
             // connect from scratch
             // get BluetoothDevice object for specified address
             mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
@@ -341,27 +344,32 @@ public class BleWrapper {
             // now we have everything, get the value
             intValue = ch.getIntValue(format, index);
             strValue = intValue + " bpm"; // it is always in bpm units
-        } else if (uuid.equals(BleDefinedUUIDs.Characteristic.HEART_RATE_MEASUREMENT) || // manufacturer name string
+        }
+        else if (uuid.equals(BleDefinedUUIDs.Characteristic.HEART_RATE_MEASUREMENT) || // manufacturer name string
                 uuid.equals(BleDefinedUUIDs.Characteristic.MODEL_NUMBER_STRING) || // model number string)
                 uuid.equals(BleDefinedUUIDs.Characteristic.FIRMWARE_REVISION_STRING)) // firmware revision string
         {
             // follow https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.manufacturer_name_string.xml etc.
             // string value are usually simple utf8s string at index 0
             strValue = ch.getStringValue(0);
-        } else if (uuid.equals(BleDefinedUUIDs.Characteristic.APPEARANCE)) { // appearance
+        }
+        else if (uuid.equals(BleDefinedUUIDs.Characteristic.APPEARANCE)) { // appearance
             // follow: https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.gap.appearance.xml
             intValue = ((int) rawValue[1]) << 8;
             intValue += rawValue[0];
             strValue = BleNamesResolver.resolveAppearance(intValue);
-        } else if (uuid.equals(BleDefinedUUIDs.Characteristic.BODY_SENSOR_LOCATION)) { // body sensor location
+        }
+        else if (uuid.equals(BleDefinedUUIDs.Characteristic.BODY_SENSOR_LOCATION)) { // body sensor location
             // follow: https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.body_sensor_location.xml
             intValue = rawValue[0];
             strValue = BleNamesResolver.resolveHeartRateSensorLocation(intValue);
-        } else if (uuid.equals(BleDefinedUUIDs.Characteristic.BATTERY_LEVEL)) { // battery level
+        }
+        else if (uuid.equals(BleDefinedUUIDs.Characteristic.BATTERY_LEVEL)) { // battery level
             // follow: https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.battery_level.xml
             intValue = rawValue[0];
             strValue = "" + intValue + "% battery level";
-        } else {
+        }
+        else {
             // not known type of characteristic, so we need to handle this in "general" way
             // get first four bytes and transform it to integer
             intValue = 0;
@@ -449,5 +457,20 @@ public class BleWrapper {
             descriptor.setValue(val);
             mBluetoothGatt.writeDescriptor(descriptor);
         }
+    }
+
+    // reset wrapper data
+    public void resetWrapperData() {
+        this.diconnect();
+        this.close();
+        this.mBluetoothGatt = null;
+        this.mBluetoothSelectedService=null;
+        this.mBluetoothGattServices.clear();
+    }
+
+    // reset wrapper data
+    public void resetBlueToothDevice() {
+
+        this.mBluetoothDevice = null;
     }
 }

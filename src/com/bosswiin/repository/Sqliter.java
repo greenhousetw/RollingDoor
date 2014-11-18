@@ -45,6 +45,9 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
     // string for table creation
     private String createTableString = "";
 
+    // the name of database
+    private String mdataBaseName = "";
+
     /**
      * Create a helper object to create, open, and/or manage a database. This method always
      * returns very quickly. The database is not actually created or opened until one of
@@ -65,6 +68,31 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
         super(context, name, factory, version);
         this.context = context;
         this.version = version;
+        this.mdataBaseName = name;
+    }
+
+    /**
+     * Create a helper object to create, open, and/or manage a database. This method always
+     * returns very quickly. The database is not actually created or opened until one of
+     * getWritableDatabase() or getReadableDatabase() is called.
+     * date: 2014/10/23
+     *
+     * @param context to use to open or create the database
+     * @param name    of the database file, or null for an in-memory database
+     * @param factory to use for creating cursor objects, or null for the default
+     * @param version number of the database (starting at 1); if the database is older,
+     *                onUpgrade(SQLiteDatabase, int, int) will be used to upgrade the database;
+     *                if the database is newer, onDowngrade(SQLiteDatabase, int, int)
+     *                will be used to downgrade the database
+     * @author Yu-Hua Tseng
+     */
+    public Sqliter(Context context, String name, CursorFactory factory,
+                   int version, String tableInitString) {
+        super(context, name, factory, version);
+        this.context = context;
+        this.version = version;
+        this.mdataBaseName = name;
+        this.createTableString = tableInitString;
     }
 
     /**
@@ -122,15 +150,14 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
 
         Log.v(LOGTAGNAME, "Open database:" + databaseName);
 
-        if (this.database == null) {
+        if (this.database == null || !this.database.isOpen()) {
             try {
-                this.database = this.getWritableDatabase();
+                this.database = super.getWritableDatabase();
+                this.createTableString = initString;
+                this.onCreate(this.database);
             } catch (Exception ex) {
                 Log.e(LOGTAGNAME, ex.getMessage());
-                this.database=this.getWritableDatabase();
             }
-            this.createTableString = initString;
-            this.onCreate(this.database);
         }
 
         result = true;
@@ -235,7 +262,7 @@ public class Sqliter extends SQLiteOpenHelper implements IRepository {
                 Cursor cursor = this.database.query(tableName, column, null, null, null, null, null);
 
                 executionResult.clear();
-                cursor.moveToFirst();
+
                 int columnSize = cursor.getColumnCount();
 
                 while (cursor.moveToNext()) {
