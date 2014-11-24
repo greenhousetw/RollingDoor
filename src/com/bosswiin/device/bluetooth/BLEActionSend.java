@@ -43,8 +43,7 @@ public class BLEActionSend extends BLEActionBase {
 
             while (!result) {
 
-                if(retryTimes == 0)
-                {
+                if (retryTimes == 0) {
                     break;
                 }
 
@@ -98,15 +97,10 @@ public class BLEActionSend extends BLEActionBase {
         boolean result = false;
 
         try {
-
             Log.d(BLEActionSend.class.getName(), "Send data");
-            for (BluetoothGattCharacteristic characteristic : request.targetService.getCharacteristics()) {
-                if (characteristic.getUuid().equals(UUID.fromString(request.characteristicsUUID))) {
-                    request.bleWrapper.writeDataToCharacteristic(characteristic, request.transmittedContent);
-                    result = true;
-                    break;
-                }
-            }
+            BluetoothGattCharacteristic characteristic = request.targetService.getCharacteristic(UUID.fromString(request.characteristicsUUID));
+            request.bleWrapper.writeDataToCharacteristic(characteristic, request.transmittedContent);
+            result = true;
         } catch (Exception ex) {
             Log.e(logTag, ex.getMessage());
         }

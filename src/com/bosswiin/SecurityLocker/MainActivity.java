@@ -116,7 +116,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         this.mDeviceManager = new ChwanJheDeviceManager(this, true);
         listView.setAdapter(this.bleAdpater);
-        //this.scanButton.setVisibility(View.GONE);
+        this.scanButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -241,24 +241,24 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                     if (view.getId() == R.id.buttonUP) {
 
                         this.request.characteristicsUUID = this.uuidDoorCharactristicsForUP;
-                        //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
-                        this.request.transmittedContent = chatService.getBytes();
+                        //this.request.transmittedContent = chatService.getBytes();
+                        this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
                         this.mJBluetootManager.executeRequest(this.request);
                     }
                     else if (view.getId() == R.id.buttonDown) {
 
                         this.request.characteristicsUUID = this.uuidDoorCharactristicsForDown;
-                        chatService = "down";
-                        this.request.transmittedContent = chatService.getBytes();
-                        //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
+                        //chatService = "down";
+                        //this.request.transmittedContent = chatService.getBytes();
+                        this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x01};
                         this.mJBluetootManager.executeRequest(this.request);
                     }
                     else if (view.getId() == R.id.buttonStop) {
 
                         this.request.characteristicsUUID = this.uuidDoorCharactristicsForStop;
-                        chatService = "stop";
+                        //chatService = "stop";
                         this.request.transmittedContent = chatService.getBytes();
-                        //this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00};
+                        this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
                         this.mJBluetootManager.executeRequest(this.request);
                     }
                 }
