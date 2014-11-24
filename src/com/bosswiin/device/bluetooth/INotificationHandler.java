@@ -57,4 +57,14 @@ public interface INotificationHandler {
      */
     public void handleNewRssiAvailable(final BluetoothGatt gatt, final BluetoothDevice device, final int rssi);
 
+
+    /**
+     * process new Rssi value
+     * date: 2014/11/24
+     *
+     * @param gatt instance of BluetoothGatt
+     * @param device instance of BluetoothDevice
+     * @author Yu-Hua Tseng
+     */
+    public void handleDeviceDisconnected(final BluetoothGatt gatt, final BluetoothDevice device);
 }

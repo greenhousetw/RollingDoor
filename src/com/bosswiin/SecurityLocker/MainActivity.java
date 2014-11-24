@@ -299,10 +299,15 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
     /**
      * Pass data to activity for ui related operations
+     * date: 2014/11/24
      * date: 2014/11/09
      *
      * @param data data that needs to be process
      * @author Yu-Hua Tseng
+     * @note 2014/11/24:
+     * if one device is in disconnection status, below code will be executed from handleDeviceDisconnected of
+     * JBluetoothManager
+     * if (value == this.getString(R.string.connectionStringForUnknown))
      */
     @Override
     public void passContentToActivity(Object data) {
@@ -316,9 +321,14 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                     ((TextView) this.findViewById(R.id.RssiTextView)).setText(value + " db");
                     ((TextView) this.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStringForSuccessful);
                 }
+                else if (value == this.getString(R.string.connectionStringForUnknown)) {
+                    if (this.currentSelectedTextview != null) {
+                        this.currentSelectedTextview.setText(this.getString(R.string.connectionStringForUnknown));
+                    }
+                }
                 else {
                     ((EditText) this.findViewById(R.id.editnoticontent)).setText(value.trim());
-                    ((EditText) this.findViewById(R.id.editnoticontent)).clearFocus();
+                    (this.findViewById(R.id.editnoticontent)).clearFocus();
                     this.listView.requestFocus();
                 }
             }

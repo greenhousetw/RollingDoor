@@ -181,6 +181,11 @@ public class JBluetoothManager implements INotificationHandler {
                 public void uiNewRssiAvailable(final BluetoothGatt gatt, final BluetoothDevice device, final int rssi) {
                     handleNewRssiAvailable(gatt, device, rssi);
                 }
+
+                @Override
+                public void uiDeviceDisconnected(final BluetoothGatt gatt, final BluetoothDevice device) {
+                    handleDeviceDisconnected(gatt, device);
+                }
             });
         }
 
@@ -344,6 +349,7 @@ public class JBluetoothManager implements INotificationHandler {
      * @param rssi   strength of signal
      * @author Yu-Hua Tseng
      */
+    @Override
     public void handleNewRssiAvailable(final BluetoothGatt gatt, final BluetoothDevice device, final int rssi) {
         final Activity activity = ((Activity) this.context);
         activity.runOnUiThread(new Runnable() {
@@ -353,6 +359,29 @@ public class JBluetoothManager implements INotificationHandler {
                 mJBTUICallBack.passContentToActivity(rssiValue);
             }
         });
+    }
+
+    /**
+     * process new Rssi value
+     * date: 2014/11/14
+     *
+     * @param gatt   instance of BluetoothGatt
+     * @param device instance of BluetoothDevice
+     * @author Yu-Hua Tseng
+     */
+    @Override
+    public void handleDeviceDisconnected(final BluetoothGatt gatt, final BluetoothDevice device) {
+        final Activity activity = ((Activity) this.context);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mJBTUICallBack.passContentToActivity(activity.getString(R.string.connectionStringForUnknown));
+            }
+        });
+
+        gatt.close();
+        gatt.disconnect();
+        this.mBleWrapper.resetBlueToothDevice();
     }
 
     /**
