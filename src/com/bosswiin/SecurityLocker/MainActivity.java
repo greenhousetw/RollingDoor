@@ -74,7 +74,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         this.downButton = (Button) this.findViewById(R.id.buttonDown);
         this.stopButton = (Button) this.findViewById(R.id.buttonStop);
 
-        this.scanButton.setOnClickListener(this);
+        //this.scanButton.setOnClickListener(this);
         this.upButton.setOnClickListener(this);
         this.stopButton.setOnClickListener(this);
         this.downButton.setOnClickListener(this);
@@ -183,7 +183,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         Log.d(this.logTag, "Application in stop phase");
 
         if (this.currentSelectedTextview != null) {
-            this.currentSelectedTextview.setText(this.getString(R.string.connectionStringForUnknown));
+            this.currentSelectedTextview.setText(this.getString(R.string.connectionStatus));
             this.currentSelectedRSSITextview.setText(this.getText(R.string.rssiPrefixValue) + "?");
         }
     }
@@ -321,9 +321,9 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                     ((TextView) this.findViewById(R.id.RssiTextView)).setText(value + " db");
                     ((TextView) this.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStringForSuccessful);
                 }
-                else if (value == this.getString(R.string.connectionStringForUnknown)) {
+                else if (value == this.getString(R.string.connectionStatus)) {
                     if (this.currentSelectedTextview != null) {
-                        this.currentSelectedTextview.setText(this.getString(R.string.connectionStringForUnknown));
+                        this.currentSelectedTextview.setText(this.getString(R.string.connectionStatus));
                     }
                 }
                 else {

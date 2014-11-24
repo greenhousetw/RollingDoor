@@ -375,7 +375,7 @@ public class JBluetoothManager implements INotificationHandler {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mJBTUICallBack.passContentToActivity(activity.getString(R.string.connectionStringForUnknown));
+                mJBTUICallBack.passContentToActivity(activity.getString(R.string.connectionStatus));
             }
         });
 
@@ -477,10 +477,15 @@ public class JBluetoothManager implements INotificationHandler {
         // shutdown automatic scanning
         //this.stopScanning();
 
-        this.stopMonitoringRSSI();
-        this.disconnect();
-        this.closeConnection();
-        this.resetBLEWrapper(selectedAddress);
+        try {
+            this.stopMonitoringRSSI();
+            this.disconnect();
+            this.closeConnection();
+            this.resetBLEWrapper(selectedAddress);
+        }
+        catch (Exception ex){
+            Log.w(this.mLogTag, "reset connection");
+        }
     }
 
     /**
