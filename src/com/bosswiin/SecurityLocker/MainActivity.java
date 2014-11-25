@@ -87,25 +87,37 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                                     int position, long id) {
 
                 view.setSelected(true);
-                acts.resetSelectedItemUI();
 
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
-                selectedAddress = peripheralName.getTag().toString();
 
-                request.remoteAddress = selectedAddress;
-                request.characteristicsUUID = uuidDoorCharactristicsForRead;
-                request.serviceUUID = uuidDoorService;
-                request.actionEnum = BLEAcionEnum.Notification;
+                if (selectedAddress != peripheralName.getTag().toString()) {
+                    acts.resetSelectedItemUI();
+                    selectedAddress = peripheralName.getTag().toString();
 
-                mJBluetootManager.resetConnection(selectedAddress);
+                    request.remoteAddress = selectedAddress;
+                    request.characteristicsUUID = uuidDoorCharactristicsForRead;
+                    request.serviceUUID = uuidDoorService;
+                    request.actionEnum = BLEAcionEnum.Notification;
 
-                if (mJBluetootManager.checkConnection(selectedAddress)) {
-                    mJBluetootManager.changeBleDevice(request);
-                    TextView statusText = (TextView) acts.findViewById(R.id.bleProgressBar);
-                    statusText.setText(acts.getString(R.string.connectionStringForSuccessful));
-                }
-                else {
-                    CommonHelper.ShowToast(acts, acts.getString(R.string.DoorHint_RemoteNotConnected));
+                    mJBluetootManager.resetConnection(selectedAddress);
+
+                    if (mJBluetootManager.checkConnection(selectedAddress)) {
+                        mJBluetootManager.changeBleDevice(request);
+                        TextView statusText = (TextView) acts.findViewById(R.id.bleProgressBar);
+                        statusText.setText(acts.getString(R.string.connectionStringForSuccessful));
+                    }
+                    else {
+
+                        try {
+                            double waitSeconds = 0.8;
+                            Thread.sleep((long) waitSeconds);
+                            if (!mJBluetootManager.checkConnection(selectedAddress)) {
+                                CommonHelper.ShowToast(acts, acts.getString(R.string.DoorHint_RemoteNotConnected));
+                            }
+                        } catch (Exception ex) {
+                            Log.e(logTag, ex.getMessage());
+                        }
+                    }
                 }
 
                 currentSelection = position;
@@ -122,10 +134,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     @Override
     protected void onStart() {
         super.onStart();
-
-        if (this.mJBluetootManager.enableBluetoothHardware(this)) {
-            this.isBTHardwareAvaialbe = true;
-        }
 
         // restore peripherals into listview
         this.getDoorList();
@@ -144,7 +152,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         // if back from "home"
         if (isBTHardwareAvaialbe && !this.isDestroyBack) {
             mJBluetootManager.setBluetoothLowEnergyWrapper(this);
-
             // shutdown automatic scanning
             //mJBluetootManager.startScanning();
         }
@@ -154,6 +161,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 Log.d(logTag, "the index of current peripheral=" + this.currentSelection);
                 this.listView.setSelection(this.currentSelection);
                 this.listView.setItemsCanFocus(true);
+                this.selectedAddress="";
                 this.listView.performItemClick(this.listView, this.currentSelection, this.listView.getItemIdAtPosition(this.currentSelection));
             }
         }
@@ -169,7 +177,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         mJBluetootManager.resetConnection(selectedAddress);
 
-        if (this.currentSelectedTextview != null) {
+        if (this.currentSelectedTextview != null && this.currentSelectedTextview.getText() == this.getString(R.string.connectionStringForSuccessful)) {
             this.currentSelectedTextview.setText(this.getString(R.string.connectionStringForPause));
         }
 
@@ -250,7 +258,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                         this.request.characteristicsUUID = this.uuidDoorCharactristicsForDown;
                         //chatService = "down";
                         //this.request.transmittedContent = chatService.getBytes();
-                        this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x01};
+                        this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x03, (byte) 0x00};
                         this.mJBluetootManager.executeRequest(this.request);
                     }
                     else if (view.getId() == R.id.buttonStop) {
@@ -258,7 +266,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                         this.request.characteristicsUUID = this.uuidDoorCharactristicsForStop;
                         //chatService = "stop";
                         this.request.transmittedContent = chatService.getBytes();
-                        this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x00, (byte) 0x00};
+                        this.request.transmittedContent = new byte[]{(byte) 0x01, (byte) 0x02, (byte) 0x00};
                         this.mJBluetootManager.executeRequest(this.request);
                     }
                 }
@@ -324,6 +332,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 else if (value == this.getString(R.string.connectionStatus)) {
                     if (this.currentSelectedTextview != null) {
                         this.currentSelectedTextview.setText(this.getString(R.string.connectionStatus));
+                        ((TextView) this.findViewById(R.id.RssiTextView)).setText(this.getString(R.string.rssiPrefixValue) + "?");
                     }
                 }
                 else {
