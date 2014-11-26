@@ -56,7 +56,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     private boolean isDestroyBack = false;
     private boolean isBTHardwareAvaialbe = false;
     private IJBTDeviceManager mDeviceManager;
-    private BluetoothAdapter mBluetoothAdapter;
     private IBLEHandler mBleHandler = null;
 
     private UUID serviceName = UUID.fromString(this.uuidDoorService);

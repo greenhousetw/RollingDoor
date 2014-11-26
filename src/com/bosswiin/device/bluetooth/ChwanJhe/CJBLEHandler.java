@@ -20,13 +20,11 @@ public class CJBLEHandler implements IBLEHandler {
     private final String mTAG = CJBLEHandler.class.getSimpleName();
 
     private              Activity                        mParent                   = null;
-    private              boolean                         mConnected                = false;
     private              String                          mDeviceAddress            = "";
     private BluetoothManager mBluetoothManager         = null;
     private BluetoothAdapter mBluetoothAdapter         = null;
     private BluetoothDevice mBluetoothDevice          = null;
     private              BluetoothGatt                   mBluetoothGatt            = null;
-    private              BluetoothGattService            mBluetoothSelectedService = null;
     private final        BluetoothGattCallback           mBleCallback=null;
     private IJBTManagerUICallback mUICallback=null;
 
