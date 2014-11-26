@@ -57,67 +57,80 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainActivity.java" pinned="true" current="false" current-in-tab="false">
+      <file leaf-file-name="MainActivity.java" pinned="true" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="97" max-vertical-offset="5700">
-              <caret line="34" column="98" selection-start-line="34" selection-start-column="27" selection-end-line="34" selection-end-column="98" />
+            <state vertical-scroll-proportion="0.43649372" vertical-offset="776" max-vertical-offset="5250">
+              <caret line="93" column="8" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="8" />
               <folding>
-                <element signature="e#4370#6260#0" expanded="true" />
-                <element signature="e#5925#5977#0" expanded="true" />
-                <element signature="e#6070#6122#0" expanded="true" />
-                <element signature="e#6249#6250#0" expanded="true" />
-                <element signature="e#7598#7652#0" expanded="true" />
-                <element signature="e#7705#7754#0" expanded="true" />
-                <element signature="e#8078#8119#0" expanded="true" />
-                <element signature="e#8175#8213#0" expanded="true" />
-                <element signature="e#8853#8886#0" expanded="true" />
-                <element signature="e#8916#8948#0" expanded="true" />
-                <element signature="e#9069#9361#0" expanded="true" />
-                <element signature="e#9342#9343#0" expanded="true" />
-                <element signature="e#11559#11592#0" expanded="true" />
-                <element signature="e#12327#12630#0" expanded="true" />
-                <element signature="e#12619#12620#0" expanded="true" />
-                <element signature="e#13301#13341#0" expanded="true" />
-                <element signature="e#13508#13546#0" expanded="true" />
-                <element signature="e#13740#13781#0" expanded="true" />
-                <element signature="e#13947#13972#0" expanded="true" />
-                <element signature="e#14076#14116#0" expanded="true" />
-                <element signature="e#14654#14695#0" expanded="true" />
-                <element signature="e#14724#14764#0" expanded="true" />
+                <element signature="e#4566#5004#0" expanded="true" />
+                <element signature="e#4993#4994#0" expanded="true" />
+                <element signature="e#5722#5776#0" expanded="true" />
+                <element signature="e#5829#5878#0" expanded="true" />
+                <element signature="e#6770#6803#0" expanded="true" />
+                <element signature="e#6833#6865#0" expanded="true" />
+                <element signature="e#6986#7278#0" expanded="true" />
+                <element signature="e#7259#7260#0" expanded="true" />
+                <element signature="e#9476#9509#0" expanded="true" />
+                <element signature="e#10244#10547#0" expanded="true" />
+                <element signature="e#10536#10537#0" expanded="true" />
+                <element signature="e#11218#11258#0" expanded="true" />
+                <element signature="e#11425#11463#0" expanded="true" />
+                <element signature="e#11657#11698#0" expanded="true" />
+                <element signature="e#11864#11889#0" expanded="true" />
+                <element signature="e#11993#12033#0" expanded="true" />
+                <element signature="e#12945#12986#0" expanded="true" />
+                <element signature="e#13015#13055#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JBluetoothManager.java" pinned="true" current="false" current-in-tab="false">
+      <file leaf-file-name="JBluetoothManager.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/JBluetoothManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-246.66667" vertical-offset="0" max-vertical-offset="8730">
-              <caret line="475" column="22" selection-start-line="475" selection-start-column="22" selection-end-line="475" selection-end-column="22" />
-              <folding>
-                <element signature="e#12244#12288#0" expanded="true" />
-                <element signature="e#12943#12988#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BLEActionChungJeSend.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionChungJeSend.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="915">
-              <caret line="15" column="3" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+            <state vertical-scroll-proportion="-6.5555553" vertical-offset="4773" max-vertical-offset="8730">
+              <caret line="353" column="35" selection-start-line="353" selection-start-column="31" selection-end-line="353" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CJGattAttributes.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="CJBLEHandler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJBLEHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="86" max-vertical-offset="2715">
+              <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1710#1711#0" expanded="true" />
+                <element signature="e#1768#1769#0" expanded="true" />
+                <element signature="e#1817#2923#0" expanded="true" />
+                <element signature="e#2912#2913#0" expanded="true" />
+                <element signature="e#4907#5278#0" expanded="true" />
+                <element signature="e#5252#5253#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IBLEHandler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
+              <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CJGattAttributes.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJGattAttributes.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.32085562" vertical-offset="30" max-vertical-offset="540">
-              <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
+              <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
               <folding>
                 <element signature="e#221#237#0" expanded="true" />
               </folding>
@@ -125,42 +138,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IHandler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IHandler.java">
+      <file leaf-file-name="CJService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
-              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ChwanJheDeviceManager.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/devicemanager/ChwanJheDeviceManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2486" max-vertical-offset="3045">
-              <caret line="201" column="47" selection-start-line="201" selection-start-column="39" selection-end-line="201" selection-end-column="47" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BleWrapper.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/blehandelr/BleWrapper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-58.77778" vertical-offset="318" max-vertical-offset="6765">
-              <caret line="152" column="0" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="strings.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="38" max-vertical-offset="435">
-              <caret line="10" column="55" selection-start-line="10" selection-start-column="55" selection-end-line="10" selection-end-column="55" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4845">
+              <caret line="32" column="22" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="22" />
+              <folding>
+                <element signature="e#0#12292#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#5924#5925#0" expanded="true" />
+                <element signature="e#5954#5955#0" expanded="true" />
+                <element signature="e#12238#12239#0" expanded="true" />
+                <element signature="e#12283#12284#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -175,11 +165,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/bosswiin/UserInterface/Components/RollingAdpater.java" />
-        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionCheckEquipment.java" />
-        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionClose.java" />
-        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionDisconnect.java" />
-        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionScan.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionStopScan.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEDeviceInfo.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/sharelibs/JSONHelper.java" />
@@ -222,10 +207,15 @@
         <option value="$PROJECT_DIR$/src/com/bosswiin/devicemanager/ChwanJheDeviceManager.java" />
         <option value="$PROJECT_DIR$/res/layout/main.xml" />
         <option value="$PROJECT_DIR$/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/JBluetoothManager.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/blehandelr/BleWrapper.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJGattAttributes.java" />
+        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJService.java" />
+        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEManager.java" />
+        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/CJBLEHandler.java" />
+        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java" />
+        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJBLEHandler.java" />
+        <option value="$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java" />
       </list>
     </option>
   </component>
@@ -591,7 +581,7 @@
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32804233" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32888147" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3305509" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3305509" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2921536" sideWeight="0.4989858" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26711187" sideWeight="0.50050557" order="7" side_tool="true" content_ui="tabs" />
@@ -672,28 +662,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="85" max-vertical-offset="459">
-          <caret line="5" column="44" selection-start-line="5" selection-start-column="44" selection-end-line="5" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionSend.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="450" max-vertical-offset="540">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/info.db">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/values/box_sky_blue.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.4" vertical-offset="0" max-vertical-offset="306">
@@ -813,13 +781,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8575" vertical-offset="407" max-vertical-offset="1050">
           <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IJBTManagerUICallback.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6690519" vertical-offset="51" max-vertical-offset="612">
-          <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1008,11 +969,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionChungJeSend.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.18783543" vertical-offset="0" max-vertical-offset="915">
+          <caret line="15" column="3" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/blehandelr/BleWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-58.77778" vertical-offset="318" max-vertical-offset="6765">
+        <state vertical-scroll-proportion="2.9830828" vertical-offset="318" max-vertical-offset="6765">
           <caret line="152" column="0" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/devicemanager/ChwanJheDeviceManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0268337" vertical-offset="2081" max-vertical-offset="3045">
+          <caret line="192" column="7" selection-start-line="192" selection-start-column="7" selection-end-line="192" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJGattAttributes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
+          <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
+          <folding>
+            <element signature="e#221#237#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1024,70 +1011,86 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/devicemanager/ChwanJheDeviceManager.java">
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2486" max-vertical-offset="3045">
-          <caret line="201" column="47" selection-start-line="201" selection-start-column="39" selection-end-line="201" selection-end-column="47" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="4845">
+          <caret line="32" column="22" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#12292#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#5924#5925#0" expanded="true" />
+            <element signature="e#5954#5955#0" expanded="true" />
+            <element signature="e#12238#12239#0" expanded="true" />
+            <element signature="e#12283#12284#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IJBTManagerUICallback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7513417" vertical-offset="0" max-vertical-offset="559">
+          <caret line="33" column="44" selection-start-line="14" selection-start-column="4" selection-end-line="33" selection-end-column="44" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/JBluetoothManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-246.66667" vertical-offset="0" max-vertical-offset="8730">
-          <caret line="475" column="22" selection-start-line="475" selection-start-column="22" selection-end-line="475" selection-end-column="22" />
+        <state vertical-scroll-proportion="-6.5555553" vertical-offset="4773" max-vertical-offset="8730">
+          <caret line="353" column="35" selection-start-line="353" selection-start-column="31" selection-end-line="353" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
+          <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
           <folding>
-            <element signature="e#12244#12288#0" expanded="true" />
-            <element signature="e#12943#12988#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEActionChungJeSend.java">
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJBLEHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="915">
-          <caret line="15" column="3" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
-          <folding />
+        <state vertical-scroll-proportion="0.0" vertical-offset="86" max-vertical-offset="2715">
+          <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1710#1711#0" expanded="true" />
+            <element signature="e#1768#1769#0" expanded="true" />
+            <element signature="e#1817#2923#0" expanded="true" />
+            <element signature="e#2912#2913#0" expanded="true" />
+            <element signature="e#4907#5278#0" expanded="true" />
+            <element signature="e#5252#5253#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="97" max-vertical-offset="5700">
-          <caret line="34" column="98" selection-start-line="34" selection-start-column="27" selection-end-line="34" selection-end-column="98" />
+        <state vertical-scroll-proportion="0.43649372" vertical-offset="776" max-vertical-offset="5250">
+          <caret line="93" column="8" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="8" />
           <folding>
-            <element signature="e#4370#6260#0" expanded="true" />
-            <element signature="e#5925#5977#0" expanded="true" />
-            <element signature="e#6070#6122#0" expanded="true" />
-            <element signature="e#6249#6250#0" expanded="true" />
-            <element signature="e#7598#7652#0" expanded="true" />
-            <element signature="e#7705#7754#0" expanded="true" />
-            <element signature="e#8078#8119#0" expanded="true" />
-            <element signature="e#8175#8213#0" expanded="true" />
-            <element signature="e#8853#8886#0" expanded="true" />
-            <element signature="e#8916#8948#0" expanded="true" />
-            <element signature="e#9069#9361#0" expanded="true" />
-            <element signature="e#9342#9343#0" expanded="true" />
-            <element signature="e#11559#11592#0" expanded="true" />
-            <element signature="e#12327#12630#0" expanded="true" />
-            <element signature="e#12619#12620#0" expanded="true" />
-            <element signature="e#13301#13341#0" expanded="true" />
-            <element signature="e#13508#13546#0" expanded="true" />
-            <element signature="e#13740#13781#0" expanded="true" />
-            <element signature="e#13947#13972#0" expanded="true" />
-            <element signature="e#14076#14116#0" expanded="true" />
-            <element signature="e#14654#14695#0" expanded="true" />
-            <element signature="e#14724#14764#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJGattAttributes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.32085562" vertical-offset="30" max-vertical-offset="540">
-          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
-          <folding>
-            <element signature="e#221#237#0" expanded="true" />
+            <element signature="e#4566#5004#0" expanded="true" />
+            <element signature="e#4993#4994#0" expanded="true" />
+            <element signature="e#5722#5776#0" expanded="true" />
+            <element signature="e#5829#5878#0" expanded="true" />
+            <element signature="e#6770#6803#0" expanded="true" />
+            <element signature="e#6833#6865#0" expanded="true" />
+            <element signature="e#6986#7278#0" expanded="true" />
+            <element signature="e#7259#7260#0" expanded="true" />
+            <element signature="e#9476#9509#0" expanded="true" />
+            <element signature="e#10244#10547#0" expanded="true" />
+            <element signature="e#10536#10537#0" expanded="true" />
+            <element signature="e#11218#11258#0" expanded="true" />
+            <element signature="e#11425#11463#0" expanded="true" />
+            <element signature="e#11657#11698#0" expanded="true" />
+            <element signature="e#11864#11889#0" expanded="true" />
+            <element signature="e#11993#12033#0" expanded="true" />
+            <element signature="e#12945#12986#0" expanded="true" />
+            <element signature="e#13015#13055#0" expanded="true" />
           </folding>
         </state>
       </provider>

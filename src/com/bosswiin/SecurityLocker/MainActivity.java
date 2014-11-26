@@ -2,8 +2,10 @@ package com.bosswiin.SecurityLocker;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,10 +16,8 @@ import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import com.bosswiin.UserInterface.Components.BLEAdpaterBase;
 import com.bosswiin.UserInterface.Components.BLEDBAdapter;
-import com.bosswiin.device.bluetooth.BLEAcionEnum;
-import com.bosswiin.device.bluetooth.BLERequest;
-import com.bosswiin.device.bluetooth.IJBTManagerUICallback;
-import com.bosswiin.device.bluetooth.JBluetoothManager;
+import com.bosswiin.device.bluetooth.*;
+import com.bosswiin.device.bluetooth.ChwanJhe.CJBLEHandler;
 import com.bosswiin.devicemanager.ChwanJheDeviceManager;
 import com.bosswiin.devicemanager.IJBTDeviceManager;
 import com.bosswiin.sharelibs.CommonHelper;
@@ -58,6 +58,11 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     private boolean                 isBTHardwareAvaialbe        = false;
     private IJBTDeviceManager mDeviceManager;
 
+    private BluetoothAdapter mBluetoothAdapter;
+
+    private              IBLEHandler mBleHandler        = null;
+    private static final int         REQUEST_ENABLE_BT = 1;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -86,6 +91,8 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         this.mDeviceManager = new ChwanJheDeviceManager(this, true);
         this.getDoorList();
+        
+        this.mBleHandler=new CJBLEHandler(this, this);
 
         this.listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -96,37 +103,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
                 String currentAddress = peripheralName.getTag().toString();
-
-                acts.selectedPeripheral = view;
-
-                if (selectedAddress != currentAddress) {
-                    request.remoteAddress = currentAddress;
-                    request.characteristicsUUID = uuidDoorCharactristicsForRead;
-                    request.serviceUUID = uuidDoorService;
-                    request.actionEnum = BLEAcionEnum.Notification;
-                }
-
-                acts.resetSelectedItemUI();
-                mJBluetootManager.resetConnection(selectedAddress);
-                mJBluetootManager.resetConnection(currentAddress);
-
-                try {
-                    double pauseTime = 0.3;
-                    Thread.sleep((long) CommonHelper.SecsToMilliSeconds(pauseTime));
-                }
-                catch (InterruptedException itterupt){}
-
-                if (mJBluetootManager.connectToPeripheral(currentAddress)) {
-                    mJBluetootManager.setNotification(request);
-                    currentSelectedTextview = (TextView) view.findViewById(R.id.bleProgressBar);
-                    currentSelectedRSSITextview = (TextView) view.findViewById(R.id.RssiTextView);
-                    CommonHelper.ShowToast(acts,acts.getString(R.string.DoorHint_RemoteConnectionOK));
-                }
-                else {
-                    CommonHelper.ShowToast(acts, acts.getString(R.string.DoorHint_RemoteNotConnected));
-                }
-
-                selectedAddress=currentAddress;
                 currentSelection = position;
             }
         });
@@ -137,27 +113,13 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         super.onResume();
         Log.d(this.logTag, "Application in resume phase");
 
-        if (this.mJBluetootManager.enableBluetoothHardware(this)) {
-            this.isBTHardwareAvaialbe = true;
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
 
-        // if back from "home"
-        if (isBTHardwareAvaialbe && !this.isDestroyBack) {
-            mJBluetootManager.setBluetoothLowEnergyWrapper(this);
-        }
-
-        if (this.isPauseBack) {
-            if (this.listView != null && this.currentSelection != Integer.MAX_VALUE) {
-                Log.d(logTag, "the index of current peripheral=" + this.currentSelection);
-                this.listView.setSelection(this.currentSelection);
-                this.listView.setItemsCanFocus(true);
-                this.selectedAddress = "";
-                this.listView.performItemClick(this.listView, this.currentSelection, this.listView.getItemIdAtPosition(this.currentSelection));
-            }
-        }
-
-        this.isPauseBack = false;
-        this.isDestroyBack = false;
+        this.mBleHandler.setRegisterReceiver();
     }
 
     @Override
@@ -179,11 +141,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     protected void onStop() {
         super.onStop();
         Log.d(this.logTag, "Application in stop phase");
-
-        if (this.currentSelectedTextview != null) {
-            this.currentSelectedTextview.setText(this.getString(R.string.connectionStatus));
-            this.currentSelectedRSSITextview.setText(this.getText(R.string.rssiPrefixValue) + "?");
-        }
+        this.mBleHandler.stopregisterReceiver();
     }
 
     @Override
@@ -333,6 +291,18 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 }
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // User chose not to enable Bluetooth.
+        if (requestCode == REQUEST_ENABLE_BT
+                && resultCode == Activity.RESULT_CANCELED) {
+            finish();
+            return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
