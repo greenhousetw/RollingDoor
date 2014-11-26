@@ -160,7 +160,7 @@ public class BleWrapper {
         boolean result=false;
 
         if(this.mDeviceAddress==this.mBluetoothDevice.getAddress()){
-            
+
             result=mConnected;
         }
 
