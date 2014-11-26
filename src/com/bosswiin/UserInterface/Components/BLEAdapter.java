@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bosswiin.SecurityLocker.R;
-import com.bosswiin.device.bluetooth.BLEDeviceInfo;
 
 import java.util.Iterator;
+import com.bosswiin.device.bluetooth.BLEDeviceInfo;
 
 /**
  * This class is UI related class, which provides BLEDeviceInfo presentation

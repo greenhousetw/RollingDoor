@@ -11,13 +11,7 @@ import java.util.UUID;
 public interface IBLEHandler {
 
     void scanDevice();
-
     boolean initialize();
     boolean connect(String address);
-
-    boolean getGattService(BluetoothGattService gattService);
-
     void writeData(UUID serviceName, UUID characteristics, byte[] data);
-
-    void startReadRssi();
 }

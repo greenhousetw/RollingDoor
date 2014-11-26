@@ -32,4 +32,17 @@ public interface IJBTManagerUICallback {
      * @author Yu-Hua Tseng
      */
     void passContentToActivity(Object data);
+
+    /**
+     * Pass data to activity for ui related operations
+     * date: 2014/11/09
+     *
+     * @param address data that needs to be process
+     * @author Yu-Hua Tseng
+     */
+    void uiDeviceDisconnected(String address);
+
+    void uiWriteResult(String address, String chName, String description, boolean operationresult);
+
+    void uiNewRssiAvailable(String address, final int rssi);
 }

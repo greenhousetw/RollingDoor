@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import com.bosswiin.device.bluetooth.BLEDeviceInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
