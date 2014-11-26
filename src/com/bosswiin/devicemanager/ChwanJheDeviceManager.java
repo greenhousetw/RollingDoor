@@ -25,7 +25,7 @@ import java.util.HashMap;
 public class ChwanJheDeviceManager implements IJBTDeviceManager {
 
     // the name of main table
-    private final String mTableName="DeviceList";
+    private final String mTableName    = "DeviceList";
     // the name of database
     private final String mDatabaseName = "info.db";
     // the runtime context
@@ -56,7 +56,7 @@ public class ChwanJheDeviceManager implements IJBTDeviceManager {
             throw new IllegalArgumentException("orz!" + this.mDatabaseName + " init fail.");
         }
 
-        if(enableSimulation){
+        if (enableSimulation) {
             this.simulateData();
         }
     }
@@ -74,7 +74,7 @@ public class ChwanJheDeviceManager implements IJBTDeviceManager {
     @Override
     public boolean saveSingleDevice(String address, String name, String location, String freq) {
 
-        boolean result=false;
+        boolean result = false;
 
         try {
             this.deviceInfo.clear();
@@ -83,12 +83,12 @@ public class ChwanJheDeviceManager implements IJBTDeviceManager {
             this.deviceInfo.put("location", location);
             this.deviceInfo.put("frequency", freq);
             this.deviceInfo.put("updateTime", new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(new Date()));
-            result=this.saveDevice("DeviceList", this.deviceInfo);
+            result = this.saveDevice("DeviceList", this.deviceInfo);
         } catch (Exception ex) {
             Log.e(this.logTag, ex.getMessage());
         }
 
-        return  result;
+        return result;
     }
 
     /**
@@ -180,9 +180,9 @@ public class ChwanJheDeviceManager implements IJBTDeviceManager {
      *
      * @author Yu-Hua Tseng
      */
-    private void clearRecords(boolean isCleanAll){
+    private void clearRecords(boolean isCleanAll) {
 
-        if(isCleanAll){
+        if (isCleanAll) {
             this.deviceInfo.clear();
             this.deviceInfo.put("Where", "");
             this.repository.Delete(this.mTableName, this.deviceInfo);
@@ -196,11 +196,11 @@ public class ChwanJheDeviceManager implements IJBTDeviceManager {
      *
      * @author Yu-Hua Tseng
      */
-    private void simulateData(){
+    private void simulateData() {
 
         String testData[][] = {
-                {"F9:28:FC:F1:A3:5B", "Chwan-Jhe,YuHua", "1F", "1"},
-                {"E6:F0:28:07:56:19", "Chwan-Jhe,Richard", "B1", "1"}
+                {"E6:F0:28:07:56:19", "Chwan-Jhe,YuHua", "1F", "1"},
+                {"F9:28:FC:F1:A3:5B", "Chwan-Jhe,Richard", "B1", "1"}
         };
 
         this.clearRecords(true);

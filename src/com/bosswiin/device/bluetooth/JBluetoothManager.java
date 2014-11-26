@@ -13,12 +13,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
-import android.util.TimingLogger;
 import com.bosswiin.SecurityLocker.R;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapper;
 import com.bosswiin.device.bluetooth.blehandelr.BleWrapperUiCallbacks;
 import com.bosswiin.sharelibs.CommonHelper;
-import com.bosswiin.sharelibs.Stopwatch;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;
@@ -77,6 +75,24 @@ public class JBluetoothManager implements INotificationHandler {
         if (this.mBleWrapper != null) {
             this.mBleWrapper.stopMonitoringRssiValue();
             result = true;
+        }
+
+        return result;
+    }
+
+    /**
+     * check connection is alive
+     * date: 2014/11/26
+     *
+     * @return true for successful and false for fail
+     * @author Yu-Hua Tseng
+     */
+    public boolean isConnected() {
+
+        boolean result = false;
+
+        if (this.mBleWrapper != null) {
+            result = this.mBleWrapper.isConnected();
         }
 
         return result;
@@ -161,7 +177,7 @@ public class JBluetoothManager implements INotificationHandler {
 
         this.mJBTUICallBack = interfaceDeviceFound;
 
-        if(this.mBleWrapper==null) {
+        if (this.mBleWrapper == null) {
             this.mBleWrapper = new BleWrapper((Activity) this.context, new BleWrapperUiCallbacks.Null() {
                 @Override
                 public void uiDeviceFound(final BluetoothDevice device, final int rssi, final byte[] record) {
@@ -283,10 +299,10 @@ public class JBluetoothManager implements INotificationHandler {
      * @param request instance of BLERequest
      * @author Yu-Hua Tseng
      */
-    public void changeBleDevice(BLERequest request) {
+    public void setNotification(BLERequest request) {
 
         // clean current connection
-        this.resetBLEWrapper(request.remoteAddress);
+        //this.resetBLEWrapper(request.remoteAddress);
 
         // start to connect to the given peripheral
         if (request.actionEnum.equals(BLEAcionEnum.Notification)) {
@@ -385,6 +401,29 @@ public class JBluetoothManager implements INotificationHandler {
     }
 
     /**
+     * Reset connection
+     * date: 2014/11/18
+     *
+     * @param selectedAddress the target device's address
+     * @author Yu-Hua Tseng
+     */
+    public void resetConnection(String selectedAddress) {
+        // shutdown automatic scanning
+        //this.stopScanning();
+
+        try {
+            if (selectedAddress.length() != 0) {
+                this.stopMonitoringRSSI();
+                this.disconnect();
+                this.closeConnection();
+                this.resetBLEWrapper(selectedAddress);
+            }
+        } catch (Exception ex) {
+            Log.w(this.mLogTag, "reset connection");
+        }
+    }
+
+    /**
      * reset instance of BLE peripheral
      * date: 2014/10/31
      *
@@ -397,22 +436,9 @@ public class JBluetoothManager implements INotificationHandler {
         boolean result = false;
 
         try {
-            // clean current connection
-            if (this.mBleWrapper.isConnected()) {
-
-                BluetoothDevice device=this.mBleWrapper.getDevice();
-
-                if (device !=null){
-                   if(device.getAddress() != remoteAddress) {
-                       this.mBleWrapper.resetWrapperData();
-                   }
-                }
-            }
-
+            this.mBleWrapper.resetWrapperData();
             this.mBleWrapper.resetBlueToothDevice();
-
             result = true;
-
         } catch (Exception ex) {
             Log.e(JBluetoothManager.class.getName(), ex.getMessage());
         }
@@ -428,7 +454,7 @@ public class JBluetoothManager implements INotificationHandler {
      * @return true for successful and false for fail
      * @author Yu-Hua Tseng
      */
-    public boolean checkConnection(String address) {
+    public boolean connectToPeripheral(String address) {
 
         boolean isConnected = false;
 
@@ -436,69 +462,51 @@ public class JBluetoothManager implements INotificationHandler {
 
             try {
 
-                int retryTimes=5;
-                double waitSeconds=0.1;
+                int retryTimes = 5;
+                double waitSeconds = 0.2;
 
-                while (this.mBleWrapper.getDevice() == null) {
+                while (retryTimes > 0) {
 
-                    if(this.mBleWrapper.connect(address)){
+                    if (retryTimes == 0) {
                         break;
+                    }
+
+                    if (this.mBleWrapper.connect(address)) {
+                        if (this.mBleWrapper.getDevice().getAddress() == address && this.mBleWrapper.isConnected()) {
+                            this.addDeviceIntoInternalList(address, this.mBleWrapper.getDevice());
+                            Thread.sleep((long) CommonHelper.SecsToMilliSeconds(waitSeconds));
+
+                            isConnected = this.mBleWrapper.isConnected();
+                            Log.e(mLogTag, "successfully connect to " + address);
+                            break;
+                        }
                     }
 
                     Thread.sleep((long) CommonHelper.SecsToMilliSeconds(waitSeconds));
-
-                    if(retryTimes==0){
-                        break;
-                    }
-
                     retryTimes--;
                 }
-
-                if (this.mBleWrapper.getDevice().getAddress() == address) {
-                    this.addDeviceIntoInternalList(address, this.mBleWrapper.getDevice());
-                    isConnected = this.mBleWrapper.isConnected();
-                }
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 Log.e(this.mLogTag, ex.getMessage());
             }
+        }
+        else {
+            Log.e(mLogTag, "wrapper instance or the value of address is empty");
         }
 
         return isConnected;
     }
 
     /**
-     * Reset connection
-     * date: 2014/11/18
-     *
-     * @param selectedAddress the target device's address
-     * @author Yu-Hua Tseng
-     */
-    public void resetConnection(String selectedAddress){
-        // shutdown automatic scanning
-        //this.stopScanning();
-
-        try {
-            this.stopMonitoringRSSI();
-            this.disconnect();
-            this.closeConnection();
-            this.resetBLEWrapper(selectedAddress);
-        }
-        catch (Exception ex){
-            Log.w(this.mLogTag, "reset connection");
-        }
-    }
-
-    /**
      * To add device into internal list for management
      * date: 2014/11/18
      *
-     * @param device instance of BluetoothDevice
+     * @param device  instance of BluetoothDevice
      * @param address address that we want to check
      * @author Yu-Hua Tseng
      */
-    private void addDeviceIntoInternalList(String address, BluetoothDevice device){
+    private void addDeviceIntoInternalList(String address, BluetoothDevice device) {
 
-        if(!CommonHelper.stringIsNullOrEmpty(address) && !this.bluetoothDeviceList.containsKey(address)){
+        if (!CommonHelper.stringIsNullOrEmpty(address) && !this.bluetoothDeviceList.containsKey(address)) {
             this.bluetoothDeviceList.put(address, device);
         }
     }
@@ -512,7 +520,7 @@ public class JBluetoothManager implements INotificationHandler {
     private void setCommandChain() {
 
         //this.mBleAction = new BLEActionSend();
-        this.mBleAction =new BLEActionChungJeSend();
+        this.mBleAction = new BLEActionChungJeSend();
         this.mBleAction.setSuccessor(new BLEActionNotificaiton());
     }
 

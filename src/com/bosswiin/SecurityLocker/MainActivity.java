@@ -52,6 +52,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     private int                     currentSelection            = Integer.MAX_VALUE;
     private TextView                currentSelectedTextview     = null;
     private TextView                currentSelectedRSSITextview = null;
+    private View                    selectedPeripheral          = null;
     private boolean                 isPauseBack                 = false;
     private boolean                 isDestroyBack               = false;
     private boolean                 isBTHardwareAvaialbe        = false;
@@ -69,17 +70,22 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         this.bleAdpater = new BLEDBAdapter(this);
         this.listView = (ListView) this.findViewById(R.id.listView);
         this.listView.setEmptyView(findViewById(R.id.empty));
+        this.listView.setAdapter(this.bleAdpater);
         this.scanButton = (Button) this.findViewById(R.id.buttonScan);
         this.upButton = (Button) this.findViewById(R.id.buttonUP);
         this.downButton = (Button) this.findViewById(R.id.buttonDown);
         this.stopButton = (Button) this.findViewById(R.id.buttonStop);
 
         //this.scanButton.setOnClickListener(this);
+        this.scanButton.setVisibility(View.GONE);
         this.upButton.setOnClickListener(this);
         this.stopButton.setOnClickListener(this);
         this.downButton.setOnClickListener(this);
 
         this.acts = this;
+
+        this.mDeviceManager = new ChwanJheDeviceManager(this, true);
+        this.getDoorList();
 
         this.listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -89,55 +95,41 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 view.setSelected(true);
 
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
+                String currentAddress = peripheralName.getTag().toString();
 
-                if (selectedAddress != peripheralName.getTag().toString()) {
-                    acts.resetSelectedItemUI();
-                    selectedAddress = peripheralName.getTag().toString();
+                acts.selectedPeripheral = view;
 
-                    request.remoteAddress = selectedAddress;
+                if (selectedAddress != currentAddress) {
+                    request.remoteAddress = currentAddress;
                     request.characteristicsUUID = uuidDoorCharactristicsForRead;
                     request.serviceUUID = uuidDoorService;
                     request.actionEnum = BLEAcionEnum.Notification;
-
-                    mJBluetootManager.resetConnection(selectedAddress);
-
-                    if (mJBluetootManager.checkConnection(selectedAddress)) {
-                        mJBluetootManager.changeBleDevice(request);
-                        TextView statusText = (TextView) acts.findViewById(R.id.bleProgressBar);
-                        statusText.setText(acts.getString(R.string.connectionStringForSuccessful));
-                    }
-                    else {
-
-                        try {
-                            double waitSeconds = 0.8;
-                            Thread.sleep((long) waitSeconds);
-                            if (!mJBluetootManager.checkConnection(selectedAddress)) {
-                                CommonHelper.ShowToast(acts, acts.getString(R.string.DoorHint_RemoteNotConnected));
-                            }
-                        } catch (Exception ex) {
-                            Log.e(logTag, ex.getMessage());
-                        }
-                    }
                 }
 
+                acts.resetSelectedItemUI();
+                mJBluetootManager.resetConnection(selectedAddress);
+                mJBluetootManager.resetConnection(currentAddress);
+
+                try {
+                    double pauseTime = 0.3;
+                    Thread.sleep((long) CommonHelper.SecsToMilliSeconds(pauseTime));
+                }
+                catch (InterruptedException itterupt){}
+
+                if (mJBluetootManager.connectToPeripheral(currentAddress)) {
+                    mJBluetootManager.setNotification(request);
+                    currentSelectedTextview = (TextView) view.findViewById(R.id.bleProgressBar);
+                    currentSelectedRSSITextview = (TextView) view.findViewById(R.id.RssiTextView);
+                    CommonHelper.ShowToast(acts,acts.getString(R.string.DoorHint_RemoteConnectionOK));
+                }
+                else {
+                    CommonHelper.ShowToast(acts, acts.getString(R.string.DoorHint_RemoteNotConnected));
+                }
+
+                selectedAddress=currentAddress;
                 currentSelection = position;
-                currentSelectedTextview = (TextView) acts.findViewById(R.id.bleProgressBar);
-                currentSelectedRSSITextview = (TextView) acts.findViewById(R.id.RssiTextView);
             }
         });
-
-        this.mDeviceManager = new ChwanJheDeviceManager(this, true);
-        listView.setAdapter(this.bleAdpater);
-        this.scanButton.setVisibility(View.GONE);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        // restore peripherals into listview
-        this.getDoorList();
-        Log.d(this.logTag, "Application in start phase");
     }
 
     @Override
@@ -152,8 +144,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         // if back from "home"
         if (isBTHardwareAvaialbe && !this.isDestroyBack) {
             mJBluetootManager.setBluetoothLowEnergyWrapper(this);
-            // shutdown automatic scanning
-            //mJBluetootManager.startScanning();
         }
 
         if (this.isPauseBack) {
@@ -161,7 +151,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 Log.d(logTag, "the index of current peripheral=" + this.currentSelection);
                 this.listView.setSelection(this.currentSelection);
                 this.listView.setItemsCanFocus(true);
-                this.selectedAddress="";
+                this.selectedAddress = "";
                 this.listView.performItemClick(this.listView, this.currentSelection, this.listView.getItemIdAtPosition(this.currentSelection));
             }
         }
@@ -244,7 +234,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
             }
             else if (this.request.remoteAddress.length() != 0) {
 
-                if (this.mJBluetootManager.checkConnection(this.request.remoteAddress)) {
+                if (this.mJBluetootManager.isConnected()) {
 
                     if (view.getId() == R.id.buttonUP) {
 
@@ -271,8 +261,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                     }
                 }
                 else {
-                    CommonHelper.ShowToast(this, this.getString(R.string.DoorHint_IsNotConnected));
-                    this.resetSelectedItemUI();
+                    ((EditText) acts.findViewById(R.id.editnoticontent)).setText(acts.getString(R.string.DoorHint));
                     this.listView.removeViewAt(currentSelection);
                 }
             }
@@ -326,13 +315,15 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 String value = data.toString();
 
                 if (value.startsWith(this.getString(R.string.rssiPrefixValue))) {
-                    ((TextView) this.findViewById(R.id.RssiTextView)).setText(value + " db");
-                    ((TextView) this.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStringForSuccessful);
+                    if (this.selectedPeripheral != null) {
+                        ((TextView) this.selectedPeripheral.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStringForSuccessful);
+                        ((TextView) this.selectedPeripheral.findViewById(R.id.RssiTextView)).setText(value + " db");
+                    }
                 }
                 else if (value == this.getString(R.string.connectionStatus)) {
-                    if (this.currentSelectedTextview != null) {
-                        this.currentSelectedTextview.setText(this.getString(R.string.connectionStatus));
-                        ((TextView) this.findViewById(R.id.RssiTextView)).setText(this.getString(R.string.rssiPrefixValue) + "?");
+                    if (this.selectedPeripheral != null) {
+                        ((TextView) this.selectedPeripheral.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStatus);
+                        ((TextView) this.selectedPeripheral.findViewById(R.id.RssiTextView)).setText(this.getString(R.string.rssiPrefixValue) + "?");
                     }
                 }
                 else {
@@ -352,9 +343,17 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
      */
     private void resetSelectedItemUI() {
 
+        String connectionHintTitle = this.getString(R.string.connectionStatus);
+        String rssiValue = this.getString(R.string.rssiPrefixValue) + "?";
+
         if (this.currentSelectedTextview != null && this.currentSelectedRSSITextview != null) {
-            this.currentSelectedTextview.setText(acts.getString(R.string.connectionStatus));
-            this.currentSelectedRSSITextview.setText(acts.getString(R.string.rssiPrefixValue) + "?");
+            currentSelectedTextview.setText(connectionHintTitle);
+            currentSelectedRSSITextview.setText(rssiValue);
+        }
+
+        if (this.selectedPeripheral != null) {
+            ((TextView) this.selectedPeripheral.findViewById(R.id.bleProgressBar)).setText(connectionHintTitle);
+            ((TextView) this.selectedPeripheral.findViewById(R.id.RssiTextView)).setText(rssiValue);
         }
     }
 

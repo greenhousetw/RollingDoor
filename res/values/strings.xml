@@ -7,6 +7,8 @@
     <string name="DoorHint">請先選取目標門位</string>
     <string name="DoorHint_IsNotConnected">門控連線失敗</string>
     <string name="DoorHint_RemoteNotConnected">無法連線，請稍候再試</string>
+    <string name="DoorHint_RemoteConnectionOK">成功連線</string>
+    <string name="DoorHint_RemoteKeepConnection">不需重新連線</string>
     <string name="btnScanTitle">掃瞄</string>
     <string name="listViewTitle">自動門列表▼</string>
     <string name="receTitle">通知內容:</string>

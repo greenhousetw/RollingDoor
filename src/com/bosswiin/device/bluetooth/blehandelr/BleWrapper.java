@@ -156,7 +156,15 @@ public class BleWrapper {
     }
 
     public boolean isConnected() {
-        return mConnected;
+
+        boolean result=false;
+
+        if(this.mDeviceAddress==this.mBluetoothDevice.getAddress()){
+            
+            result=mConnected;
+        }
+
+        return result;
     }
 
     /* run test and check if this device has BT and BLE hardware available */
@@ -463,6 +471,7 @@ public class BleWrapper {
     public void resetWrapperData() {
         this.diconnect();
         this.close();
+        this.mConnected=false;
         this.mBluetoothGatt = null;
         this.mBluetoothSelectedService=null;
         this.mBluetoothGattServices.clear();

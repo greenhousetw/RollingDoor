@@ -105,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textSize="24sp"
+                    android:textSize="14sp"
                     android:id="@+id/editnoticontent"
                     android:clickable="false"
                     android:cursorVisible="false"
