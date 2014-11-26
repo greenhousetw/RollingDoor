@@ -57,30 +57,30 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainActivity.java" pinned="true" current="true" current-in-tab="true">
+      <file leaf-file-name="MainActivity.java" pinned="true" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.43649372" vertical-offset="776" max-vertical-offset="5250">
-              <caret line="93" column="8" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="8" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="836" max-vertical-offset="5220">
+              <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
               <folding>
-                <element signature="e#4566#5004#0" expanded="true" />
-                <element signature="e#4993#4994#0" expanded="true" />
-                <element signature="e#5722#5776#0" expanded="true" />
-                <element signature="e#5829#5878#0" expanded="true" />
-                <element signature="e#6770#6803#0" expanded="true" />
-                <element signature="e#6833#6865#0" expanded="true" />
-                <element signature="e#6986#7278#0" expanded="true" />
-                <element signature="e#7259#7260#0" expanded="true" />
-                <element signature="e#9476#9509#0" expanded="true" />
-                <element signature="e#10244#10547#0" expanded="true" />
-                <element signature="e#10536#10537#0" expanded="true" />
-                <element signature="e#11218#11258#0" expanded="true" />
-                <element signature="e#11425#11463#0" expanded="true" />
-                <element signature="e#11657#11698#0" expanded="true" />
-                <element signature="e#11864#11889#0" expanded="true" />
-                <element signature="e#11993#12033#0" expanded="true" />
-                <element signature="e#12945#12986#0" expanded="true" />
-                <element signature="e#13015#13055#0" expanded="true" />
+                <element signature="e#4445#4884#0" expanded="true" />
+                <element signature="e#4873#4874#0" expanded="true" />
+                <element signature="e#5602#5656#0" expanded="true" />
+                <element signature="e#5709#5758#0" expanded="true" />
+                <element signature="e#6650#6683#0" expanded="true" />
+                <element signature="e#6713#6745#0" expanded="true" />
+                <element signature="e#6866#7158#0" expanded="true" />
+                <element signature="e#7139#7140#0" expanded="true" />
+                <element signature="e#9356#9389#0" expanded="true" />
+                <element signature="e#10124#10427#0" expanded="true" />
+                <element signature="e#10416#10417#0" expanded="true" />
+                <element signature="e#11098#11138#0" expanded="true" />
+                <element signature="e#11305#11343#0" expanded="true" />
+                <element signature="e#11537#11578#0" expanded="true" />
+                <element signature="e#11744#11769#0" expanded="true" />
+                <element signature="e#11873#11913#0" expanded="true" />
+                <element signature="e#12825#12866#0" expanded="true" />
+                <element signature="e#12895#12935#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -99,7 +99,7 @@
       <file leaf-file-name="CJBLEHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJBLEHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="86" max-vertical-offset="2715">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1166" max-vertical-offset="2715">
               <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -114,11 +114,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IBLEHandler.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="IBLEHandler.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
-              <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+            <state vertical-scroll-proportion="0.3146853" vertical-offset="0" max-vertical-offset="572">
+              <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -213,9 +213,9 @@
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJService.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEManager.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/CJBLEHandler.java" />
-        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJBLEHandler.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java" />
       </list>
     </option>
   </component>
@@ -1042,12 +1042,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
-          <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="836" max-vertical-offset="5220">
+          <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4445#4884#0" expanded="true" />
+            <element signature="e#4873#4874#0" expanded="true" />
+            <element signature="e#5602#5656#0" expanded="true" />
+            <element signature="e#5709#5758#0" expanded="true" />
+            <element signature="e#6650#6683#0" expanded="true" />
+            <element signature="e#6713#6745#0" expanded="true" />
+            <element signature="e#6866#7158#0" expanded="true" />
+            <element signature="e#7139#7140#0" expanded="true" />
+            <element signature="e#9356#9389#0" expanded="true" />
+            <element signature="e#10124#10427#0" expanded="true" />
+            <element signature="e#10416#10417#0" expanded="true" />
+            <element signature="e#11098#11138#0" expanded="true" />
+            <element signature="e#11305#11343#0" expanded="true" />
+            <element signature="e#11537#11578#0" expanded="true" />
+            <element signature="e#11744#11769#0" expanded="true" />
+            <element signature="e#11873#11913#0" expanded="true" />
+            <element signature="e#12825#12866#0" expanded="true" />
+            <element signature="e#12895#12935#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1068,29 +1085,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43649372" vertical-offset="776" max-vertical-offset="5250">
-          <caret line="93" column="8" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.3146853" vertical-offset="0" max-vertical-offset="572">
+          <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
           <folding>
-            <element signature="e#4566#5004#0" expanded="true" />
-            <element signature="e#4993#4994#0" expanded="true" />
-            <element signature="e#5722#5776#0" expanded="true" />
-            <element signature="e#5829#5878#0" expanded="true" />
-            <element signature="e#6770#6803#0" expanded="true" />
-            <element signature="e#6833#6865#0" expanded="true" />
-            <element signature="e#6986#7278#0" expanded="true" />
-            <element signature="e#7259#7260#0" expanded="true" />
-            <element signature="e#9476#9509#0" expanded="true" />
-            <element signature="e#10244#10547#0" expanded="true" />
-            <element signature="e#10536#10537#0" expanded="true" />
-            <element signature="e#11218#11258#0" expanded="true" />
-            <element signature="e#11425#11463#0" expanded="true" />
-            <element signature="e#11657#11698#0" expanded="true" />
-            <element signature="e#11864#11889#0" expanded="true" />
-            <element signature="e#11993#12033#0" expanded="true" />
-            <element signature="e#12945#12986#0" expanded="true" />
-            <element signature="e#13015#13055#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

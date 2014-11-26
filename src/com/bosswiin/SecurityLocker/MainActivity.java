@@ -70,9 +70,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.main);
 
-        this.mJBluetootManager = new JBluetoothManager(this);
-
-        this.bleAdpater = new BLEDBAdapter(this);
         this.listView = (ListView) this.findViewById(R.id.listView);
         this.listView.setEmptyView(findViewById(R.id.empty));
         this.listView.setAdapter(this.bleAdpater);
@@ -91,7 +88,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         this.mDeviceManager = new ChwanJheDeviceManager(this, true);
         this.getDoorList();
-        
+
         this.mBleHandler=new CJBLEHandler(this, this);
 
         this.listView.setOnItemClickListener(new OnItemClickListener() {
@@ -103,6 +100,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
                 String currentAddress = peripheralName.getTag().toString();
+
                 currentSelection = position;
             }
         });

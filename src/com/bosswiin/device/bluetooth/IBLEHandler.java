@@ -10,6 +10,8 @@ public interface IBLEHandler {
 
     void scanDevice();
 
+    boolean connect();
+
     boolean getGattService(BluetoothGattService gattService);
 
     void writeCharacteristic(BluetoothGattCharacteristic characteristic);
