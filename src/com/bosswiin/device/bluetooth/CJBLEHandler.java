@@ -7,6 +7,7 @@
 package com.bosswiin.device.bluetooth;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.*;
 import android.content.Context;
 import android.content.Intent;
@@ -38,13 +39,12 @@ public class CJBLEHandler implements IBLEHandler {
     private              boolean          mTimerEnabled             = false;
     private              boolean          mConnected                = false;
 
-    private IJBTManagerUICallback mUICallback            = null;
-    private boolean               isServiceDiscvoeryDone = false;
-
+    private       IJBTManagerUICallback mUICallback            = null;
+    private       boolean               isServiceDiscvoeryDone = false;
     /**
      * callbacks called for any action on particular Ble Device
      */
-    private final BluetoothGattCallback mBleCallback = new BluetoothGattCallback() {
+    private final BluetoothGattCallback mBleCallback           = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
@@ -139,35 +139,67 @@ public class CJBLEHandler implements IBLEHandler {
     @Override
     public boolean initializeBTAdapter() {
 
-        boolean result = false;
-
-        final int REQUEST_ENABLE_BT = 1;
-
-        if (this.mBluetoothManager == null) {
-
-            this.mBluetoothManager = (BluetoothManager) this.mParent.getSystemService(Context.BLUETOOTH_SERVICE);
-
-            if (this.mBluetoothManager == null) {
-                result = false;
+        if (mBluetoothManager == null) {
+            mBluetoothManager = (BluetoothManager) mParent.getSystemService(Context.BLUETOOTH_SERVICE);
+            if (mBluetoothManager == null) {
+                return false;
             }
         }
 
-        if (this.mBluetoothAdapter == null) {
+        if (mBluetoothAdapter == null) mBluetoothAdapter = mBluetoothManager.getAdapter();
+        if (mBluetoothAdapter == null) {
+            return false;
+        }
+        return true;
+    }
 
-            this.mBluetoothAdapter = this.mBluetoothManager.getAdapter();
+    /**
+     * connect to the target device
+     * date: 2014/11/27
+     *
+     * @param address        the address of remote device
+     * @param service        the uuid of service
+     * @param characteristic the uuid of characteristic
+     * @return true for successfully check service count is more than 0 and false for fail
+     * @author Yu-Hua Tseng
+     */
+    @Override
+    public BluetoothGattCharacteristic connect(String address, UUID service, UUID characteristic) {
 
-            if (this.mBluetoothAdapter != null) {
+        BluetoothGattCharacteristic chInstance = null;
 
-                if (!this.mBluetoothAdapter.isEnabled()) {
-                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    this.mParent.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        this.isServiceDiscvoeryDone=false;
+
+        this.closeConnection();
+
+        try {
+            if (this.connect(address)) {
+
+                double waitTime=0.5;
+                int retryTimes=10;
+
+                while (chInstance == null) {
+
+                    BluetoothGattService serviceInstance = this.mBluetoothGatt.getService(service);
+
+                    if (serviceInstance != null) {
+                        chInstance = serviceInstance.getCharacteristic(characteristic);
+                    }
+
+                    if(retryTimes==0){
+                            break;
+                    }
+
+                    Thread.sleep((long) CommonHelper.SecsToMilliSeconds(waitTime));
+                    retryTimes--;
                 }
-
-                result = true;
             }
         }
+        catch (Exception ex){
+            Log.e(this.mTAG, "");
+        }
 
-        return result;
+        return chInstance;
     }
 
     /**
@@ -219,8 +251,10 @@ public class CJBLEHandler implements IBLEHandler {
                 if (this.mBluetoothGatt != null) {
                     double waitSeconds = 1;
                     int retryTimes = 5;
+                    int serviceNumber=3;
                     this.mBluetoothGatt.discoverServices();
-                    while (this.mBluetoothGatt.getServices().size() == 0) {
+
+                    while (this.mBluetoothGatt.getServices().size() < serviceNumber) {
                         if (retryTimes == 0) {
                             break;
                         }
@@ -261,6 +295,24 @@ public class CJBLEHandler implements IBLEHandler {
         try {
             BluetoothGattService service = this.mBluetoothGatt.getService(serviceName);
             BluetoothGattCharacteristic characteristic = service.getCharacteristic(characteristics);
+            this.writeData(characteristic, data);
+        } catch (Exception ex) {
+            Log.e(this.mTAG, ex.getMessage());
+        }
+    }
+
+    /**
+     * send data to remote device, data is bye stream
+     * date: 2014/11/27
+     *
+     * @param characteristic BluetoothGattCharacteristic instance of target characteristics of service
+     * @param data           data that we want to send
+     * @author Yu-Hua Tseng
+     */
+    @Override
+    public void writeData(BluetoothGattCharacteristic characteristic, byte[] data) {
+
+        try {
             characteristic.setValue(data);
             this.mBluetoothGatt.writeCharacteristic(characteristic);
         } catch (Exception ex) {
@@ -313,20 +365,33 @@ public class CJBLEHandler implements IBLEHandler {
      * @param characteristics uuid of target characteristics of service
      * @author Yu-Hua Tseng
      */
+    @Override
     public void getCharacteristicValue(UUID serviceName, UUID characteristics) {
-        if (!this.mConnected || this.mBluetoothAdapter == null || this.mBluetoothGatt == null || characteristics == null) {
+
+        BluetoothGattService service = this.mBluetoothGatt.getService(serviceName);
+        BluetoothGattCharacteristic ch = service.getCharacteristic(characteristics);
+        this.getCharacteristicValue(ch);
+    }
+
+    /**
+     * Get data from the specific characteristic
+     * date: 2014/11/27
+     *
+     * @param ch BluetoothGattCharacteristic instance of target characteristics of service
+     * @author Yu-Hua Tseng
+     */
+    @Override
+    public void getCharacteristicValue(BluetoothGattCharacteristic ch) {
+        if (!this.mConnected || this.mBluetoothAdapter == null || this.mBluetoothGatt == null || ch == null) {
             Log.w(this.mTAG, "bluetoothadpater or gatt instance is null");
         }
         else {
-
-            BluetoothGattService service = this.mBluetoothGatt.getService(serviceName);
-            BluetoothGattCharacteristic ch = service.getCharacteristic(characteristics);
 
             byte[] rawValue = ch.getValue();
             String strValue = null;
 
             // lets read and do real parsing of some characteristic to get meaningful value from it
-            UUID uuid = characteristics;
+            UUID uuid = ch.getUuid();
 
             // not known type of characteristic, so we need to handle this in "general" way
             // get first four bytes and transform it to integer
@@ -360,6 +425,27 @@ public class CJBLEHandler implements IBLEHandler {
     @Override
     public void startMonitoringRssiValue() {
         readPeriodicalyRssiValue(true);
+    }
+
+
+    /**
+     * to close current connected characteristic
+     * date: 2014/11/27
+     *
+     * @author Yu-Hua Tseng
+     */
+    @Override
+    public void closeConnection() {
+
+        if (mBluetoothGatt != null) {
+            this.mBluetoothGatt.disconnect();
+            this.mBluetoothGatt.close();
+            this.mBluetoothGatt = null;
+        }
+
+        this.mBluetoothGatt=null;
+
+        this.mUICallback.uiDeviceDisconnected(this.mBluetoothAdapter.getAddress());
     }
 
     /**

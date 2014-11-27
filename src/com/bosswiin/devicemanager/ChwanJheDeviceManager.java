@@ -199,8 +199,8 @@ public class ChwanJheDeviceManager implements IJBTDeviceManager {
     private void simulateData() {
 
         String testData[][] = {
-                {"E6:F0:28:07:56:19", "ChwanJhe,YuHua", "1F", "1"},
-                {"F9:28:FC:F1:A3:5B", "ChwanJhe,Richard", "B1", "1"}
+                {"E6:F0:28:07:56:19", "ChwanJhe,Richard", "B1", "1"},
+                {"F9:28:FC:F1:A3:5B", "ChwanJhe,YuHua", "1F", "1"}
         };
 
         this.clearRecords(true);

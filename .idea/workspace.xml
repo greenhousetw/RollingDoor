@@ -60,36 +60,40 @@
       <file leaf-file-name="MainActivity.java" pinned="true" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.6666665" vertical-offset="466" max-vertical-offset="6477">
-              <caret line="38" column="24" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
+            <state vertical-scroll-proportion="51.185184" vertical-offset="3643" max-vertical-offset="7820">
+              <caret line="133" column="19" selection-start-line="133" selection-start-column="19" selection-end-line="133" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2154#2170#0" expanded="true" />
-                <element signature="e#2570#2576#0" expanded="true" />
-                <element signature="e#3793#6376#0" expanded="true" />
-                <element signature="e#4330#4841#0" expanded="true" />
-                <element signature="e#4691#4731#0" expanded="true" />
-                <element signature="e#4791#4792#0" expanded="true" />
-                <element signature="e#5619#5671#0" expanded="true" />
-                <element signature="e#5913#5953#0" expanded="true" />
-                <element signature="e#6011#6063#0" expanded="true" />
-                <element signature="e#6365#6366#0" expanded="true" />
-                <element signature="e#6924#6978#0" expanded="true" />
-                <element signature="e#7028#7077#0" expanded="true" />
-                <element signature="e#7808#7841#0" expanded="true" />
-                <element signature="e#7871#7903#0" expanded="true" />
-                <element signature="e#8024#8316#0" expanded="true" />
-                <element signature="e#8297#8298#0" expanded="true" />
-                <element signature="e#9850#10153#0" expanded="true" />
-                <element signature="e#10142#10143#0" expanded="true" />
-                <element signature="e#10479#10936#0" expanded="true" />
-                <element signature="e#10856#10896#0" expanded="true" />
-                <element signature="e#10921#10922#0" expanded="true" />
-                <element signature="e#11888#12145#0" expanded="true" />
-                <element signature="e#12063#12103#0" expanded="true" />
-                <element signature="e#12134#12135#0" expanded="true" />
-                <element signature="e#12912#13112#0" expanded="true" />
-                <element signature="e#13101#13102#0" expanded="true" />
+                <element signature="e#2355#2371#0" expanded="true" />
+                <element signature="e#2895#2901#0" expanded="true" />
+                <element signature="e#4260#7119#0" expanded="true" />
+                <element signature="e#4848#5197#0" expanded="true" />
+                <element signature="e#5101#5141#0" expanded="true" />
+                <element signature="e#5174#5175#0" expanded="true" />
+                <element signature="e#6100#6152#0" expanded="true" />
+                <element signature="e#6622#6662#0" expanded="true" />
+                <element signature="e#6720#6772#0" expanded="true" />
+                <element signature="e#7108#7109#0" expanded="true" />
+                <element signature="e#7519#7849#0" expanded="true" />
+                <element signature="e#7826#7827#0" expanded="true" />
+                <element signature="e#8289#8343#0" expanded="true" />
+                <element signature="e#8393#8442#0" expanded="true" />
+                <element signature="e#9250#9283#0" expanded="true" />
+                <element signature="e#9313#9345#0" expanded="true" />
+                <element signature="e#9466#9842#0" expanded="true" />
+                <element signature="e#9823#9824#0" expanded="true" />
+                <element signature="e#11544#11847#0" expanded="true" />
+                <element signature="e#11836#11837#0" expanded="true" />
+                <element signature="e#12169#12707#0" expanded="true" />
+                <element signature="e#12605#12645#0" expanded="true" />
+                <element signature="e#12692#12693#0" expanded="true" />
+                <element signature="e#13284#13452#0" expanded="true" />
+                <element signature="e#13437#13438#0" expanded="true" />
+                <element signature="e#13811#14146#0" expanded="true" />
+                <element signature="e#14046#14086#0" expanded="true" />
+                <element signature="e#14135#14136#0" expanded="true" />
+                <element signature="e#15520#15720#0" expanded="true" />
+                <element signature="e#15709#15710#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -98,49 +102,59 @@
       <file leaf-file-name="CJBLEHandler.java" pinned="true" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/CJBLEHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.5925927" vertical-offset="5486" max-vertical-offset="6834">
-              <caret line="330" column="24" selection-start-line="330" selection-start-column="24" selection-end-line="330" selection-end-column="24" />
+            <state vertical-scroll-proportion="-3.148148" vertical-offset="2363" max-vertical-offset="8296">
+              <caret line="144" column="29" selection-start-line="144" selection-start-column="29" selection-end-line="144" selection-end-column="29" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="imports" expanded="true" />
-                <element signature="e#4371#4661#0" expanded="true" />
-                <element signature="e#4642#4643#0" expanded="true" />
-                <element signature="e#14224#14225#0" expanded="true" />
-                <element signature="e#14270#14271#0" expanded="true" />
-                <element signature="e#14741#15270#0" expanded="true" />
-                <element signature="e#15259#15260#0" expanded="true" />
+                <element signature="e#4427#4717#0" expanded="true" />
+                <element signature="e#4698#4699#0" expanded="true" />
+                <element signature="e#16210#16211#0" expanded="true" />
+                <element signature="e#16256#16257#0" expanded="true" />
+                <element signature="e#17205#17734#0" expanded="true" />
+                <element signature="e#17723#17724#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IJBTManagerUICallback.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IJBTManagerUICallback.java">
+      <file leaf-file-name="ChwanJheDeviceManager.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/devicemanager/ChwanJheDeviceManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="767" max-vertical-offset="1326">
-              <caret line="72" column="43" selection-start-line="72" selection-start-column="16" selection-end-line="72" selection-end-column="43" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1432" max-vertical-offset="3536">
+              <caret line="106" column="38" selection-start-line="106" selection-start-column="38" selection-end-line="106" selection-end-column="38" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="n#!!doc" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BleWrapper.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/blehandelr/BleWrapper.java">
+      <file leaf-file-name="strings.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.2330827" vertical-offset="5756" max-vertical-offset="7667">
-              <caret line="340" column="25" selection-start-line="340" selection-start-column="25" selection-end-line="340" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.81100917" vertical-offset="0" max-vertical-offset="612">
+              <caret line="26" column="46" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="46" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BleWrapperUiCallbacks.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/blehandelr/BleWrapperUiCallbacks.java">
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="1751">
-              <caret line="40" column="68" selection-start-line="33" selection-start-column="4" selection-end-line="40" selection-end-column="68" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="544">
+              <caret line="16" column="20" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BleWrapper.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/blehandelr/BleWrapper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2823" max-vertical-offset="7667">
+              <caret line="215" column="0" selection-start-line="209" selection-start-column="6" selection-end-line="220" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -149,8 +163,8 @@
       <file leaf-file-name="IBLEHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="257" max-vertical-offset="1275">
-              <caret line="42" column="79" selection-start-line="34" selection-start-column="4" selection-end-line="42" selection-end-column="79" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1345" max-vertical-offset="1904">
+              <caret line="109" column="27" selection-start-line="109" selection-start-column="27" selection-end-line="109" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -198,8 +212,6 @@
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/tinyblelibs/TinyBLEServiceDictionary.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/tinyblelibs/TinyBLEService.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/INotificationHandler.java" />
-        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/src/com/bosswiin/devicemanager/ChwanJheDeviceManager.java" />
         <option value="$PROJECT_DIR$/res/layout/main.xml" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/blehandelr/BleWrapper.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/ChwanJhe/CJGattAttributes.java" />
@@ -212,11 +224,13 @@
         <option value="$PROJECT_DIR$/src/com/bosswiin/UserInterface/Components/BLEDBAdapter.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/BLEDeviceInfo.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/UserInterface/Components/BLESimpleAdapter.java" />
-        <option value="$PROJECT_DIR$/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java" />
-        <option value="$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IJBTManagerUICallback.java" />
+        <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java" />
+        <option value="$PROJECT_DIR$/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/src/com/bosswiin/devicemanager/ChwanJheDeviceManager.java" />
         <option value="$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/CJBLEHandler.java" />
+        <option value="$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java" />
       </list>
     </option>
   </component>
@@ -301,6 +315,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="bosswiin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SecurityLocker" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RollingDoor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bosswiin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="devicemanager" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -605,7 +641,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -695,7 +731,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="371" />
+      <option name="time" value="414" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -709,32 +745,36 @@
           <caret line="259" column="0" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2154#2170#0" expanded="true" />
-            <element signature="e#2570#2576#0" expanded="true" />
-            <element signature="e#3793#6376#0" expanded="true" />
-            <element signature="e#4330#4841#0" expanded="true" />
-            <element signature="e#4691#4731#0" expanded="true" />
-            <element signature="e#4791#4792#0" expanded="true" />
-            <element signature="e#5619#5671#0" expanded="true" />
-            <element signature="e#5913#5953#0" expanded="true" />
-            <element signature="e#6011#6063#0" expanded="true" />
-            <element signature="e#6365#6366#0" expanded="true" />
-            <element signature="e#6924#6978#0" expanded="true" />
-            <element signature="e#7028#7077#0" expanded="true" />
-            <element signature="e#7808#7841#0" expanded="true" />
-            <element signature="e#7871#7903#0" expanded="true" />
-            <element signature="e#8024#8316#0" expanded="true" />
-            <element signature="e#8297#8298#0" expanded="true" />
-            <element signature="e#9850#10153#0" expanded="true" />
-            <element signature="e#10142#10143#0" expanded="true" />
-            <element signature="e#10479#10936#0" expanded="true" />
-            <element signature="e#10856#10896#0" expanded="true" />
-            <element signature="e#10921#10922#0" expanded="true" />
-            <element signature="e#11888#12145#0" expanded="true" />
-            <element signature="e#12063#12103#0" expanded="true" />
-            <element signature="e#12134#12135#0" expanded="true" />
-            <element signature="e#12912#13112#0" expanded="true" />
-            <element signature="e#13101#13102#0" expanded="true" />
+            <element signature="e#2355#2371#0" expanded="true" />
+            <element signature="e#2895#2901#0" expanded="true" />
+            <element signature="e#4260#7119#0" expanded="true" />
+            <element signature="e#4848#5197#0" expanded="true" />
+            <element signature="e#5101#5141#0" expanded="true" />
+            <element signature="e#5174#5175#0" expanded="true" />
+            <element signature="e#6100#6152#0" expanded="true" />
+            <element signature="e#6622#6662#0" expanded="true" />
+            <element signature="e#6720#6772#0" expanded="true" />
+            <element signature="e#7108#7109#0" expanded="true" />
+            <element signature="e#7519#7849#0" expanded="true" />
+            <element signature="e#7826#7827#0" expanded="true" />
+            <element signature="e#8289#8343#0" expanded="true" />
+            <element signature="e#8393#8442#0" expanded="true" />
+            <element signature="e#9250#9283#0" expanded="true" />
+            <element signature="e#9313#9345#0" expanded="true" />
+            <element signature="e#9466#9842#0" expanded="true" />
+            <element signature="e#9823#9824#0" expanded="true" />
+            <element signature="e#11544#11847#0" expanded="true" />
+            <element signature="e#11836#11837#0" expanded="true" />
+            <element signature="e#12169#12707#0" expanded="true" />
+            <element signature="e#12605#12645#0" expanded="true" />
+            <element signature="e#12692#12693#0" expanded="true" />
+            <element signature="e#13284#13452#0" expanded="true" />
+            <element signature="e#13437#13438#0" expanded="true" />
+            <element signature="e#13811#14146#0" expanded="true" />
+            <element signature="e#14046#14086#0" expanded="true" />
+            <element signature="e#14135#14136#0" expanded="true" />
+            <element signature="e#15520#15720#0" expanded="true" />
+            <element signature="e#15709#15710#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -746,12 +786,12 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#4371#4661#0" expanded="true" />
-            <element signature="e#4642#4643#0" expanded="true" />
-            <element signature="e#14224#14225#0" expanded="true" />
-            <element signature="e#14270#14271#0" expanded="true" />
-            <element signature="e#14741#15270#0" expanded="true" />
-            <element signature="e#15259#15260#0" expanded="true" />
+            <element signature="e#4427#4717#0" expanded="true" />
+            <element signature="e#4698#4699#0" expanded="true" />
+            <element signature="e#16210#16211#0" expanded="true" />
+            <element signature="e#16256#16257#0" expanded="true" />
+            <element signature="e#17205#17734#0" expanded="true" />
+            <element signature="e#17723#17724#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -761,7 +801,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="810">
           <caret line="46" column="49" selection-start-line="46" selection-start-column="49" selection-end-line="46" selection-end-column="49" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -788,32 +828,36 @@
           <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2154#2170#0" expanded="true" />
-            <element signature="e#2570#2576#0" expanded="true" />
-            <element signature="e#3793#6376#0" expanded="true" />
-            <element signature="e#4330#4841#0" expanded="true" />
-            <element signature="e#4691#4731#0" expanded="true" />
-            <element signature="e#4791#4792#0" expanded="true" />
-            <element signature="e#5619#5671#0" expanded="true" />
-            <element signature="e#5913#5953#0" expanded="true" />
-            <element signature="e#6011#6063#0" expanded="true" />
-            <element signature="e#6365#6366#0" expanded="true" />
-            <element signature="e#6924#6978#0" expanded="true" />
-            <element signature="e#7028#7077#0" expanded="true" />
-            <element signature="e#7808#7841#0" expanded="true" />
-            <element signature="e#7871#7903#0" expanded="true" />
-            <element signature="e#8024#8316#0" expanded="true" />
-            <element signature="e#8297#8298#0" expanded="true" />
-            <element signature="e#9850#10153#0" expanded="true" />
-            <element signature="e#10142#10143#0" expanded="true" />
-            <element signature="e#10479#10936#0" expanded="true" />
-            <element signature="e#10856#10896#0" expanded="true" />
-            <element signature="e#10921#10922#0" expanded="true" />
-            <element signature="e#11888#12145#0" expanded="true" />
-            <element signature="e#12063#12103#0" expanded="true" />
-            <element signature="e#12134#12135#0" expanded="true" />
-            <element signature="e#12912#13112#0" expanded="true" />
-            <element signature="e#13101#13102#0" expanded="true" />
+            <element signature="e#2355#2371#0" expanded="true" />
+            <element signature="e#2895#2901#0" expanded="true" />
+            <element signature="e#4260#7119#0" expanded="true" />
+            <element signature="e#4848#5197#0" expanded="true" />
+            <element signature="e#5101#5141#0" expanded="true" />
+            <element signature="e#5174#5175#0" expanded="true" />
+            <element signature="e#6100#6152#0" expanded="true" />
+            <element signature="e#6622#6662#0" expanded="true" />
+            <element signature="e#6720#6772#0" expanded="true" />
+            <element signature="e#7108#7109#0" expanded="true" />
+            <element signature="e#7519#7849#0" expanded="true" />
+            <element signature="e#7826#7827#0" expanded="true" />
+            <element signature="e#8289#8343#0" expanded="true" />
+            <element signature="e#8393#8442#0" expanded="true" />
+            <element signature="e#9250#9283#0" expanded="true" />
+            <element signature="e#9313#9345#0" expanded="true" />
+            <element signature="e#9466#9842#0" expanded="true" />
+            <element signature="e#9823#9824#0" expanded="true" />
+            <element signature="e#11544#11847#0" expanded="true" />
+            <element signature="e#11836#11837#0" expanded="true" />
+            <element signature="e#12169#12707#0" expanded="true" />
+            <element signature="e#12605#12645#0" expanded="true" />
+            <element signature="e#12692#12693#0" expanded="true" />
+            <element signature="e#13284#13452#0" expanded="true" />
+            <element signature="e#13437#13438#0" expanded="true" />
+            <element signature="e#13811#14146#0" expanded="true" />
+            <element signature="e#14046#14086#0" expanded="true" />
+            <element signature="e#14135#14136#0" expanded="true" />
+            <element signature="e#15520#15720#0" expanded="true" />
+            <element signature="e#15709#15710#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -944,14 +988,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="79" max-vertical-offset="527">
-          <caret line="13" column="32" selection-start-line="13" selection-start-column="32" selection-end-line="13" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/drawable/listrowhighlighter.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.18783543" vertical-offset="0" max-vertical-offset="559">
@@ -1035,32 +1071,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/devicemanager/ChwanJheDeviceManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3041145" vertical-offset="0" max-vertical-offset="3536">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="23" selection-end-column="3" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23776224" vertical-offset="0" max-vertical-offset="578">
-          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="257" max-vertical-offset="1275">
-          <caret line="42" column="79" selection-start-line="34" selection-start-column="4" selection-end-line="42" selection-end-column="79" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/blehandelr/BleWrapperUiCallbacks.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="1751">
@@ -1069,73 +1079,137 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
+    <entry file="file://$PROJECT_DIR$/../../SDK/R23.0.2/sources/android-18/com/android/internal/os/ZygoteInit.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.6666665" vertical-offset="466" max-vertical-offset="6477">
-          <caret line="38" column="24" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="12172">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2154#2170#0" expanded="true" />
-            <element signature="e#2570#2576#0" expanded="true" />
-            <element signature="e#3793#6376#0" expanded="true" />
-            <element signature="e#4330#4841#0" expanded="true" />
-            <element signature="e#4691#4731#0" expanded="true" />
-            <element signature="e#4791#4792#0" expanded="true" />
-            <element signature="e#5619#5671#0" expanded="true" />
-            <element signature="e#5913#5953#0" expanded="true" />
-            <element signature="e#6011#6063#0" expanded="true" />
-            <element signature="e#6365#6366#0" expanded="true" />
-            <element signature="e#6924#6978#0" expanded="true" />
-            <element signature="e#7028#7077#0" expanded="true" />
-            <element signature="e#7808#7841#0" expanded="true" />
-            <element signature="e#7871#7903#0" expanded="true" />
-            <element signature="e#8024#8316#0" expanded="true" />
-            <element signature="e#8297#8298#0" expanded="true" />
-            <element signature="e#9850#10153#0" expanded="true" />
-            <element signature="e#10142#10143#0" expanded="true" />
-            <element signature="e#10479#10936#0" expanded="true" />
-            <element signature="e#10856#10896#0" expanded="true" />
-            <element signature="e#10921#10922#0" expanded="true" />
-            <element signature="e#11888#12145#0" expanded="true" />
-            <element signature="e#12063#12103#0" expanded="true" />
-            <element signature="e#12134#12135#0" expanded="true" />
-            <element signature="e#12912#13112#0" expanded="true" />
-            <element signature="e#13101#13102#0" expanded="true" />
+            <element signature="e#0#25702#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../SDK/R23.0.2/sources/android-18/android/app/ActivityThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33246753" vertical-offset="43834" max-vertical-offset="83555">
+          <caret line="2776" column="0" selection-start-line="2776" selection-start-column="0" selection-end-line="2776" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IJBTManagerUICallback.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="767" max-vertical-offset="1326">
+        <state vertical-scroll-proportion="1.4865832" vertical-offset="308" max-vertical-offset="1326">
           <caret line="72" column="43" selection-start-line="72" selection-start-column="16" selection-end-line="72" selection-end-column="43" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/CJBLEHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/IBLEHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.5925927" vertical-offset="5486" max-vertical-offset="6834">
-          <caret line="330" column="24" selection-start-line="330" selection-start-column="24" selection-end-line="330" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1345" max-vertical-offset="1904">
+          <caret line="109" column="27" selection-start-line="109" selection-start-column="27" selection-end-line="109" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../SDK/R23.0.2/sources/android-18/android/app/Activity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.99220777" vertical-offset="77222" max-vertical-offset="87125">
+          <caret line="4723" column="0" selection-start-line="4723" selection-start-column="0" selection-end-line="4723" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="544">
+          <caret line="16" column="20" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/devicemanager/ChwanJheDeviceManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1432" max-vertical-offset="3536">
+          <caret line="106" column="38" selection-start-line="106" selection-start-column="38" selection-end-line="106" selection-end-column="38" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#4371#4661#0" expanded="true" />
-            <element signature="e#4642#4643#0" expanded="true" />
-            <element signature="e#14224#14225#0" expanded="true" />
-            <element signature="e#14270#14271#0" expanded="true" />
-            <element signature="e#14741#15270#0" expanded="true" />
-            <element signature="e#15259#15260#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/blehandelr/BleWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.2330827" vertical-offset="5756" max-vertical-offset="7667">
-          <caret line="340" column="25" selection-start-line="340" selection-start-column="25" selection-end-line="340" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2823" max-vertical-offset="7667">
+          <caret line="215" column="0" selection-start-line="209" selection-start-column="6" selection-end-line="220" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/device/bluetooth/CJBLEHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.148148" vertical-offset="2363" max-vertical-offset="8296">
+          <caret line="144" column="29" selection-start-line="144" selection-start-column="29" selection-end-line="144" selection-end-column="29" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#4427#4717#0" expanded="true" />
+            <element signature="e#4698#4699#0" expanded="true" />
+            <element signature="e#16210#16211#0" expanded="true" />
+            <element signature="e#16256#16257#0" expanded="true" />
+            <element signature="e#17205#17734#0" expanded="true" />
+            <element signature="e#17723#17724#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/bosswiin/SecurityLocker/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="51.185184" vertical-offset="3643" max-vertical-offset="7820">
+          <caret line="133" column="19" selection-start-line="133" selection-start-column="19" selection-end-line="133" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2355#2371#0" expanded="true" />
+            <element signature="e#2895#2901#0" expanded="true" />
+            <element signature="e#4260#7119#0" expanded="true" />
+            <element signature="e#4848#5197#0" expanded="true" />
+            <element signature="e#5101#5141#0" expanded="true" />
+            <element signature="e#5174#5175#0" expanded="true" />
+            <element signature="e#6100#6152#0" expanded="true" />
+            <element signature="e#6622#6662#0" expanded="true" />
+            <element signature="e#6720#6772#0" expanded="true" />
+            <element signature="e#7108#7109#0" expanded="true" />
+            <element signature="e#7519#7849#0" expanded="true" />
+            <element signature="e#7826#7827#0" expanded="true" />
+            <element signature="e#8289#8343#0" expanded="true" />
+            <element signature="e#8393#8442#0" expanded="true" />
+            <element signature="e#9250#9283#0" expanded="true" />
+            <element signature="e#9313#9345#0" expanded="true" />
+            <element signature="e#9466#9842#0" expanded="true" />
+            <element signature="e#9823#9824#0" expanded="true" />
+            <element signature="e#11544#11847#0" expanded="true" />
+            <element signature="e#11836#11837#0" expanded="true" />
+            <element signature="e#12169#12707#0" expanded="true" />
+            <element signature="e#12605#12645#0" expanded="true" />
+            <element signature="e#12692#12693#0" expanded="true" />
+            <element signature="e#13284#13452#0" expanded="true" />
+            <element signature="e#13437#13438#0" expanded="true" />
+            <element signature="e#13811#14146#0" expanded="true" />
+            <element signature="e#14046#14086#0" expanded="true" />
+            <element signature="e#14135#14136#0" expanded="true" />
+            <element signature="e#15520#15720#0" expanded="true" />
+            <element signature="e#15709#15710#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.81100917" vertical-offset="0" max-vertical-offset="612">
+          <caret line="26" column="46" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="46" />
           <folding />
         </state>
       </provider>
