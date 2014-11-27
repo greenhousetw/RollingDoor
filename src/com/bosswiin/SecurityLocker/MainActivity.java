@@ -3,11 +3,10 @@ package com.bosswiin.SecurityLocker;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Message;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -33,27 +34,28 @@ import java.util.UUID;
  */
 public class MainActivity extends Activity implements OnClickListener, IJBTManagerUICallback {
 
-    private static final int REQUEST_ENABLE_BT = 1;
-    private final String uuidDoorService = "713d0000-503e-4c75-ba94-3148f18d941e";
-    private UUID serviceName = UUID.fromString(this.uuidDoorService);
-    private final String uuidDoorCharactristicsForWrite = "713d0003-503e-4c75-ba94-3148f18d941e";
-    private UUID chName = UUID.fromString(this.uuidDoorCharactristicsForWrite);
-    private final String logTag = MainActivity.class.getName();
-    private ListView listView = null;
-    private Button scanButton = null, upButton = null, stopButton = null, downButton = null;
-    private String selectedAddress = "";
-    private String tableName = "DeviceList";
+    private static final int      REQUEST_ENABLE_BT              = 1;
+    private final        String   uuidDoorService                = "713d0000-503e-4c75-ba94-3148f18d941e";
+    private              UUID     serviceName                    = UUID.fromString(this.uuidDoorService);
+    private final        String   uuidDoorCharactristicsForWrite = "713d0003-503e-4c75-ba94-3148f18d941e";
+    private              UUID     chName                         = UUID.fromString(this.uuidDoorCharactristicsForWrite);
+    private final        String   logTag                         = MainActivity.class.getName();
+    private              ListView listView                       = null;
+    private              Button   scanButton                     = null, upButton = null, stopButton = null, downButton = null;
+    private String                  tableName     = "DeviceList";
     private HashMap<String, Object> databaseTuple = new HashMap<String, Object>();
+
     private BLEAdpaterBase bleAdpater = null;
-    private MainActivity acts = this;
-    private TextView lastSelectedTextview = null;
+    private MainActivity   acts       = this;
+
+    private TextView lastSelectedTextview     = null;
     private TextView lastSelectedRSSITextview = null;
-    private View selectedPeripheral = null;
-    private boolean isPauseBack = false;
-    private boolean isDestroyBack = false;
-    private boolean isBTHardwareAvaialbe = false;
+    private View     selectedPeripheral       = null;
+
     private IJBTDeviceManager mDeviceManager;
     private IBLEHandler mBleHandler = null;
+
+    private List<View> viewList = new LinkedList<View>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,17 +93,42 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 view.setSelected(true);
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
 
+                ((TextView) view.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStatusIsConnecting);
+
                 if (lastSelectedTextview != null && lastSelectedRSSITextview != null) {
-                    lastSelectedTextview.setText(R.string.connectionStatus);
-                    lastSelectedRSSITextview.setText(acts.getString(R.string.rssiPrefixValue) + "?");
+                    acts.runOnUiThread(new Runnable() {
+                                                   @Override
+                                                   public void run() {
+                                                       lastSelectedTextview.setText(R.string.connectionStatusUnConnection);
+                                                       lastSelectedRSSITextview.setText(acts.getString(R.string.rssiPrefixValue) + "?");
+                                                   }
+                                               });
                 }
 
+                acts.viewList.add(acts.downButton);
+                acts.viewList.add(acts.upButton);
+                acts.viewList.add(acts.stopButton);
+                acts.viewList.add(acts.listView);
+                acts.setUIComponentEnable(acts.viewList, false);
+
                 if (mBleHandler.connect(peripheralName.getTag().toString())) {
-                    ((TextView) view.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStringForSuccessful);
+                    ((TextView) view.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStatusConnected);
                     selectedPeripheral = view;
                     lastSelectedTextview = ((TextView) view.findViewById(R.id.bleProgressBar));
                     lastSelectedRSSITextview = ((TextView) view.findViewById(R.id.RssiTextView));
+                    CommonHelper.ShowToast(acts, acts.getString(R.string.DoorHint_RemoteConnectionOK));
                 }
+                else {
+                    ((TextView) view.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStatusUnConnection);
+                    ((TextView) view.findViewById(R.id.RssiTextView)).setText(acts.getString(R.string.rssiPrefixValue) + "?");
+                    CommonHelper.ShowToast(acts, acts.getString(R.string.DoorHint_RemoteNotConnected));
+                }
+
+                acts.viewList.add(acts.downButton);
+                acts.viewList.add(acts.upButton);
+                acts.viewList.add(acts.stopButton);
+                acts.viewList.add(acts.listView);
+                acts.setUIComponentEnable(acts.viewList, true);
             }
         });
     }
@@ -110,7 +137,11 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     protected void onResume() {
         super.onResume();
         Log.d(this.logTag, "Application in resume phase");
-        this.mBleHandler.initialize();
+
+        if (!this.mBleHandler.initializeBTAdapter()) {
+            CommonHelper.ShowToast(this, this.getString(R.string.initializeAdapterFail));
+            this.finish();
+        }
     }
 
     @Override
@@ -121,9 +152,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         if (this.lastSelectedTextview != null && this.lastSelectedTextview.getText() == this.getString(R.string.connectionStringForSuccessful)) {
             this.lastSelectedTextview.setText(this.getString(R.string.connectionStringForPause));
         }
-
-        this.isPauseBack = true;
-        this.isBTHardwareAvaialbe = false;
     }
 
     @Override
@@ -136,7 +164,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     protected void onDestroy() {
         super.onDestroy();
         Log.d(this.logTag, "Application in destroy phase");
-        this.isDestroyBack = true;
         int pid = android.os.Process.myPid();
         android.os.Process.killProcess(pid);
         System.exit(0);
@@ -169,15 +196,27 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         try {
             if (view.getId() == R.id.buttonUP) {
                 this.mBleHandler.writeData(this.serviceName, this.chName, new byte[]{(byte) 0x01, (byte) 0x01, (byte) 0x00});
-            } else if (view.getId() == R.id.buttonDown) {
+            }
+            else if (view.getId() == R.id.buttonDown) {
                 this.mBleHandler.writeData(this.serviceName, this.chName, new byte[]{(byte) 0x01, (byte) 0x03, (byte) 0x00});
-            } else if (view.getId() == R.id.buttonStop) {
+            }
+            else if (view.getId() == R.id.buttonStop) {
                 this.mBleHandler.writeData(this.serviceName, this.chName, new byte[]{(byte) 0x01, (byte) 0x02, (byte) 0x00});
             }
         } catch (Exception ex) {
             Log.e(MainActivity.class.getName(), ex.getMessage());
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+
+    }
+
 
     /**
      * This method should notification of bluetoothGattCharacteristic, you should call
@@ -203,49 +242,39 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     }
 
     /**
-     * Pass data to activity for ui related operations
-     * date: 2014/11/24
+     * Callback method for disconnection
      * date: 2014/11/09
      *
-     * @param data data that needs to be process
+     * @param address the address of remote device
      * @author Yu-Hua Tseng
-     * @note 2014/11/24:
-     * if one device is in disconnection status, below code will be executed from handleDeviceDisconnected of
-     * JBluetoothManager
-     * if (value == this.getString(R.string.connectionStringForUnknown))
      */
-    @Override
-    public void passContentToActivity(Object data) {
-        if (data != null) {
-
-            if (data instanceof String) {
-
-                String value = data.toString();
-
-                if (value.startsWith(this.getString(R.string.rssiPrefixValue))) {
-                    if (this.selectedPeripheral != null) {
-                        ((TextView) this.selectedPeripheral.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStringForSuccessful);
-                        ((TextView) this.selectedPeripheral.findViewById(R.id.RssiTextView)).setText(value + " db");
-                    }
-                } else if (value == this.getString(R.string.connectionStatus)) {
-                    if (this.selectedPeripheral != null) {
-                        ((TextView) this.selectedPeripheral.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStatus);
-                        ((TextView) this.selectedPeripheral.findViewById(R.id.RssiTextView)).setText(this.getString(R.string.rssiPrefixValue) + "?");
-                    }
-                } else {
-                    ((EditText) this.findViewById(R.id.editnoticontent)).setText(value.trim());
-                    (this.findViewById(R.id.editnoticontent)).clearFocus();
-                    this.listView.requestFocus();
-                }
-            }
-        }
-    }
-
     @Override
     public void uiDeviceDisconnected(String address) {
 
+        if (this.selectedPeripheral != null) {
+
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((TextView) selectedPeripheral.findViewById(R.id.bleProgressBar))
+                            .setText(acts.getText(R.string.connectionStatusUnConnection));
+                    ((TextView) selectedPeripheral.findViewById(R.id.RssiTextView))
+                            .setText(acts.getString(R.string.rssiPrefixValue) + "?");
+                }
+            });
+        }
     }
 
+    /**
+     * Callback method for write data to remote device
+     * date: 2014/11/09
+     *
+     * @param address         the address of remote device
+     * @param chName          uuid value of the target characteristic
+     * @param description     characteristic's description
+     * @param operationresult result of this operation
+     * @author Yu-Hua Tseng
+     */
     @Override
     public void uiWriteResult(String address, String chName, String description, boolean operationresult) {
         if (operationresult) {
@@ -253,13 +282,55 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         }
     }
 
+    /**
+     * Callback method for write data to remote device
+     * date: 2014/11/09
+     *
+     * @param address the address of remote device
+     * @param rssi    the value of current ssi
+     * @author Yu-Hua Tseng
+     */
     @Override
     public void uiNewRssiAvailable(String address, final int rssi) {
 
-
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
                 String value = Integer.toString(rssi);
-                lastSelectedRSSITextview.setText(value + " db");
+                lastSelectedRSSITextview.setText(acts.getString(R.string.rssiPrefixValue) + value + " db");
+            }
+        });
+    }
 
+    /**
+     * callback function for notification of new data ready in remote characteristic
+     * date: 2014/11/09
+     *
+     * @param strValue the value of characteristic
+     * @param intValue the value of characteristic
+     * @param rawValue the value of characteristic
+     * @param timestamp time stamp of this data
+     * @author Yu-Hua Tseng
+     */
+    public void uiNewValueForCharacteristic(final String strValue,
+                                            final int intValue,
+                                            final byte[] rawValue,
+                                            final String timestamp)
+    {
+
+    }
+
+
+    private void setUIComponentEnable(final List<View> viewList, final boolean flag) {
+
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (View view : viewList) {
+                    view.setEnabled(flag);
+                }
+            }
+        });
     }
 
     /**
