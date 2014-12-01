@@ -21,15 +21,7 @@
             android:orientation="horizontal"
             android:layout_marginBottom="16dp"
             >
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/btnScanTitle"
-                android:textSize="24sp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/flatbuttonorgange"
-                android:id="@+id/buttonScan"/>
-        <Button
+       <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="0dip"
