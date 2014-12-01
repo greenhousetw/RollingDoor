@@ -5,20 +5,12 @@
         android:orientation="vertical"
         xmlns:android="http://schemas.android.com/apk/res/android"
         >
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:textSize="36sp"
-              android:layout_marginTop="24dp"
-              android:layout_marginBottom="12dp"
-              android:text="@string/app_internalTitle"
-            />
     <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginBottom="16dp"
             >
        <Button
@@ -78,32 +70,5 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:text="@string/noListItemTitle"/>
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="0"
-                android:focusableInTouchMode="true"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                >
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/receTitle"
-                android:textSize="24sp"
-                android:id="@+id/recvmessage"
-                />
-         <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="14sp"
-                    android:id="@+id/editnoticontent"
-                    android:clickable="false"
-                    android:cursorVisible="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    />
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

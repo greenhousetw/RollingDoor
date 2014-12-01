@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">傳捷門控 version:alpha.141127</string>
+    <string name="app_name">傳捷門控 version:beta.141203</string>
     <string name="app_internalTitle">傳捷門控</string>
     <string name="UP">New Button</string>
     <string name="empty">Empty Hint</string>
@@ -23,9 +23,9 @@
     <string name="retryHintValue">重試次數:</string>
     <dimen name="TEXT_SIZE">26sp</dimen>
     <string name="initializeAdapterFail">連線狀態:取得藍牙裝置失敗</string>
-    <string name="connectionStatusUnConnection">連線狀態:尚未連線</string>
+    <string name="connectionStatusUnConnection">狀態:離線</string>
     <string name="connectionStatusIsConnecting">連線狀態:正在連線</string>
-    <string name="connectionStatusConnected">連線狀態:已建連線</string>
+    <string name="connectionStatusConnected">狀態:連線</string>
     <string name="connectionStatusFailConnect">連線狀態:連線失敗</string>
     <string name="doorReconnect">沒有已連線門控</string>
 </resources>

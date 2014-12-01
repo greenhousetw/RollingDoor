@@ -39,11 +39,8 @@ import java.util.UUID;
  */
 public class MainActivity extends Activity implements OnClickListener, IJBTManagerUICallback {
 
-    private static final int      REQUEST_ENABLE_BT              = 1;
     private final        String   uuidDoorService                = "713d0000-503e-4c75-ba94-3148f18d941e";
-    private              UUID     serviceName                    = UUID.fromString(this.uuidDoorService);
     private final        String   uuidDoorCharactristicsForWrite = "713d0003-503e-4c75-ba94-3148f18d941e";
-    private              UUID     chName                         = UUID.fromString(this.uuidDoorCharactristicsForWrite);
     private final        String   logTag                         = MainActivity.class.getName();
     private              ListView listView                       = null;
     private              Button   scanButton                     = null, upButton = null, stopButton = null, downButton = null;
@@ -53,7 +50,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     private BLEAdpaterBase bleAdpater = null;
     private MainActivity   acts       = this;
 
-    private TextView lastSelectedTextview     = null;
     private TextView lastSelectedRSSITextview = null;
     private View     selectedDevice           = null, currentSelecteDevice = null;
 
@@ -78,7 +74,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         this.listView = (ListView) this.findViewById(R.id.listView);
         this.listView.setEmptyView(findViewById(R.id.empty));
         this.listView.setAdapter(this.bleAdpater);
-        this.scanButton = (Button) this.findViewById(R.id.buttonScan);
         this.upButton = (Button) this.findViewById(R.id.buttonUP);
         this.downButton = (Button) this.findViewById(R.id.buttonDown);
         this.stopButton = (Button) this.findViewById(R.id.buttonStop);
@@ -109,12 +104,11 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 currentSelecteDevice = view;
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
 
-                if (lastSelectedTextview != null && lastSelectedRSSITextview != null) {
+                if (lastSelectedRSSITextview != null) {
                     acts.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            lastSelectedTextview.setText(R.string.connectionStatusUnConnection);
-                            lastSelectedRSSITextview.setText(acts.getString(R.string.rssiPrefixValue) + "?");
+                            lastSelectedRSSITextview.setText(R.string.connectionStatusUnConnection);
                         }
                     });
                 }
@@ -129,11 +123,9 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                         UUID.fromString(uuidDoorCharactristicsForWrite));
 
                 if (chInstance != null) {
-                    ((TextView) view.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStatusConnected);
                     selectedDevice = view;
-                    lastSelectedTextview = ((TextView) view.findViewById(R.id.bleProgressBar));
                     lastSelectedRSSITextview = ((TextView) view.findViewById(R.id.RssiTextView));
-
+                    lastSelectedRSSITextview.setText(R.string.connectionStatusConnected);
                     String connectionString = acts.getString(R.string.DoorHint_RemoteConnectionOK);
 
                     if (mPauseFlag) {
@@ -143,8 +135,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                     CommonHelper.ShowToast(acts, connectionString);
                 }
                 else {
-                    ((TextView) view.findViewById(R.id.bleProgressBar)).setText(R.string.connectionStatusUnConnection);
-                    ((TextView) view.findViewById(R.id.RssiTextView)).setText(acts.getString(R.string.rssiPrefixValue) + "?");
+                    ((TextView) view.findViewById(R.id.RssiTextView)).setText(R.string.connectionStatusUnConnection);
                     CommonHelper.ShowToast(acts, acts.getString(R.string.DoorHint_RemoteNotConnected));
                     selectedDevice = null;
                 }
@@ -192,11 +183,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     protected void onPause() {
         super.onPause();
         Log.d(this.logTag, "Application in pause phase");
-
-        if (this.lastSelectedTextview != null && this.lastSelectedTextview.getText() == this.getString(R.string.connectionStringForSuccessful)) {
-            this.lastSelectedTextview.setText(this.getString(R.string.connectionStringForPause));
-        }
-
         this.mPauseFlag = true;
         this.mBleHandler.closeConnection();
     }
@@ -309,10 +295,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
                 public void run() {
 
                     if (selectedDevice != null) {
-                        ((TextView) selectedDevice.findViewById(R.id.bleProgressBar))
-                                .setText(acts.getText(R.string.connectionStatusUnConnection));
-                        ((TextView) selectedDevice.findViewById(R.id.RssiTextView))
-                                .setText(acts.getString(R.string.rssiPrefixValue) + "?");
+                        ((TextView) selectedDevice.findViewById(R.id.RssiTextView)).setText(acts.getString(R.string.connectionStatusUnConnection));
                     }
                 }
             });
@@ -355,9 +338,8 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                String value = Integer.toString(rssi);
                 if (lastSelectedRSSITextview != null) {
-                    lastSelectedRSSITextview.setText(acts.getString(R.string.rssiPrefixValue) + value + " db");
+                    lastSelectedRSSITextview.setText(acts.getString(R.string.connectionStatusConnected));
                 }
             }
         });
