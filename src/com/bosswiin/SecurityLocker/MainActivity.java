@@ -39,11 +39,11 @@ import java.util.UUID;
  */
 public class MainActivity extends Activity implements OnClickListener, IJBTManagerUICallback {
 
-    private final        String   uuidDoorService                = "713d0000-503e-4c75-ba94-3148f18d941e";
-    private final        String   uuidDoorCharactristicsForWrite = "713d0003-503e-4c75-ba94-3148f18d941e";
-    private final        String   logTag                         = MainActivity.class.getName();
-    private              ListView listView                       = null;
-    private              Button   scanButton                     = null, upButton = null, stopButton = null, downButton = null;
+    private final String   uuidDoorService                = "713d0000-503e-4c75-ba94-3148f18d941e";
+    private final String   uuidDoorCharactristicsForWrite = "713d0003-503e-4c75-ba94-3148f18d941e";
+    private final String   logTag                         = MainActivity.class.getName();
+    private       ListView listView                       = null;
+    private       Button   scanButton                     = null, upButton = null, stopButton = null, downButton = null;
     private String                  tableName     = "DeviceList";
     private HashMap<String, Object> databaseTuple = new HashMap<String, Object>();
 
@@ -61,7 +61,6 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
     private BluetoothGattCharacteristic chInstance   = null;
 
     private boolean mPauseFlag = false;
-    private boolean isEnableBT = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,14 +71,11 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         this.bleAdpater = new BLEDBAdapter(this);
         this.listView = (ListView) this.findViewById(R.id.listView);
-        this.listView.setEmptyView(findViewById(R.id.empty));
         this.listView.setAdapter(this.bleAdpater);
         this.upButton = (Button) this.findViewById(R.id.buttonUP);
         this.downButton = (Button) this.findViewById(R.id.buttonDown);
         this.stopButton = (Button) this.findViewById(R.id.buttonStop);
 
-        //this.scanButton.setOnClickListener(this);
-        this.scanButton.setVisibility(View.GONE);
         this.upButton.setOnClickListener(this);
         this.stopButton.setOnClickListener(this);
         this.downButton.setOnClickListener(this);
@@ -95,23 +91,21 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+
                 view.setSelected(true);
 
                 if (mPauseFlag && selectedDevice != null) {
                     view = selectedDevice;
                 }
 
+                if (lastSelectedRSSITextview == null) {
+                    lastSelectedRSSITextview = ((TextView) view.findViewById(R.id.RssiTextView));
+                }
+
+                lastSelectedRSSITextview.setText(acts.getString(R.string.connectionStatusIsConnecting));
+
                 currentSelecteDevice = view;
                 TextView peripheralName = (TextView) view.findViewById(R.id.bleDeviceName);
-
-                if (lastSelectedRSSITextview != null) {
-                    acts.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            lastSelectedRSSITextview.setText(R.string.connectionStatusUnConnection);
-                        }
-                    });
-                }
 
                 acts.viewList.add(acts.downButton);
                 acts.viewList.add(acts.upButton);
@@ -120,7 +114,8 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
                 chInstance = mBleHandler.connect(peripheralName.getTag().toString(),
                         UUID.fromString(uuidDoorService),
-                        UUID.fromString(uuidDoorCharactristicsForWrite));
+                        UUID.fromString(uuidDoorCharactristicsForWrite),
+                        lastSelectedRSSITextview);
 
                 if (chInstance != null) {
                     selectedDevice = view;
@@ -158,6 +153,7 @@ public class MainActivity extends Activity implements OnClickListener, IJBTManag
 
         this.setBluetooth(true);
 
+        // check bluetooth adapter
         if (this.mBleHandler.initializeBTAdapter()) {
             if (this.mPauseFlag) {
                 if (this.currentIndex != Integer.MIN_VALUE) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">傳捷門控 version:beta.141203</string>
-    <string name="app_internalTitle">傳捷門控</string>
-    <string name="UP">New Button</string>
+    <string name="app_name">傳捷搖控器 version:b141202</string>
+    <string name="brandName">傳捷</string>
+    <string name="listTitle">受控裝置▼</string>
     <string name="empty">Empty Hint</string>
     <string name="DoorHint">請先選取目標門位</string>
     <string name="DoorHint_IsNotConnected">門控連線失敗</string>
@@ -19,13 +19,14 @@
     <string name="connectionStringForUnknown">連線狀態:點擊連線</string>
     <string name="connectionStringForPause">連線狀態:暫停連線</string>
     <string name="exitApp">退出本控制器?</string>
-    <string name="rssiPrefixValue">強度:</string>
     <string name="retryHintValue">重試次數:</string>
-    <dimen name="TEXT_SIZE">26sp</dimen>
-    <string name="initializeAdapterFail">連線狀態:取得藍牙裝置失敗</string>
-    <string name="connectionStatusUnConnection">狀態:離線</string>
-    <string name="connectionStatusIsConnecting">連線狀態:正在連線</string>
-    <string name="connectionStatusConnected">狀態:連線</string>
+    <string name="initializeAdapterFail">請手動開啟藍牙設備</string>
+    <string name="connectionStatusConnected">連線</string>
+    <string name="connectionStatusUnConnection">離線</string>
+    <string name="connectionStatusIsConnecting">連線中</string>
     <string name="connectionStatusFailConnect">連線狀態:連線失敗</string>
-    <string name="doorReconnect">沒有已連線門控</string>
+    <string name="doorReconnect">無連線裝置</string>
+    <dimen name="TEXT_SIZE">26sp</dimen>
+    <dimen name="BUTTON_SIZE">100sp</dimen>
+    <dimen name="LISTTITLETEXT_SIZE">18sp</dimen>
 </resources>

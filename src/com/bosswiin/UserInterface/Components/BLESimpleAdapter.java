@@ -148,7 +148,6 @@ public class BLESimpleAdapter extends BLEAdpaterBase {
             holder.image = (ImageView) convertView.findViewById(R.id.bleIcon);
             holder.nameField = (TextView) convertView.findViewById(R.id.bleDeviceName);
             holder.rssiField = (TextView) convertView.findViewById(R.id.RssiTextView);
-            holder.connectionStatus = (TextView) convertView.findViewById(R.id.bleProgressBar);
             convertView.setTag(holder);
         }
         else {
@@ -159,7 +158,7 @@ public class BLESimpleAdapter extends BLEAdpaterBase {
         try {
             BLEDeviceInfo record = (BLEDeviceInfo) this.GetDevice(position);
             holder.nameField.setText(record.deviceName);
-            holder.rssiField.setText(this.context.getString(R.string.rssiPrefixValue) + "?");
+            holder.rssiField.setText(this.context.getString(R.string.connectionStatusUnConnection));
             holder.nameField.setTag(record.deviceAddress);
         } catch (Exception ex) {
             Log.e(LOGTAG, ex.getMessage());

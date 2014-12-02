@@ -7,12 +7,13 @@
 package com.bosswiin.device.bluetooth;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.*;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import com.bosswiin.SecurityLocker.R;
 import com.bosswiin.device.bluetooth.blehandelr.BleNamesResolver;
 import com.bosswiin.sharelibs.CommonHelper;
 
@@ -38,6 +39,7 @@ public class CJBLEHandler implements IBLEHandler {
     private              Handler          mTimerHandler             = new Handler();
     private              boolean          mTimerEnabled             = false;
     private              boolean          mConnected                = false;
+    private              View             mView                     = null;
 
     private       IJBTManagerUICallback mUICallback            = null;
     private       boolean               isServiceDiscvoeryDone = false;
@@ -160,6 +162,24 @@ public class CJBLEHandler implements IBLEHandler {
      * @param address        the address of remote device
      * @param service        the uuid of service
      * @param characteristic the uuid of characteristic
+     * @param view           the instance of View
+     * @return true for successfully check service count is more than 0 and false for fail
+     * @author Yu-Hua Tseng
+     */
+    @Override
+    public BluetoothGattCharacteristic connect(String address, UUID service, UUID characteristic, View view) {
+
+        this.mView=view;
+        return this.connect(address, service, characteristic);
+    }
+
+    /**
+     * connect to the target device
+     * date: 2014/11/27
+     *
+     * @param address        the address of remote device
+     * @param service        the uuid of service
+     * @param characteristic the uuid of characteristic
      * @return true for successfully check service count is more than 0 and false for fail
      * @author Yu-Hua Tseng
      */
@@ -168,15 +188,15 @@ public class CJBLEHandler implements IBLEHandler {
 
         BluetoothGattCharacteristic chInstance = null;
 
-        this.isServiceDiscvoeryDone=false;
+        this.isServiceDiscvoeryDone = false;
 
         this.closeConnection();
 
         try {
             if (this.connect(address)) {
 
-                double waitTime=0.5;
-                int retryTimes=10;
+                double waitTime = 0.5;
+                int retryTimes = 10;
 
                 while (chInstance == null) {
 
@@ -186,16 +206,15 @@ public class CJBLEHandler implements IBLEHandler {
                         chInstance = serviceInstance.getCharacteristic(characteristic);
                     }
 
-                    if(retryTimes==0){
-                            break;
+                    if (retryTimes == 0) {
+                        break;
                     }
 
                     Thread.sleep((long) CommonHelper.SecsToMilliSeconds(waitTime));
                     retryTimes--;
                 }
             }
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             Log.e(this.mTAG, "");
         }
 
@@ -251,7 +270,7 @@ public class CJBLEHandler implements IBLEHandler {
                 if (this.mBluetoothGatt != null) {
                     double waitSeconds = 1;
                     int retryTimes = 5;
-                    int serviceNumber=3;
+                    int serviceNumber = 3;
                     this.mBluetoothGatt.discoverServices();
 
                     while (this.mBluetoothGatt.getServices().size() < serviceNumber) {
@@ -443,7 +462,7 @@ public class CJBLEHandler implements IBLEHandler {
             this.mBluetoothGatt = null;
         }
 
-        this.mBluetoothGatt=null;
+        this.mBluetoothGatt = null;
 
         this.mUICallback.uiDeviceDisconnected(this.mBluetoothAdapter.getAddress());
     }

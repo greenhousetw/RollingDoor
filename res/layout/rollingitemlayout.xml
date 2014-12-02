@@ -4,7 +4,6 @@
                 android:background="@drawable/listrowhighlighter"
                 android:descendantFocusability="blocksDescendants"
                 android:padding="6dip" >
-
     <ImageView
             android:id="@+id/bleIcon"
             android:layout_width="64dp"
@@ -15,41 +14,27 @@
             android:contentDescription="photo"
             android:focusable="false"
             android:src="@android:drawable/ic_menu_my_calendar" />
-
-    <TextView
-            android:id="@+id/bleProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/bleIcon"
-            android:layout_marginTop="6dp"
-            android:focusable="false"
-            android:textSize="14dp"
-            android:text="@string/connectionStatus"/>
-    <TextView
-            android:id="@+id/RssiTextView"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/bleIcon"
-            android:layout_marginTop="6dp"
-            android:layout_marginLeft="200dp"
-            android:focusable="false"
-            android:textSize="14dp"
-            android:text="@string/rssiPrefixValue"/>
     <TextView
             android:id="@+id/bleDeviceName"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/bleProgressBar"
-            android:layout_alignParentTop="true"
-            android:layout_alignWithParentIfMissing="true"
             android:layout_toRightOf="@id/bleIcon"
-            android:layout_marginBottom="3dp"
+            android:layout_centerInParent="true"
+            android:layout_alignWithParentIfMissing="true"
             android:textSize="24sp"
             android:textColor="@color/white"
             android:focusable="false"
-            android:text="DeviceName" />
+            android:text="@string/brandName"
+    />
+    <TextView
+            android:id="@+id/RssiTextView"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
+            android:focusable="false"
+            android:textSize="14dp"
+            android:text="@string/connectionStatusUnConnection"
+    />
 </RelativeLayout>

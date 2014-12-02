@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.util.Log;
+import android.view.View;
 
 import java.util.UUID;
 
@@ -42,6 +43,19 @@ public interface IBLEHandler {
      * @author Yu-Hua Tseng
      */
     BluetoothGattCharacteristic connect(String address, UUID service, UUID characteristic);
+
+    /**
+     * connect to the target device
+     * date: 2014/11/27
+     *
+     * @param address        the address of remote device
+     * @param service        the uuid of service
+     * @param characteristic the uuid of characteristic
+     * @param view the instance of View
+     * @return true for successfully check service count is more than 0 and false for fail
+     * @author Yu-Hua Tseng
+     */
+    BluetoothGattCharacteristic connect(String address, UUID service, UUID characteristic, View view);
 
     /**
      * Get data from the specific characteristic
