@@ -22,4 +22,10 @@
         </activity>
         <service android:name="com.bosswiin.device.bluetooth.CJService"/>
     </application>
+
+    <supports-screens
+            android:largeScreens="true"
+            android:normalScreens="true"
+            android:anyDensity = "true"/>
+
 </manifest>

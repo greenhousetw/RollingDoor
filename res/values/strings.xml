@@ -29,4 +29,8 @@
     <dimen name="TEXT_SIZE">26sp</dimen>
     <dimen name="BUTTON_SIZE">100sp</dimen>
     <dimen name="LISTTITLETEXT_SIZE">18sp</dimen>
+    <dimen name="LISTTITLETEXT_SIZE25601600">1119sp</dimen>
+    <dimen name="BUTTON_SIZE25601600">70sp</dimen>
+    <dimen name="BUTTON_SIZE16002560">250sp</dimen>
+    <dimen name="LISTTITLETEXT_SIZE16002560">70sp</dimen>
 </resources>
